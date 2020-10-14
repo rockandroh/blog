@@ -1,0 +1,11 @@
+library(rmarkdown)
+setwd("/Users/master/document/blog")
+setwd("/Users/master/Documents/GitHub/blog")
+ls()
+ls
+file()
+setwd("/Users/master/Documents/GitHub/blog/content")
+getwd()
+pandoc_convert(teaching.html, to = "markdown_strict")
+pandoc_convert(/teaching.html, to = "markdown_strict")
+pandoc_convert('teaching.html', to = "markdown_strict")
