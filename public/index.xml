@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Home on Rock &#39;n&#39; Roh</title>
+    <link>http://rockandroh.com/</link>
+    <description>Recent content in Home on Rock &#39;n&#39; Roh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://rockandroh.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bootstrapping and its application in R</title>
+      <link>http://rockandroh.com/note/2020/10/15/bootstrapping-and-its-application-in-r/</link>
+      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/note/2020/10/15/bootstrapping-and-its-application-in-r/</guid>
+      <description>Setting Perform multiple tests at once Concise and easily interpretable results T-test  References   Setting As part of my teaching assistant position in a Belgian university, students often ask me for some help in their statistical analyses for their master’s thesis.
+A frequent question is how to compare groups of patients in terms of several quantitative continuous variables. Most of us know that:
+ To compare two groups, a Student’s t-test should be used1 To compare three groups or more, an ANOVA should be performed  These two tests are quite basic and have been extensively documented online and in statistical textbooks so the difficulty is not in how to perform these tests.</description>
+    </item>
+    
+    <item>
+      <title>Rmd Note Sample Using both R, Python, and C</title>
+      <link>http://rockandroh.com/note/2020/10/15/note-template/</link>
+      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/note/2020/10/15/note-template/</guid>
+      <description>Head 1 Head 2 R example Python Example CPP example  Latex Example References (Example)    Note: This document is to provide a sample template for the lecture notes in .Rmd
+Memo: test
+Usage of singe quote
+x = 5 # radius of a circle For a circle with the radius 5, its area is 78.5398163.
+Head 1 Add link like this. Link
+Description
+Footnote example1 Footnote example22</description>
+    </item>
+    
+    <item>
+      <title>Another Note on A blogdown Tutorial</title>
+      <link>http://rockandroh.com/data/another-note/</link>
+      <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/data/another-note/</guid>
+      <description>I just discovered an awesome tutorial on blogdown written by Alison. I have to admit this is the best blogdown tutorial I have seen so far.</description>
+    </item>
+    
+    <item>
+      <title>Another Note on A blogdown Tutorial</title>
+      <link>http://rockandroh.com/note/2017/06/14/another-note/</link>
+      <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/note/2017/06/14/another-note/</guid>
+      <description>I just discovered an awesome tutorial on blogdown written by Alison. I have to admit this is the best blogdown tutorial I have seen so far.</description>
+    </item>
+    
+    <item>
+      <title>A Quick Note on Two Beautiful Websites</title>
+      <link>http://rockandroh.com/note/2017/06/13/a-quick-note/</link>
+      <pubDate>Tue, 13 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/note/2017/06/13/a-quick-note/</guid>
+      <description>To me, the two most impressive websites based on blogdown are:
+ Rob J Hyndman&amp;rsquo;s personal website. Live Free or Dichotomize by Lucy and Nick et al.  I&amp;rsquo;m sure there will be more.</description>
+    </item>
+    
+    <item>
+      <title>A Plain Markdown Post</title>
+      <link>http://rockandroh.com/note/2016/02/14/a-plain-markdown-post/</link>
+      <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/note/2016/02/14/a-plain-markdown-post/</guid>
+      <description>This sample post is mainly for blogdown users. If you do not use blogdown, you can skip the first section.
+1. Markdown or R Markdown This is a post written in plain Markdown (*.md) instead of R Markdown (*.Rmd). The major differences are:
+ You cannot run any R code in a plain Markdown document, whereas in an R Markdown document, you can embed R code chunks (```{r}); A plain Markdown post is rendered through Blackfriday, and an R Markdown document is compiled by rmarkdown and Pandoc.</description>
+    </item>
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>http://rockandroh.com/note/2015/07/23/hello-r-markdown/</link>
+      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      
+      <guid>http://rockandroh.com/note/2015/07/23/hello-r-markdown/</guid>
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    
+    <item>
+      <title>Lorem Ipsum</title>
+      <link>http://rockandroh.com/note/2015/07/23/lorem-ipsum/</link>
+      <pubDate>Thu, 23 Jul 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/note/2015/07/23/lorem-ipsum/</guid>
+      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Quisque mattis volutpat lorem vitae feugiat.</description>
+    </item>
+    
+    <item>
+      <title>Teaching Experiences 및 교육 컨설팅 (과외)</title>
+      <link>http://rockandroh.com/teaching/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/teaching/</guid>
+      <description>____________________________________________________________________________________________________  Teaching Assistant (TA) &amp; Grader Positions   University of Chicago (UoC) / 시카고대학교   2020 Winter: Econometricss &amp;nbsp;-&amp;nbsp; Syllabus, TA Evaluation [Bachelor Course]  2019 Autumn: Statistical Methods in Economics &amp;nbsp;-&amp;nbsp; Syllabus, TA Evaluation [Bachelor Course]  2020 Winter: Introduction to Stochastic Calculus &amp;nbsp;-&amp;nbsp; Syllabus, Grader [Master Course] 2019 Winter: Portfolio Theory and Risk Management I &amp;nbsp;-&amp;nbsp; Syllabus, Grader [Master Course]  Students are invited to visit Uchicago Canvas to download teaching materials for these courses.</description>
+    </item>
+    
+    <item>
+      <title>Who is behind this blog?</title>
+      <link>http://rockandroh.com/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/about/</guid>
+      <description>Hello, this is Roh $\rho$ !
+Hello, my name is Hyunwoo Roh and you can call me Roh. After finishing the grad school in US and working as consultant/researcher in IT finance company, now I stay in a city called Daegu (Korea) doing civil service for two years. My research interests focus on statistical and machine learning analysis on data related to finance industry.
+While studying in University of Chicago (UoC), I was a teaching assistant and grader for several courses in statistics, econometrics, and finance courses at bachelor and master&amp;rsquo;s level.</description>
+    </item>
+    
+  </channel>
+</rss>

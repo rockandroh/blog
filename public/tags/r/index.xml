@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on Rock &#39;n&#39; Roh</title>
+    <link>http://rockandroh.com/tags/r/</link>
+    <description>Recent content in R on Rock &#39;n&#39; Roh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://rockandroh.com/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bootstrapping and its application in R</title>
+      <link>http://rockandroh.com/note/2020/10/15/bootstrapping-and-its-application-in-r/</link>
+      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/note/2020/10/15/bootstrapping-and-its-application-in-r/</guid>
+      <description>Setting Perform multiple tests at once Concise and easily interpretable results T-test  References   Setting As part of my teaching assistant position in a Belgian university, students often ask me for some help in their statistical analyses for their master’s thesis.
+A frequent question is how to compare groups of patients in terms of several quantitative continuous variables. Most of us know that:
+ To compare two groups, a Student’s t-test should be used1 To compare three groups or more, an ANOVA should be performed  These two tests are quite basic and have been extensively documented online and in statistical textbooks so the difficulty is not in how to perform these tests.</description>
+    </item>
+    
+  </channel>
+</rss>

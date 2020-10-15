@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>rmd template on Rock &#39;n&#39; Roh</title>
+    <link>http://rockandroh.com/tags/rmd-template/</link>
+    <description>Recent content in rmd template on Rock &#39;n&#39; Roh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://rockandroh.com/tags/rmd-template/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rmd Note Sample Using both R, Python, and C</title>
+      <link>http://rockandroh.com/note/2020/10/15/note-template/</link>
+      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://rockandroh.com/note/2020/10/15/note-template/</guid>
+      <description>Head 1 Head 2 R example Python Example CPP example  Latex Example References (Example)    Note: This document is to provide a sample template for the lecture notes in .Rmd
+Memo: test
+Usage of singe quote
+x = 5 # radius of a circle For a circle with the radius 5, its area is 78.5398163.
+Head 1 Add link like this. Link
+Description
+Footnote example1 Footnote example22</description>
+    </item>
+    
+  </channel>
+</rss>
