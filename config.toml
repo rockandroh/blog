@@ -34,11 +34,11 @@ footnotereturnlinkcontents = "↩"
 [[menu.main]]
     name = "Categories"
     url = "/categories/"
-    weight = 8
+    weight = 6
 [[menu.main]]
     name = "Tags"
     url = "/tags/"
-    weight = 9
+    weight = 7
 [[menu.main]]
     name = "Medium"
     url = "http://medium.com/@corr.roh"

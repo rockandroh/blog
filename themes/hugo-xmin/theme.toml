@@ -8,5 +8,5 @@ features = ["blog"]
 min_version = "0.18"
 
 [author]
-  name = "Roh"
+  name = "Yihui Xie"
   homepage = "https://yihui.org"
