@@ -1,4 +1,4 @@
-baseurl = "http://rockandroh.com"
+baseurl = "https://rockandroh.netlify.app/"
 languageCode = "en-us"
 title = "Rock 'n' Roh"
 theme = "hugo-xmin"
