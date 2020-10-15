@@ -2,53 +2,53 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Rock &#39;n&#39; Roh</title>
-    <link>http://rockandroh.com/categories/</link>
+    <link>https://rockandroh.netlify.app/categories/</link>
     <description>Recent content in Categories on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://rockandroh.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R</title>
-      <link>http://rockandroh.com/categories/r/</link>
+      <link>https://rockandroh.netlify.app/categories/r/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>http://rockandroh.com/categories/r/</guid>
+      <guid>https://rockandroh.netlify.app/categories/r/</guid>
       <description></description>
     </item>
     
     <item>
       <title>statistics</title>
-      <link>http://rockandroh.com/categories/statistics/</link>
+      <link>https://rockandroh.netlify.app/categories/statistics/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>http://rockandroh.com/categories/statistics/</guid>
+      <guid>https://rockandroh.netlify.app/categories/statistics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>template</title>
-      <link>http://rockandroh.com/categories/template/</link>
+      <link>https://rockandroh.netlify.app/categories/template/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>http://rockandroh.com/categories/template/</guid>
+      <guid>https://rockandroh.netlify.app/categories/template/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Example</title>
-      <link>http://rockandroh.com/categories/example/</link>
+      <link>https://rockandroh.netlify.app/categories/example/</link>
       <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rockandroh.com/categories/example/</guid>
+      <guid>https://rockandroh.netlify.app/categories/example/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Hugo</title>
-      <link>http://rockandroh.com/categories/hugo/</link>
+      <link>https://rockandroh.netlify.app/categories/hugo/</link>
       <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rockandroh.com/categories/hugo/</guid>
+      <guid>https://rockandroh.netlify.app/categories/hugo/</guid>
       <description></description>
     </item>
     
