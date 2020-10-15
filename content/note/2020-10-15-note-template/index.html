@@ -1,0 +1,116 @@
+---
+title: Rmd Note Sample Using both R, Python, and C
+author: Roh
+date: '2020-10-15'
+slug: note-template
+categories:
+  - template
+tags:
+  - rmd template
+  - lecture template
+urlcolor: blue
+meta_img: /Users/master/Documents/GitHub//blog/content/note/2020-10-15-note-template/lec_note.jpg
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 5
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#head-1">Head 1</a></li>
+<li><a href="#head-2">Head 2</a><ul>
+<li><a href="#r-example">R example</a></li>
+<li><a href="#python-example">Python Example</a></li>
+<li><a href="#cpp-example">CPP example</a></li>
+</ul></li>
+<li><a href="#latex-example">Latex Example</a><ul>
+<li><a href="#references-example">References (Example)</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p><img src="lec_note.jpg" style="width:100.0%" /></p>
+<p><em><strong>Note</strong>: This document is to provide a sample template for the lecture notes in .Rmd</em></p>
+<p><em><strong>Memo</strong>: test</em></p>
+<p><code>Usage of singe quote</code></p>
+<pre class="r"><code>x = 5  # radius of a circle</code></pre>
+<p>For a circle with the radius 5,
+its area is 78.5398163.</p>
+<div id="head-1" class="section level1">
+<h1>Head 1</h1>
+<p>Add link like this. <a href="https://www.rockandroh.com">Link</a></p>
+<p>Description</p>
+<p>Footnote example<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+Footnote example2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+</div>
+<div id="head-2" class="section level1">
+<h1>Head 2</h1>
+<p>Refer to the <a href="https://www.rockandroh.com/note/2017/06/13/a-quick-note/">other lecture note in this blog</a></p>
+<div id="r-example" class="section level2">
+<h2>R example</h2>
+<p>Description</p>
+<p>Below chunk is a simple R code and its output</p>
+<pre class="r"><code># R code example
+dat &lt;- iris
+
+# remove one level to have only two groups
+dat &lt;- subset(dat, Species != &quot;setosa&quot;)
+dat$Species &lt;- factor(dat$Species)
+
+dim(dat)
+## [1] 100   5
+
+boxplot(dat[, 1] ~ dat$Species, # draw boxplots by group
+    ylab = names(dat[1]), # rename y-axis with variable&#39;s name
+    xlab = &quot;Species&quot;
+  )
+title(&#39;R example&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+Regarding the option whether to show output or not as well as running the code when knitting, here are the options.</p>
+<ul>
+<li><code>eval</code>: whether to evaluate the code</li>
+<li><code>echo</code>: whether to show the code or not</li>
+<li><code>result</code>: whether to show the result output</li>
+<li></li>
+</ul>
+</div>
+<div id="python-example" class="section level2">
+<h2>Python Example</h2>
+<p>To run python code in R, we simply need install the package called <code>reticulate</code>.</p>
+<pre class="r"><code>#install.packages(&#39;reticulate&#39;)
+library(reticulate)
+#py_install(packages = &quot;matplotlib&quot;)</code></pre>
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+x = np.arange(0,3,0.1)
+y = 1 + np.sin(2*np.pi*x)
+plt.plot(x,y)
+plt.title(&#39;python example&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
+</div>
+<div id="cpp-example" class="section level2">
+<h2>CPP example</h2>
+</div>
+</div>
+<div id="latex-example" class="section level1">
+<h1>Latex Example</h1>
+<p>We observe an <span class="math inline">\(iid\)</span> sample of size <span class="math inline">\(n\)</span>, <span class="math inline">\({[X_i]}_{i=1}^{n}\stackrel{iid}{\sim}F\)</span>. Each observation is real-values. We wish to estimate some parameter of the distribution <span class="math inline">\(F\)</span> that can be written as a functional of <span class="math inline">\(F, T(F)\)</span>. Examples include the following.</p>
+<ul>
+<li><span class="math inline">\(\mu = \int{xdF(x)}\)</span></li>
+<li><span class="math inline">\(median = \inf \{x:F(x)\ge0.5\}\)</span></li>
+<li><span class="math inline">\(Var=\int{\left(x-\mu\right)^2dF}\)</span></li>
+</ul>
+<div id="references-example" class="section level4">
+<h4>References (Example)</h4>
+<p>McDonald, J.H. 2014. Handbook of Biological Statistics (3rd ed.). Sparky House Publishing, Baltimore, Maryland.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>this part will be displaed in the footnote part<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>hello<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>

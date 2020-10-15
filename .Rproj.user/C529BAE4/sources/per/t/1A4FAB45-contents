@@ -1,0 +1,116 @@
+---
+title: Rmd Note Sample Using both R, Python, and C
+author: Roh
+date: '2020-10-15'
+slug: note-template
+categories:
+  - template
+tags:
+  - rmd template
+  - lecture template
+urlcolor: blue
+meta_img: /Users/master/Documents/GitHub//blog/content/note/2020-10-15-note-template/lec_note.jpg
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 5
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+![](/Users/master/Documents/GitHub//blog/content/note/2020-10-15-note-template/lec_note.jpg){width=100%}
+
+*__Note__: This document is to provide a sample template for the lecture notes in .Rmd*
+
+*__Memo__: test*
+
+`Usage of singe quote`
+
+```{r}
+x = 5  # radius of a circle
+```
+
+For a circle with the radius `r x`,
+its area is `r pi * x^2`.
+
+# Head 1
+
+Add link like this. [Link](https://www.rockandroh.com)
+
+Description
+
+Footnote example^[this part will be displaed in the footnote part]
+Footnote example2^[hello]
+
+# Head 2
+
+Refer to the [other lecture note in this blog](https://www.rockandroh.com/note/2017/06/13/a-quick-note/)
+
+## R example
+
+Description
+
+Below chunk is a simple R code and its output
+
+```{r, collapse=TRUE}
+# R code example
+dat <- iris
+
+# remove one level to have only two groups
+dat <- subset(dat, Species != "setosa")
+dat$Species <- factor(dat$Species)
+
+dim(dat)
+
+boxplot(dat[, 1] ~ dat$Species, # draw boxplots by group
+    ylab = names(dat[1]), # rename y-axis with variable's name
+    xlab = "Species"
+  )
+title('R example')
+
+```
+
+Regarding the option whether to show output or not as well as running the code when knitting, here are the options.
+
+- `eval`: whether to evaluate the code
+- `echo`: whether to show the code or not
+- `result`: whether to show the result output
+- `collapse`: Whether to merge text output and source code into a single code block in the output
+- `warning`, `message`, `error`: wether to display warning, message, and error
+- `include`: whether to include anything from a code chunk in the output document
+
+## Python Example
+
+To run python code in R, we simply need install the package called `reticulate`.
+
+```{r}
+#install.packages('reticulate')
+library(reticulate)
+#py_install(packages = "matplotlib")
+```
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+x = np.arange(0,3,0.1)
+y = 1 + np.sin(2*np.pi*x)
+plt.plot(x,y)
+plt.title('python example')
+```
+
+## CPP example
+
+
+# Latex Example
+
+We observe an $iid$ sample of size $n$, ${[X_i]}_{i=1}^{n}\stackrel{iid}{\sim}F$. Each observation is real-values. We wish to estimate some parameter of the distribution $F$ that can be written as a functional of $F, T(F)$. Examples include the following. 
+
+- $\mu = \int{xdF(x)}$
+- $median = \inf \{x:F(x)\ge0.5\}$
+- $Var=\int{\left(x-\mu\right)^2dF}$
+
+#### References (Example)
+
+McDonald, J.H. 2014. Handbook of Biological Statistics (3rd ed.). Sparky House Publishing, Baltimore, Maryland.
