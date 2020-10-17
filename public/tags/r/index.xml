@@ -8,14 +8,12 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/tags/r/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Bootstrapping and its application in R</title>
+      <title>Bootstrapping and its Implementation in R</title>
       <link>https://rockandroh.netlify.app/note/2020/10/15/bootstrapping-and-its-application-in-r/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2020/10/15/bootstrapping-and-its-application-in-r/</guid>
-      <description>Setting Perform multiple tests at once Concise and easily interpretable results T-test  References   Setting As part of my teaching assistant position in a Belgian university, students often ask me for some help in their statistical analyses for their master’s thesis.
-A frequent question is how to compare groups of patients in terms of several quantitative continuous variables. Most of us know that:
- To compare two groups, a Student’s t-test should be used1 To compare three groups or more, an ANOVA should be performed  These two tests are quite basic and have been extensively documented online and in statistical textbooks so the difficulty is not in how to perform these tests.</description>
+      <description>About Empirical Bootstrap (a.k.a Nonparametric Bootstrap) What is bootstrapping sample and how to generate it? Let’s take median as a parameter of distribution of our interest What is it for? Difference between real world and bootstrap world Empirical CDF Why does it work?  Parametric Bootstrap References   About This page is to provide a gentle introduction of Bootstrapping and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end.</description>
     </item>
     
   </channel>

@@ -8,14 +8,12 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Bootstrapping and its application in R</title>
+      <title>Bootstrapping and its Implementation in R</title>
       <link>https://rockandroh.netlify.app/note/2020/10/15/bootstrapping-and-its-application-in-r/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2020/10/15/bootstrapping-and-its-application-in-r/</guid>
-      <description>Setting Perform multiple tests at once Concise and easily interpretable results T-test  References   Setting As part of my teaching assistant position in a Belgian university, students often ask me for some help in their statistical analyses for their master’s thesis.
-A frequent question is how to compare groups of patients in terms of several quantitative continuous variables. Most of us know that:
- To compare two groups, a Student’s t-test should be used1 To compare three groups or more, an ANOVA should be performed  These two tests are quite basic and have been extensively documented online and in statistical textbooks so the difficulty is not in how to perform these tests.</description>
+      <description>About Empirical Bootstrap (a.k.a Nonparametric Bootstrap) What is bootstrapping sample and how to generate it? Let’s take median as a parameter of distribution of our interest What is it for? Difference between real world and bootstrap world Empirical CDF Why does it work?  Parametric Bootstrap References   About This page is to provide a gentle introduction of Bootstrapping and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end.</description>
     </item>
     
     <item>
@@ -34,42 +32,17 @@ Footnote example1 Footnote example22</description>
     </item>
     
     <item>
-      <title>Another Note on A blogdown Tutorial</title>
-      <link>https://rockandroh.netlify.app/data/another-note/</link>
-      <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
+      <title>Useful Websites</title>
+      <link>https://rockandroh.netlify.app/note/2020/10/15/useful-website/</link>
+      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/data/another-note/</guid>
-      <description>I just discovered an awesome tutorial on blogdown written by Alison. I have to admit this is the best blogdown tutorial I have seen so far.</description>
-    </item>
-    
-    <item>
-      <title>Another Note on A blogdown Tutorial</title>
-      <link>https://rockandroh.netlify.app/note/2017/06/14/another-note/</link>
-      <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/note/2017/06/14/another-note/</guid>
-      <description>I just discovered an awesome tutorial on blogdown written by Alison. I have to admit this is the best blogdown tutorial I have seen so far.</description>
-    </item>
-    
-    <item>
-      <title>A Quick Note on Two Beautiful Websites</title>
-      <link>https://rockandroh.netlify.app/note/2017/06/13/a-quick-note/</link>
-      <pubDate>Tue, 13 Jun 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/note/2017/06/13/a-quick-note/</guid>
-      <description>To me, the two most impressive websites based on blogdown are:
- Rob J Hyndman&amp;rsquo;s personal website. Live Free or Dichotomize by Lucy and Nick et al.  I&amp;rsquo;m sure there will be more.</description>
-    </item>
-    
-    <item>
-      <title>A Plain Markdown Post</title>
-      <link>https://rockandroh.netlify.app/note/2016/02/14/a-plain-markdown-post/</link>
-      <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/note/2016/02/14/a-plain-markdown-post/</guid>
-      <description>This sample post is mainly for blogdown users. If you do not use blogdown, you can skip the first section.
-1. Markdown or R Markdown This is a post written in plain Markdown (*.md) instead of R Markdown (*.Rmd). The major differences are:
- You cannot run any R code in a plain Markdown document, whereas in an R Markdown document, you can embed R code chunks (```{r}); A plain Markdown post is rendered through Blackfriday, and an R Markdown document is compiled by rmarkdown and Pandoc.</description>
+      <guid>https://rockandroh.netlify.app/note/2020/10/15/useful-website/</guid>
+      <description>Note: This page is to provide a list of useful notes
+Blogdown  https://bookdown.org/yihui/blogdown/
+ https://www.storybench.org/how-to-build-a-website-with-blogdown-in-r/
+Hugo version control in netlify by setting the environment variable.
+ https://docs.netlify.com/configure-builds/environment-variables/#netlify-configuration-variables
+ HUGO_VERSION We need to set this not to have ‘build-site’ error  Building sites … ERROR 2020/10/15 16:41:28 render of &#34;taxonomyTerm&#34; failed: &#34;/opt/build/repo/themes/hugo-xmin/layouts/_default/terms.html:8:21&#34;: execute of template failed: template: _default/terms.html:8:21: executing &#34;_default/terms.html&#34; at &amp;lt;.Page.RelPermalink&amp;gt;: can&#39;t evaluate field Page in type hugolib.WeightedPages</description>
     </item>
     
     <item>
@@ -81,16 +54,6 @@ Footnote example1 Footnote example22</description>
       <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
 You can embed an R code chunk like this:
 summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
-    </item>
-    
-    <item>
-      <title>Lorem Ipsum</title>
-      <link>https://rockandroh.netlify.app/note/2015/07/23/lorem-ipsum/</link>
-      <pubDate>Thu, 23 Jul 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/note/2015/07/23/lorem-ipsum/</guid>
-      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Quisque mattis volutpat lorem vitae feugiat.</description>
     </item>
     
     <item>
