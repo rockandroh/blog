@@ -48,12 +48,6 @@ footnotereturnlinkcontents = "↩"
     description = "A website built through Hugo and blogdown."
     footer = "&copy; [Roh](/) 2020 | [Github](https://github.com/rockandroh) | [Medium](https://medium.com/@corr.roh)"
 
-[context.production]
-  command = "hugo"
-  [context.production.environment]
-    HUGO_VERSION = "0.76.5"
-    HUGO_ENV = "production"
-
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]

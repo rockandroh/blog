@@ -1,0 +1,38 @@
+---
+title: Useful Websites
+author: Roh
+date: '2020-10-15'
+slug: useful-website
+categories:
+  - miscellaneous
+tags:
+  - information
+urlcolor: blue
+output:
+  blogdown::html_page:
+    toc: false
+    #toc_depth: 5
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*__Note__: This page is to provide a list of useful notes*
+
+#### Blogdown
+
+- https://bookdown.org/yihui/blogdown/
+- https://www.storybench.org/how-to-build-a-website-with-blogdown-in-r/
+
+  Hugo version control in netlify by setting the environment variable.
+
+- https://docs.netlify.com/configure-builds/environment-variables/#netlify-configuration-variables
+  - HUGO_VERSION
+  - We need to set this not to have 'build-site' error
+  
+  `Building sites … ERROR 2020/10/15 16:41:28 render of "taxonomyTerm" failed: "/opt/build/repo/themes/hugo-xmin/layouts/_default/terms.html:8:21": execute of template failed: template: _default/terms.html:8:21: executing "_default/terms.html" at <.Page.RelPermalink>: can't evaluate field Page in type hugolib.WeightedPages`
+  
+
+  
+  

@@ -3,11 +3,13 @@ title: Home
 ---
 <img src="/./_index_files/roh_image.jpg" style="max-width:20%;min-width:50px;float:right;" alt="Github repo"/>
 
-# Rock 'n' Roh `\(\rho\)`
+# Rock 'n' Roh($\rho$)
 
 ## Welcome to my website 
 
-Let's **Rock and Roh**. This blog is about [statistics](/categories/statistics/), [machine learning](/categories/machine/), and [finance](/tags/finance/), which covers both theoretical and practical sides. 
+Let's **Rock and Roh**. This blog is about [statistics](/categories/statistics/), [machine learning](/categories/machine/), and [finance](/tags/finance/), 
+
+which covers both theoretical and practical sides. 
 
 **If you are new to this blog**, I invite you to:
 

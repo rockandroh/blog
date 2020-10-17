@@ -1,0 +1,3 @@
+"0","bs_MSE = (1/length(bs_sample_median_vec))*sum((bs_sample_median_vec - median(mpg))^2)"
+"0","printf(""Bootstrap estimate of MSE is: %.2f"", bs_MSE)"
+"1","Bootstrap estimate of MSE is: 0.67"
