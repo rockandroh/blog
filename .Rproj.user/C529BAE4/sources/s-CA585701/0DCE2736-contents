@@ -1,0 +1,24 @@
+---
+title: data structure summary
+author: Roh
+date: '2020-10-19'
+slug: data-structure-summary
+categories:
+  - computer science
+tags:
+  - data structure
+urlcolor: blue
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 2
+---
+
+# 자료구조 렉쳐노트 정리
+
+## 자료의 표현
+- 디지털 시스템에서의 자료 표현
+  - 모든 형식의 자료를 2진수 코드로 표현하여 저장 및 처리
+  - 2진수 코드의 단위
+    - 8비트 = 2니블 = 1바이트
+

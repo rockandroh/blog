@@ -3,11 +3,11 @@ title: Home
 ---
 <img src="/./_index_files/roh_image.jpg" style="max-width:20%;min-width:50px;float:right;" alt="Github repo"/>
 
-# Rock 'n' Roh($\rho$)
+# Rock 'n' Roh
 
 ## Welcome to my website 
 
-Let's **Rock and Roh**. This blog is about [statistics](/categories/statistics/), [machine learning](/categories/machine/), and [finance](/tags/finance/), 
+Let's **Rock and Roh**. You might have already figured it out from the name of this blog, I go by '로 (Roh)' that pronounces same as correlation coefficient ($\rho$). This blog is about [statistics](/categories/statistics/), [machine learning](/categories/machine/), and [finance](/tags/finance/), 
 
 which covers both theoretical and practical sides. 
 
