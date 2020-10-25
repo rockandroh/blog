@@ -23,7 +23,6 @@ output:
 <li><a href="#head-2">Head 2</a><ul>
 <li><a href="#r-example">R example</a></li>
 <li><a href="#python-example">Python Example</a></li>
-<li><a href="#cpp-example">CPP example</a></li>
 </ul></li>
 <li><a href="#latex-example">Latex Example</a><ul>
 <li><a href="#references-example">References (Example)</a></li>
@@ -67,13 +66,15 @@ boxplot(dat[, 1] ~ dat$Species, # draw boxplots by group
     xlab = &quot;Species&quot;
   )
 title(&#39;R example&#39;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
-Regarding the option whether to show output or not as well as running the code when knitting, here are the options.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Regarding the option whether to show output or not as well as running the code when knitting, here are the options.</p>
 <ul>
 <li><code>eval</code>: whether to evaluate the code</li>
 <li><code>echo</code>: whether to show the code or not</li>
 <li><code>result</code>: whether to show the result output</li>
-<li></li>
+<li><code>collapse</code>: Whether to merge text output and source code into a single code block in the output</li>
+<li><code>warning</code>, <code>message</code>, <code>error</code>: wether to display warning, message, and error</li>
+<li><code>include</code>: whether to include anything from a code chunk in the output document</li>
 </ul>
 </div>
 <div id="python-example" class="section level2">
@@ -88,10 +89,7 @@ x = np.arange(0,3,0.1)
 y = 1 + np.sin(2*np.pi*x)
 plt.plot(x,y)
 plt.title(&#39;python example&#39;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
-</div>
-<div id="cpp-example" class="section level2">
-<h2>CPP example</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 </div>
 <div id="latex-example" class="section level1">
