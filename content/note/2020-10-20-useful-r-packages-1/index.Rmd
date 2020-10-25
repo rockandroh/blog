@@ -1,0 +1,56 @@
+---
+title: 'Useful R packages #1'
+author: Roh
+date: '2020-10-20'
+slug: useful-r-packages-1
+categories:
+  - R
+tags:
+  - r packages
+output:
+blogdown::html_page:
+  toc: true
+  toc_depth: 6
+# draft: true
+---
+
+This page provides a summary and simple examples of contents introduced in the Medium as "The Most Underrated R pakcages: 2020 Edition".  
+
+## Misc
+
+#### Make Calendar
+
+```{r}
+#install.packages('calendR')
+library(calendR)
+calendR(year = 2020, month=10, title.size = 10, 
+        subtitle = "Have a nice day",
+        subtitle.col = 'Blue',
+        day.size = 3,
+        weeknames.size = 4,
+        weeknames.col = 'blue',
+        weeknames = c('Mon','Tue','Wed','Thu','Fri','Sat','Sun'),
+        start = 'M',
+        special.days = 'weekend',
+        special.col = 'skyblue',
+        lty = 1, margin = 0
+        )
+
+```
+
+#### Checkpoint
+
+The goal of `checkpoint` is to solve the problem of package reproducibility in R. Specifically, `checkpoint` solve the problems that occur when you don’t have the correct versions of R packages. Since packages get updated on CRAN all the time, it can be difficult to recreate an environment where all your packages are consistent with some earlier state.
+
+
+
+
+
+
+
+
+
+
+
+# Reference
+- https://towardsdatascience.com/the-most-underrated-r-packages-254e4a6516a1

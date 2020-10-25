@@ -1,0 +1,59 @@
+---
+title: sampling method in detail
+author: Roh
+date: '2020-10-21'
+slug: sampling-method-in-detail
+categories:
+  - sampling technique
+tags:
+  - mcmc
+  - gibbs
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 6
+# draft: true
+---
+
+This page talks about how to sample from the distribution. We will go over well known sampling techniques and try to implement with various examples. 
+
+## Basic
+
+What it means to calcaulte the variance with mean 0?
+
+$$ Var[X]= \int_{-\infty}^{\infty} x^2 f(x)dx $$
+when $f(x)$ is $N(1,2)$. Then $f(x)$ is  $$\frac{1}{\sqrt{2\pi\sigma^2}}\cdot\exp\left(-(x-\mu)^2/2\sigma^2\right)$$ where $\mu$ is 0 and $\sigma$ is 2. 
+
+$$ Var[X]= \int_{-\infty}^{\infty} x^2 \frac{f(x)}{g(x)}g(x)dx $$
+where $g(x)$ is N(0,3)+1 
+
+- Integrand of $x$ along with density being integrated against $f(x)$
+
+We are going to show the true mean, mean using simple monte carlo, and mean using importance sampling.
+
+```{r}
+set.seed(1234)
+mu = 0
+sigma = 2
+X = rnorm(1e5, mu, sigma)
+X2 = X^2
+mean(X2); var(X2)
+```
+
+```{r}
+exp(-1000)/(exp(-1000)+exp(-1001))
+1/(1+exp(-1))
+```
+
+
+## Inverse Transform Sampling
+
+If we know the exact form of the distribution, we can sample the points using the inverse CDF technique.
+
+## Rejection Sampling
+
+## Importance Sampling
+
+- Not for generating samples. It is a method to estimate the expected value of a function directly
+
+## 
