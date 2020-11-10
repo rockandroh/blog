@@ -8,14 +8,13 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 10 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/note/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>간단한 수학 문제풀이 (1)</title>
+      <title>간단한 수리능력 문제 (1)</title>
       <link>https://rockandroh.netlify.app/note/2020/11/10/simple-math-question-1/</link>
       <pubDate>Tue, 10 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2020/11/10/simple-math-question-1/</guid>
-      <description>질문1 A,B,C 세 사람이 같이하면 5일 만에 끝낼 수 있는 일을 A, B 두 사람이 하면 10일, B, C 두 사람이 하면 6일 만에 끝낸다고 한다. 이 일을 B 혼자서 하게 되면 며칠이나 걸릴까?
- 끝내야 하는 일의 총 양을 1 이라고 하고 A, B, C 세 사람이 하루에 할 수 있는 일의 양을 a, b, c 라고 하자. 그러면 다음과 같은 식을 적어 볼 수 있다.
- 각 사람이 하루에 할 수 있는 양을 a,b,c 라고 정할 것을 다시한번 기억하자!</description>
+      <description>질문1 세팅 풀이 R code  질문2 세팅 풀이 R code    질문1 A,B,C 세 사람이 같이하면 5일 만에 끝낼 수 있는 일을 A, B 두 사람이 하면 10일, B, C 두 사람이 하면 6일 만에 끝낸다고 한다. 이 일을 B 혼자서 하게 되면 며칠이나 걸릴까?
+세팅  끝내야 하는 일의 총 양을 1 이라고 하고 A, B, C 세 사람이 하루에 할 수 있는 일의 양을 a, b, c 라고 하자.</description>
     </item>
     
     <item>

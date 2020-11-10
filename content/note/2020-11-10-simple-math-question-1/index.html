@@ -1,38 +1,62 @@
 ---
-title: 간단한 수학 문제풀이 (1)
-author: roh
+title: 간단한 수리능력 문제 (1)
+author: Roh
 date: '2020-11-10'
 slug: simple-math-question-1
 categories: []
 tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 5
 ---
 
 
+<div id="TOC">
+<ul>
+<li><a href="#질문1">질문1</a><ul>
+<li><a href="#세팅">세팅</a></li>
+<li><a href="#풀이">풀이</a></li>
+<li><a href="#r-code">R code</a></li>
+</ul></li>
+<li><a href="#질문2">질문2</a><ul>
+<li><a href="#세팅-1">세팅</a></li>
+<li><a href="#풀이-1">풀이</a></li>
+<li><a href="#r-code-1">R code</a></li>
+</ul></li>
+</ul>
+</div>
 
 <div id="질문1" class="section level1">
 <h1>질문1</h1>
 <p>A,B,C 세 사람이 같이하면 5일 만에 끝낼 수 있는 일을 A, B 두 사람이 하면 10일, B, C 두 사람이 하면 6일 만에 끝낸다고 한다. 이 일을 B 혼자서 하게 되면 며칠이나 걸릴까?</p>
+<div id="세팅" class="section level2">
+<h2>세팅</h2>
 <ul>
-<li><p>끝내야 하는 일의 총 양을 1 이라고 하고 A, B, C 세 사람이 하루에 할 수 있는 일의 양을 a, b, c 라고 하자. 그러면 다음과 같은 식을 적어 볼 수 있다.</p></li>
-<li><p>각 사람이 하루에 할 수 있는 양을 a,b,c 라고 정할 것을 다시한번 기억하자!</p></li>
-<li><p>a,b,c가 같이하면 5일:</p>
-<ul>
-<li><strong>5a + 5b + 5c = 1</strong></li>
-</ul></li>
-<li><p>a,b가 같이하면 10일:</p>
-<ul>
-<li><strong>10a + 10b = 1</strong></li>
-</ul></li>
-<li><p>b,c 가 같이하면 6일:</p>
-<ul>
-<li><strong>6b + 6c = 1</strong></li>
-</ul></li>
+<li>끝내야 하는 일의 총 양을 1 이라고 하고 A, B, C 세 사람이 하루에 할 수 있는 일의 양을 a, b, c 라고 하자. 그러면 다음과 같은 식을 적어 볼 수 있다.</li>
+<li>각 사람이 하루에 할 수 있는 양을 a,b,c 라고 정할 것을 다시한번 기억하자!</li>
+<li>결국 b를 먼저 구하고, b x 숫자 &gt; 1 가 되는 최소 숫자가 정답이 될 것이다.</li>
 </ul>
-<p>이 식들을 풀어서 a,b,c 를 구하면</p>
+</div>
+<div id="풀이" class="section level2">
+<h2>풀이</h2>
+<ul>
+<li>A,B,C 가 같이 하면 5일:
+<span class="math display">\[5a  + 5b  + 5c = 1 \qquad (1)\]</span></li>
+<li>A,B 가 같이 하면 10일:
+<span class="math display">\[10a + 10b = 1 \qquad (2)\]</span></li>
+<li>B,C 가 같이 하면 6일:
+<span class="math display">\[6b  + 6c = 1 \qquad (3)\]</span>
+이 식들을 풀어서 a,b,c 를 구하면 다음과 같다.</li>
+</ul>
 <pre><code>##       [,1]
 ## a =  0.033
 ## b =  0.067
 ## c =  0.100</code></pre>
+<p>이 식을 푸는 방법은</p>
+<p>식 (1)에 2를 곱하면 <span class="math display">\[10a  + 10b  + 10c = 2 \qquad (4)\]</span> 이 되고 여기서 식
+(2) 를 빼면 <span class="math inline">\(c=1/10\)</span> 을 구할 수 있다.</p>
+<p>c의 값을 알았기 때문에 이를 식 (3)에 넣어서 b를 구하면 되고 똑같은 방법으로 b를 알았기 때문에 이를 식 (2)에 넣어서 a를 구해주면 된다.</p>
 <p>b가 하루에 하는 일의 양은 0.067 이고 끝내야 하는 일의 총양은 1이므로</p>
 <ul>
 <li>b가 10일 일하면 0.67</li>
@@ -40,4 +64,75 @@ tags: []
 <li>b가 20일 일하면 1.34</li>
 </ul>
 <p>따라서 혼자서 일하는 경우에, b가 15일을 일하면 일을 끝낼 수 있게 된다.</p>
+</div>
+<div id="r-code" class="section level2">
+<h2>R code</h2>
+<p>위의 선형 방정식을 푸는 것은 R로도 다음과 같이 간단하게 해볼 수 있다.</p>
+<pre class="r"><code>X = matrix(c(5,5,5,
+             10,10,0,
+             0,6,6),
+           nrow = 3,
+           ncol = 3,
+           byrow = TRUE)
+y = matrix(c(1,1,1), 
+           nrow = 3,
+           ncol = 1)
+sol = round(solve(X,y),3)
+row.names(sol) = c(&#39;a = &#39;,&#39;b = &#39;,&#39;c = &#39;)
+print(sol)</code></pre>
+<pre><code>##       [,1]
+## a =  0.033
+## b =  0.067
+## c =  0.100</code></pre>
+</div>
+</div>
+<div id="질문2" class="section level1">
+<h1>질문2</h1>
+<p>풀장에 물을 채우는데, A관과 B관을 동시에 사용하면 3시간, B관과 C관을 동시에 사용하면 4시간, C관과 A관을 동시에 사용하면 6시간이 걸린다. 이 때 A,B,C 관을 동시에 사용하면 풀장의 물을 가득 채우는 데 몇 시간 정도 걸릴까?</p>
+<div id="세팅-1" class="section level2">
+<h2>세팅</h2>
+<ul>
+<li><p>풀장 전체의 크기를 임의로 1로 가정하자. 크기는 굳이 1이 아니라 아무 숫자로 가정해도 상관없다. 편의상 3, 4, 6시간 걸린다는 정보가 있으니 <strong>12</strong>로 가정하자.</p></li>
+<li><p>위에서는 하루당 A,B,C가 할 수 있는 일을 a,b,c 로 생각했다면, 이번에는 A,B,C 관이 한시간에 채울 수 있는 물의 양을 a,b,c 라고 생각하자.</p></li>
+<li><p>나머지는 위의 풀이와 비슷하게…. 이번에는 1이 아니라 12로 설정했기 때문에 다음과 같이 식을 적어볼 수 있다.</p></li>
+</ul>
+</div>
+<div id="풀이-1" class="section level2">
+<h2>풀이</h2>
+<ul>
+<li>A,B 관을 이용하면 3시간:
+<span class="math display">\[3a  + 3b = 12 \qquad (5)\]</span></li>
+<li>B,C 관을 이용하면 4시간:
+<span class="math display">\[4b + 4c = 12 \qquad (6)\]</span></li>
+<li>C,A 가 같이하면 6일:
+<span class="math display">\[6a  + 6c = 12 \qquad (7)\]</span>
+마찬가지로 이 식들을 풀면</li>
+</ul>
+<pre><code>##      [,1]
+## a =   1.5
+## b =   2.5
+## c =   0.5</code></pre>
+<p>문제로 돌아가서, A,B,C 관을 동시에 사용할 경우 걸리는 시간을 x 라두면 <span class="math display">\[x\cdot(a+b+c)=12\]</span>
+a+b+c가 4.5 이므로 x 는 <span class="math inline">\(2\frac{2}{3}\)</span> 이다. 따라서 걸리는 시간은 <span class="math inline">\(2\frac{2}{3}\)</span> 시간이고, 이는 2시간 40분이다.</p>
+</div>
+<div id="r-code-1" class="section level2">
+<h2>R code</h2>
+<p>위의 선형 방정식을 푸는 것은 R로도 다음과 같이 간단하게 해볼 수 있다.</p>
+<pre class="r"><code>X = matrix(c(3,3,0,
+             0,4,4,
+             6,0,6),
+           nrow = 3,
+           ncol = 3,
+           byrow = TRUE)
+y = matrix(c(12,12,12), 
+           nrow = 3,
+           ncol = 1)
+sol = round(solve(X,y),3)
+row.names(sol) = c(&#39;a = &#39;,&#39;b = &#39;,&#39;c = &#39;)
+print(sol)</code></pre>
+<pre><code>##      [,1]
+## a =   1.5
+## b =   2.5
+## c =   0.5</code></pre>
+</div>
 </div>
