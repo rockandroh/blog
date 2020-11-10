@@ -3,8 +3,78 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://rockandroh.netlify.app/</loc>
+    <lastmod>2020-11-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/</loc>
+    <lastmod>2020-11-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/2020/11/10/simple-math-question-1/</loc>
+    <lastmod>2020-11-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://rockandroh.netlify.app/categories/</loc>
-    <lastmod>2020-10-19T00:00:00+00:00</lastmod>
+    <lastmod>2020-10-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/finance/</loc>
+    <lastmod>2020-10-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/tags/r/</loc>
+    <lastmod>2020-10-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/r/</loc>
+    <lastmod>2020-10-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/2020/10/27/reproducible-finance-with-r-1/</loc>
+    <lastmod>2020-10-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/tags/</loc>
+    <lastmod>2020-10-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/tags/gibbs/</loc>
+    <lastmod>2020-10-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/tags/mcmc/</loc>
+    <lastmod>2020-10-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/2020/10/21/sampling-method-in-detail/</loc>
+    <lastmod>2020-10-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/sampling-technique/</loc>
+    <lastmod>2020-10-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/tags/r-packages/</loc>
+    <lastmod>2020-10-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/2020/10/20/useful-r-packages-1/</loc>
+    <lastmod>2020-10-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -14,21 +84,6 @@
   
   <url>
     <loc>https://rockandroh.netlify.app/tags/data-structure/</loc>
-    <lastmod>2020-10-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/</loc>
-    <lastmod>2020-10-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/note/</loc>
-    <lastmod>2020-10-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/tags/</loc>
     <lastmod>2020-10-19T00:00:00+00:00</lastmod>
   </url>
   
@@ -69,16 +124,6 @@
   
   <url>
     <loc>https://rockandroh.netlify.app/categories/miscellaneous/</loc>
-    <lastmod>2020-10-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/tags/r/</loc>
-    <lastmod>2020-10-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/categories/r/</loc>
     <lastmod>2020-10-15T00:00:00+00:00</lastmod>
   </url>
   

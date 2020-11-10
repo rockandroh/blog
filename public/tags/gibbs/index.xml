@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>gibbs on Rock &#39;n&#39; Roh</title>
+    <link>https://rockandroh.netlify.app/tags/gibbs/</link>
+    <description>Recent content in gibbs on Rock &#39;n&#39; Roh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 21 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/tags/gibbs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>sampling method in detail</title>
+      <link>https://rockandroh.netlify.app/note/2020/10/21/sampling-method-in-detail/</link>
+      <pubDate>Wed, 21 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/10/21/sampling-method-in-detail/</guid>
+      <description>Basic Inverse Transform Sampling Rejection Sampling Importance Sampling    This page talks about how to sample from the distribution. We will go over well known sampling techniques and try to implement with various examples.
+Basic What it means to calcaulte the variance with mean 0?
+\[ Var[X]= \int_{-\infty}^{\infty} x^2 f(x)dx \] when \(f(x)\) is \(N(1,2)\). Then \(f(x)\) is \[\frac{1}{\sqrt{2\pi\sigma^2}}\cdot\exp\left(-(x-\mu)^2/2\sigma^2\right)\] where \(\mu\) is 0 and \(\sigma\) is 2.</description>
+    </item>
+    
+  </channel>
+</rss>

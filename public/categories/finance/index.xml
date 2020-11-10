@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>finance on Rock &#39;n&#39; Roh</title>
+    <link>https://rockandroh.netlify.app/categories/finance/</link>
+    <description>Recent content in finance on Rock &#39;n&#39; Roh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 27 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/finance/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R과 금융데이터 (1) - 데이터 불러오기 및 관련 function 연습</title>
+      <link>https://rockandroh.netlify.app/note/2020/10/27/reproducible-finance-with-r-1/</link>
+      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/10/27/reproducible-finance-with-r-1/</guid>
+      <description>패키지 준비하기 데이터 불러오기 csv파일 불러오기 엑셀 파일 불러오기   Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.
+패키지 준비하기  데이터 불러오기 아래의 티커를 이용해서 야후 파이낸스로 부터 데이터를 받아옵니다.
+library(purrr) symbols = c(&amp;#39;SPY&amp;#39;,&amp;#39;EFA&amp;#39;,&amp;#39;IJS&amp;#39;,&amp;#39;EEM&amp;#39;,&amp;#39;AGG&amp;#39;) prices = getSymbols(symbols, src = &amp;#39;yahoo&amp;#39;, from = &amp;#39;2012-12-31&amp;#39;, to = &amp;#39;2017-12-31&amp;#39;, auto.assign = TRUE, warnings = FALSE) %&amp;gt;% map(~Ad((get(.)))) %&amp;gt;% # get adjusted price from each of our individual price series reduce(merge) %&amp;gt;% # looks for the date index shared by our objects and uses that index to align the data &amp;#39;colnames&amp;lt;-&amp;#39;(symbols) # rename the columns according to the symbols object ## &amp;#39;getSymbols&amp;#39; currently uses auto.</description>
+    </item>
+    
+  </channel>
+</rss>

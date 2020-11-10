@@ -6,7 +6,34 @@
     <description>Recent content in Categories on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 19 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 27 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>finance</title>
+      <link>https://rockandroh.netlify.app/categories/finance/</link>
+      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/finance/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://rockandroh.netlify.app/categories/r/</link>
+      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sampling technique</title>
+      <link>https://rockandroh.netlify.app/categories/sampling-technique/</link>
+      <pubDate>Wed, 21 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/sampling-technique/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>computer science</title>
       <link>https://rockandroh.netlify.app/categories/computer-science/</link>
@@ -22,15 +49,6 @@
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/categories/miscellaneous/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>https://rockandroh.netlify.app/categories/r/</link>
-      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/categories/r/</guid>
       <description></description>
     </item>
     

@@ -1,0 +1,261 @@
+---
+title: R과 금융데이터 (1) 및 R 연습 
+author: Roh
+date: '2020-10-27'
+slug: reproducible-finance-with-r-1
+categories:
+  - R
+  - finance
+tags:
+  - R
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 6
+---
+
+## 데이터 불러오기 및 관련 function 연습
+
+*__Note__: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.*
+
+#### 패키지 준비하기
+
+```{r, echo=FALSE,results='hide', warning=FALSE, message=FALSE}
+# install.packages("tidyverse") 
+# install.packages("lubridate")
+# install.packages("readxl") 
+# install.packages("highcharter") 
+# install.packages("tidyquant") 
+# install.packages("timetk") 
+# install.packages("tibbletime") 
+# install.packages("quantmod") 
+# install.packages("PerformanceAnalytics") 
+# install.packages("scales")
+
+library(tidyverse)
+library(lubridate) 
+library(readxl) 
+library(highcharter) 
+library(tidyquant)
+library(timetk) 
+library(tibbletime) 
+library(quantmod) 
+library(PerformanceAnalytics) 
+library(scales)
+```
+
+
+
+#### 데이터 불러오기 
+아래의 티커를 이용해서 야후 파이낸스로 부터 데이터를 받아옵니다. 
+
+```{r}
+library(purrr)
+symbols = c('SPY','EFA','IJS','EEM','AGG')
+prices = 
+  getSymbols(symbols,
+                    src = 'yahoo',
+                    from = '2012-12-31',
+                    to = '2017-12-31',
+                    auto.assign = TRUE,
+                    warnings = FALSE) %>%
+  map(~Ad((get(.)))) %>% # get adjusted price from each of our individual price series
+  reduce(merge) %>% # looks for the date index shared by our objects and uses that index to align the data
+  'colnames<-'(symbols) # rename the columns according to the symbols object
+head(prices)
+```
+
+**map** function
+- apply a function to each element of a list or atomic vector
+- map() always returns a list
+```{r, collapse=TRUE}
+1:3 %>% map(function(x) rnorm(5, mean=x, sd=1))
+1:3 %>% map(~ .x**2)
+```
+**Usage of Reduce() and merge()**
+- `Reduce()` takes a function `f` of two arguments and a list or vector `x` which is to be 'reduced' using `f`. The function is first called on the first two components of x, then with the result of that as the first argument and the third component of x as the second argument, then again with the result of the second step as first argument and the fourth component of x as the second argument etc. The process is continued until all elements of x have been processed. 
+
+```{r}
+cumsum(1:5)
+Reduce(x=1:5, f="+")
+Reduce(x=1:5, f="+", accumulate = TRUE)
+```
+
+- Joining multiple data frames with the same ids but different other columns. While there is a ready-made function `join_all()` for this in the `plyr` package, we will see shortly how to solve this task using `Reduce()` using the `merge()` function from base `R`.
+
+- Sums of matrix powers
+```{r}
+P = rbind(c(0.9,0.1),c(1,0))
+library(expm)
+P_power = lapply(0:10, function(k) P %^% k)
+head(P_power)
+Reduce(P_power, f="+")
+```
+
+- Simulating a trajectory of a Markov Chain without a loop
+```{r}
+P <- matrix(c(0, 0.1, 0.9, 0.2, 0.5, 0.3, 0, 0.5, 0.5), ncol = 3, byrow = T);
+P
+x_0 <- 2
+newstate <- function(oldstate,u) {
+  which.min(u>cumsum(P[oldstate,]))
+}
+x_1 = newstate(x_0, runif(1)); x_1
+x_2 = newstate(x_1, runif(1)); x_2
+```
+
+We can continue to do this without looping by using the function `Reduce`.
+We just have to provide a vector that contains the starting state as first component and the K uniform random numbers needed to generate the following states. We also set `accumulate=TRUE`, because we want the whole trajectory and not only the state at time K.
+
+```{r}
+set.seed(1)
+K = 500
+mc_without_loop = Reduce(newstate, c(x_0,runif(K)),accumulate = TRUE)
+mc_without_loop
+# Distribution of states:
+table(mc_without_loop)/length(mc_without_loop)
+```
+
+#### csv파일 불러오기
+
+The function `tk_xts(date_var = date)` converts the data frame to an xts object. 
+
+```{r}
+prices = 
+  read_csv('Reproducible Finance.csv',
+           col_types = 
+             cols(date = col_date(format='%Y-%m-%d'))) %>%
+  tk_xts(date_var = date)
+```
+
+#### 엑셀 파일 불러오기
+
+- `mutate`: Create new variables with functions of existing variables
+
+```{r}
+prices = 
+  read_excel('Reproducible Finance.xlsx',
+             col_types = c('text','numeric','numeric','numeric','numeric','numeric')) %>%
+  mutate(date = ymd(date)) %>%
+  tk_xts(date_var = date)
+head(prices)
+```
+지금까지 raw 데이터를 R에 불러오는 3가지 방법을 알아보았습니다. 
+
+## Daily 가격 데이터를 Monthly 데이터로 변환하기
+- to.monthly 함수를 사용하면 간편하게 변환할 수 있다.
+- 한달치 일일 가격을 월별 데이터로 변환할때, 예를들어 12월 가격 데이터인 경우, 
+  - 12월 1일 데이터를 12월의 가격 데이터로 사용할지 
+  - 12월 31일 데이터를 12월 가격 데이터로 사용할지
+  - 12월 전체 가격들의 평균을 12월 가격 데이터로 사용할지
+  정해야한다. 
+  
+#### 월말 가격
+```{r}
+prices_month_last = to.monthly(prices,
+                            indexAt = 'lastof',
+                            OHLC=FALSE)
+head(prices_month_last)
+```
+#### 월초 가격
+```{r}
+prices_month_first = to.monthly(prices,
+                            indexAt = 'firstof',
+                            OHLC=FALSE)
+head(prices_month_first)
+```
+#### 월평균 가격
+```{r}
+prices_month_avg = apply.monthly(prices, mean)
+head(prices_month_avg)
+```
+#### 수익률 데이터 만들기
+```{r}
+asset_returns_xts = 
+  Return.calculate(prices_month_last,
+                   method = 'log') %>%
+  na.omit()
+head(asset_returns_xts,3)
+```
+
+현재까지 일일 가격데이터를 가지고 와서, adjusted price를 추출한 후, 월별 가격 데이터로 변환한 후에 마지막으로 수익률로 바꾸어 보았다.
+
+#### xts 와 data frame 의 차이
+- xts 같은 경우에는 index에서 시간에 해당하는 정보를 가지고 있는 반면에, data frame 같은 경우는 date 라는 열에 시간 정보를 가지고 있다. 
+
+xts에서 data frame 으로 바꾸는 경우, 기본적으로 시작은 
+- data.frame(date=index(.)), 로 하는데 이는 
+  - coerces our object into a data frame
+  - adds a date column based on the index
+- 이러면 xts의 index에 해당하는 시간정보는 보존이 되며 추후에 remove_rownames를 통해 지워줘야한다. 
+
+**R Tips**
+R follows a set of conventions that makes one layout of tabular data much easier to work with than others. Your data will be easier to work with in R if it follows three rules as follows:
+
+  1. Each variable in the data set is placed in its own column
+  2. Each observation is placed in its own row
+  3. Each value is placed in its own cell
+  
+Data that satisfies these rules is known as tidy data.   
+
+The table 1 is tidy data.
+```{r, echo=FALSE}
+#devtools::install_github("garrettgman/DSR")
+library(DSR)
+print(table1)
+```
+**In practice, raw data is rarely tidy and is much harder to work with as a result.**
+
+Data set two intermingles the values of population and cases in the same columns. As a result, you will need to untangle the values whenever you want to work with each variable separately. 
+
+- Notice that for the first two columns, for each key column contains the values belongs to the key. However, `key` column contains only keys and `value` column contains the values associated with those keys.
+
+```{r}
+table2
+```
+Data set three combines the values of cases and population into the same cells. You will need to separate the population values from the cases values if you wish to do math with them. This can be done, but not with 'basic' R syntax
+
+```{r}
+table3
+```
+#### Spread()
+
+`spread()` turns a pair of key;value columns into a set of tidy columns. To use `spread()`, pass it the name of a dataframe, then the name of key column in the data frame, and then the name of the value column. Pass the column names as they are; do not use quotes.
+
+```{r}
+spread(table2,key,value)
+```
+#### gather()
+`gather()` does the reverse of `spread()`. It collects a set of column names and places thme into a single `key` column. `gather()` collects a set of column names and places them into a single `key` column. It also collects the cells of those columns and places them into a single value column. 
+
+For table4,
+```{r}
+table4
+gather(table4, 'year', 'cases', 2:3)
+```
+
+## Come back to price data
+
+```{r}
+asset_returns_dplyr_byhand = prices %>%
+  to.monthly(indexAt = 'lastof', OHLC=FALSE) %>%
+  # convert the index to a date colun
+  data.frame(date=index(.))%>%
+  remove_rownames()%>%
+  gather(asset, prices, -date) %>%
+  group_by( )
+
+
+```
+
+
+#### Reference
+1. https://blog.zhaw.ch/datascience/r-reduce-applys-lesser-known-brother/
+2. https://garrettgman.github.io/tidying/
+
+
+
+
+
+
+
