@@ -1,6 +1,5 @@
 ---
 title: 경상도 골프장 정리
-author: Roh
 date: '2020-11-10'
 slug: golf-club-summary
 categories:
@@ -23,7 +22,7 @@ output:
 
 ## 비회원제 골프장
 
-- [청도 그레이스](https://www.grace-cc.co.kr/home/_membership/time_calendar_form.asp) : 054-370-3030
+- [청도 그레이스](https://www.grace-cc.co.kr/home/_membership/time_calendar_form.asp) :
   - 주말/주중/공휴일: 2주전 오전 09:00
 - [군위 군위오펠](https://www.ophelgc.com/_Gunwi/Reservation/Reservation.aspx) : 
   - 주말(공휴일) : 1주전 화요일 오전 10:00
