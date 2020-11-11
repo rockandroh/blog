@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Data on Rock &#39;n&#39; Roh</title>
-    <link>https://rockandroh.netlify.app/data/</link>
-    <description>Recent content in Data on Rock &#39;n&#39; Roh</description>
+    <title>golf on Rock &#39;n&#39; Roh</title>
+    <link>https://rockandroh.netlify.app/tags/golf/</link>
+    <description>Recent content in golf on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/data/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/tags/golf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>경상도 골프장 정리</title>
       <link>https://rockandroh.netlify.app/data/golf-club-summary/</link>

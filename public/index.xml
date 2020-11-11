@@ -18,6 +18,16 @@
     </item>
     
     <item>
+      <title>경상도 골프장 정리</title>
+      <link>https://rockandroh.netlify.app/data/golf-club-summary/</link>
+      <pubDate>Tue, 10 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/data/golf-club-summary/</guid>
+      <description>  Roh’s 경상도 골프장 리스트 비회원제 골프장 회원 중심제 골프장    Roh’s 경상도 골프장 리스트 Note: 아래의 예약관련 정보는 2020년 11월 11일 기준으로 작성되었으므로 추후에 각 골프장 별로 변경사항이 있을 수도 있음을 알려드립니다. 아래의 골프장 링크 혹은 전화번호를 통해 Double Check 하시길 바랍니다.
+비회원제 골프장  청도 그레이스 : 054-370-3030  주말/주중/공휴일: 2주전 오전 09:00  군위 군위오펠 :  주말(공휴일) : 1주전 화요일 오전 10:00 주중 : 2주전 화요일 오전 10:00  군위 구니cc  주말/주중/공휴일: 2주전 화요일 오전 10:00  창녕 동훈힐마루  주말 (회원권 소지자 우대)  회원권 소지자 : 3주전 화-수 회원권 미소지자 : 3주전 금요일 오전 09:00  주중  회원권 상관없이 : 3주전 월요일 오전 09:00   칠곡 세븐밸리  주말/주중/공휴일: 2주전 화요일 오전  고령 마스터피스   회원 중심제 골프장  대구 대구cc (회원제) 경산 인터불고 (회원제) 영천 오션힐스 (회원제) 칠곡 파미힐스 (회원제) 구미 선산cc (회원제)    </description>
+    </item>
+    
+    <item>
       <title>R과 금융데이터 (1) - 데이터 불러오기 및 관련 function 연습</title>
       <link>https://rockandroh.netlify.app/note/2020/10/27/reproducible-finance-with-r-1/</link>
       <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
@@ -101,11 +111,12 @@ Footnote example1 Footnote example22</description>
       
       <guid>https://rockandroh.netlify.app/note/2020/10/15/useful-website/</guid>
       <description>Note: This page is to provide a list of useful notes
-Blogdown  https://bookdown.org/yihui/blogdown/
+Blogdown book/tutorial/blog  https://apreshill.rbind.io/post/up-and-running-with-blogdown/ [Tutorial]
+ https://bookdown.org/yihui/blogdown/
  https://www.storybench.org/how-to-build-a-website-with-blogdown-in-r/
 Hugo version control in netlify by setting the environment variable.
  https://docs.netlify.com/configure-builds/environment-variables/#netlify-configuration-variables
- HUGO_VERSION We need to set this not to have ‘build-site’ error  Building sites … ERROR 2020/10/15 16:41:28 render of &#34;taxonomyTerm&#34; failed: &#34;/opt/build/repo/themes/hugo-xmin/layouts/_default/terms.html:8:21&#34;: execute of template failed: template: _default/terms.html:8:21: executing &#34;_default/terms.html&#34; at &amp;lt;.Page.RelPermalink&amp;gt;: can&#39;t evaluate field Page in type hugolib.WeightedPages</description>
+ HUGO_VERSION We need to set this not to have ‘build-site’ error  Building sites … ERROR 2020/10/15 16:41:28 render of &#34;taxonomyTerm&#34; failed: &#34;/opt/build/repo/themes/hugo-xmin/layouts/_default/terms.html:8:21&#34;: execute of template failed: template: _default/terms.html:8:21: executing &#34;_default/terms.html&#34; at &amp;lt;.Page.RelPermalink&amp;gt;: can&#39;t evaluate field Page in type hugolib.</description>
     </item>
     
     <item>

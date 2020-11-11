@@ -1,0 +1,71 @@
+---
+title: 경상도 골프장 정리
+author: Roh
+date: '2020-11-10'
+slug: golf-club-summary
+categories:
+  - golf
+tags:
+  - golf
+urlcolor: blue
+meta_img: /Users/master/Documents/GitHub//blog/content/data/2020-11-10-golf-club-summary/golf_club.jpg
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 5
+---
+
+![](/Users/master/Documents/GitHub//blog/content/data/2020-11-10-golf-club-summary/golf_club.jpg){width=100%)}
+
+# Roh's 경상도 골프장 리스트
+
+*__Note__: 아래의 예약관련 정보는 2020년 11월 11일 기준으로 작성되었으므로 추후에 각 골프장 별로 변경사항이 있을 수도 있음을 알려드립니다. 아래의 골프장 링크 혹은 전화번호를 통해 Double Check 하시길 바랍니다.*
+
+## 비회원제 골프장
+
+- [청도 그레이스](https://www.grace-cc.co.kr/home/_membership/time_calendar_form.asp) : 054-370-3030
+  - 주말/주중/공휴일: 2주전 오전 09:00
+- [군위 군위오펠](https://www.ophelgc.com/_Gunwi/Reservation/Reservation.aspx) : 
+  - 주말(공휴일) : 1주전 화요일 오전 10:00
+  - 주중         : 2주전 화요일 오전 10:00
+- [군위 구니cc](https://www.gunicc.co.kr/GolfRes/onepage/real_reservation.asp#pointdate=20201111&courseid=0&openyn=1&dategbn=4&choice_time=0&settype=R&prevDate=202010&nowDate=202011&nextDate=202012)
+  - 주말/주중/공휴일: 2주전 화요일 오전 10:00
+- [창녕 동훈힐마루](https://www.hillmaru.com/Reservation/Reservation.aspx)
+  - 주말 (회원권 소지자 우대)
+    - 회원권 소지자   : 3주전 화-수 
+    - 회원권 미소지자 : 3주전 금요일 오전 09:00
+  - 주중
+    - 회원권 상관없이 : 3주전 월요일 오전 09:00
+- [칠곡 세븐밸리]()
+  - 주말/주중/공휴일: 2주전 화요일 오전 
+- 고령 마스터피스
+
+## 회원 중심제 골프장
+
+- 대구 대구cc   (회원제)
+- 경산 인터불고 (회원제)
+- 영천 오션힐스 (회원제)
+- 칠곡 파미힐스 (회원제)
+- 구미 선산cc   (회원제)
+
+```{r, include=FALSE}
+library(stringr)
+string <-"DIS_S_CD_EFS-NO_PCI-CD_ACT_CG-SOM_MT_ECT_CVE"
+sub(".*(SOM_.*)", "\\1", string)
+str_extract(string, "SOM.{5}")
+
+```
+
+
+```{r, include=FALSE}
+library(XML)
+url_grace = "https://www.grace-cc.co.kr/home/_membership/time_calendar_form.asp"
+doc_grace = readLines(url_grace, encoding="CP949")
+doc_grace = paste0(doc_grace, collapse="\n")
+
+grace_from = str_extract(doc_grace, "fromDate.{9}")
+grace_to   = str_extract(doc_grace, "toDate.{9}")
+
+grace_from; grace_to
+```
+

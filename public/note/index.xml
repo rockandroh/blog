@@ -101,11 +101,12 @@ Footnote example1 Footnote example22</description>
       
       <guid>https://rockandroh.netlify.app/note/2020/10/15/useful-website/</guid>
       <description>Note: This page is to provide a list of useful notes
-Blogdown  https://bookdown.org/yihui/blogdown/
+Blogdown book/tutorial/blog  https://apreshill.rbind.io/post/up-and-running-with-blogdown/ [Tutorial]
+ https://bookdown.org/yihui/blogdown/
  https://www.storybench.org/how-to-build-a-website-with-blogdown-in-r/
 Hugo version control in netlify by setting the environment variable.
  https://docs.netlify.com/configure-builds/environment-variables/#netlify-configuration-variables
- HUGO_VERSION We need to set this not to have ‘build-site’ error  Building sites … ERROR 2020/10/15 16:41:28 render of &#34;taxonomyTerm&#34; failed: &#34;/opt/build/repo/themes/hugo-xmin/layouts/_default/terms.html:8:21&#34;: execute of template failed: template: _default/terms.html:8:21: executing &#34;_default/terms.html&#34; at &amp;lt;.Page.RelPermalink&amp;gt;: can&#39;t evaluate field Page in type hugolib.WeightedPages</description>
+ HUGO_VERSION We need to set this not to have ‘build-site’ error  Building sites … ERROR 2020/10/15 16:41:28 render of &#34;taxonomyTerm&#34; failed: &#34;/opt/build/repo/themes/hugo-xmin/layouts/_default/terms.html:8:21&#34;: execute of template failed: template: _default/terms.html:8:21: executing &#34;_default/terms.html&#34; at &amp;lt;.Page.RelPermalink&amp;gt;: can&#39;t evaluate field Page in type hugolib.</description>
     </item>
     
     <item>

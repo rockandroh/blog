@@ -6,7 +6,16 @@
     <description>Recent content in Categories on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 27 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>golf</title>
+      <link>https://rockandroh.netlify.app/categories/golf/</link>
+      <pubDate>Tue, 10 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/golf/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>finance</title>
       <link>https://rockandroh.netlify.app/categories/finance/</link>

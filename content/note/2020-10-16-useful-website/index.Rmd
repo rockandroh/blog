@@ -20,8 +20,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 *__Note__: This page is to provide a list of useful notes*
 
-#### Blogdown
+#### Blogdown book/tutorial/blog
 
+- https://apreshill.rbind.io/post/up-and-running-with-blogdown/ [Tutorial]
 - https://bookdown.org/yihui/blogdown/
 - https://www.storybench.org/how-to-build-a-website-with-blogdown-in-r/
 
