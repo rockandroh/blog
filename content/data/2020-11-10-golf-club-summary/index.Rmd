@@ -22,9 +22,9 @@ output:
 
 ## 비회원제 골프장
 
-- [청도 그레이스](https://www.grace-cc.co.kr/home/_membership/time_calendar_form.asp) :
+- [청도 그레이스](https://www.grace-cc.co.kr/home/_membership/time_calendar_form.asp): [전화걸기](tel:+82-54-370-3030)
   - 주말/주중/공휴일: 2주전 오전 09:00
-- [군위 군위오펠](https://www.ophelgc.com/_Gunwi/Reservation/Reservation.aspx) : 
+- [군위 군위오펠](https://www.ophelgc.com/_Gunwi/Reservation/Reservation.aspx): [전화걸기](tel:+82-54-380-8000) 
   - 주말(공휴일) : 1주전 화요일 오전 10:00
   - 주중         : 2주전 화요일 오전 10:00
 - [군위 구니cc](https://www.gunicc.co.kr/GolfRes/onepage/real_reservation.asp#pointdate=20201111&courseid=0&openyn=1&dategbn=4&choice_time=0&settype=R&prevDate=202010&nowDate=202011&nextDate=202012)
