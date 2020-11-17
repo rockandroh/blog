@@ -14,6 +14,7 @@ output:
   blogdown::html_page:
     toc: true
     toc_depth: 5
+    number_sections: TRUE
 ---
 
 ```{r setup, include=FALSE}
@@ -25,6 +26,10 @@ knitr::opts_chunk$set(echo = TRUE)
 *__Note__: This document is to provide a sample template for the lecture notes in .Rmd*
 
 *__Memo__: test*
+
+horizontal line
+***
+
 
 `Usage of singe quote`
 
