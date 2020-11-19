@@ -48,17 +48,19 @@ shinyUI(navbarPage(title = "공치자",
                             ),
                             h4(span(textOutput("seldate"), style = "color:blue")),
                             hr(),
-                            column(5,
-                                   h4("날짜 선택 후 조회 버튼을 눌러주세요")),
-                            column(7, actionButton(inputId = "searchbutton", "조회"))
+                            column(3 , h4("날짜 선택 후 조회 버튼을 눌러주세요")),
+                            column(5, actionButton(inputId = "searchbutton", "조회")),
+                            
+                            h5('test')
                    ),
                    
                    
-                   tabPanel("골프장별 정보 (수리중)", 
+                   
+                   tabPanel("골프장별 정보", 
                             tableOutput("data")),
                    
                    tabPanel("골프 명언",
                             h5("Success in this game depends less on strength of body than strength of mind and character. - 아놀드파머 "),
-                            h5("You must play boldly to win. - 아놀드파머 ")),
+                            h5("You must play boldly to win. - 아놀드파머 "))
                    
 ))
