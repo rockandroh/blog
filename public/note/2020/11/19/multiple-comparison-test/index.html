@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Categories | Rock &#39;n&#39; Roh</title>
+    <title>multiple comparison test | Rock &#39;n&#39; Roh</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -33,44 +33,41 @@
     <hr/>
     </nav>
 
+<div class="article-meta">
+<h1><span class="title">multiple comparison test</span></h1>
+<h2 class="author">roh</h2>
+<h2 class="date">2020/11/19</h2>
+</div>
 
-<h1>Categories</h1>
+<main>
 
-<ul class="terms">
-  
-  <li>
-    <a href="/categories/computer-science/">computer science</a> (2)
-  </li>
-  
-  <li>
-    <a href="/categories/finance/">finance</a> (1)
-  </li>
-  
-  <li>
-    <a href="/categories/golf/">golf</a> (1)
-  </li>
-  
-  <li>
-    <a href="/categories/miscellaneous/">miscellaneous</a> (1)
-  </li>
-  
-  <li>
-    <a href="/categories/r/">R</a> (4)
-  </li>
-  
-  <li>
-    <a href="/categories/sampling-technique/">sampling technique</a> (1)
-  </li>
-  
-  <li>
-    <a href="/categories/statistics/">statistics</a> (2)
-  </li>
-  
-  <li>
-    <a href="/categories/template/">template</a> (1)
-  </li>
-  
+
+<div id="TOC">
+<ul>
+<li><a href="#t-test">T-test</a></li>
 </ul>
+</div>
+
+<pre><code>Multiple Comparison 정리
+
+- One sample
+- Two sample
+- Multiple sample</code></pre>
+<div id="t-test" class="section level2">
+<h2>T-test</h2>
+<ul>
+<li><p>continuous data 의 평균을 테스트</p>
+<ul>
+<li><span class="math inline">\(\text{One smaple} \quad H_0: \mu=\mu_0 \qquad H_A:\mu\neq\mu_0\)</span></li>
+<li><span class="math inline">\(\text{Two smaple} \quad H_0: \mu_1-\mu_2=0 \qquad H_A:\mu_1-mu_2\neq 0\)</span></li>
+</ul></li>
+<li><p>Outlier 로 Variance (<span class="math inline">\(s^2\)</span>) 가 커지는 경우 T-statistic 이 급격히 작아지는 문제가 발생</p>
+<p><span class="math display">\[t = \frac{\bar{x}_1-\bar{x}_2}{s\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}\]</span></p></li>
+<li></li>
+</ul>
+</div>
+
+</main>
 
   <footer>
   <script src="//yihui.org/js/math-code.js"></script>

@@ -97,7 +97,9 @@ output:
       예시3) 2020년 12월 12일 토요일 예약 희망하는 경우, 2주전 '주'의 화요일인 12월 1일 오전 9시에 웹사이트에 들어가서 예약을 하면된다.
   
   
-### <span style="color:darkgreen">**고령 마스터피스**</span>: $\quad$[웹사이트](https://www.masterpiecegc.com/Reservation/Reservation.aspx)$\quad$[전화걸기](tel:+82-54-950-2400)
+### <span style="color:darkgreen">**고령 마스터피스**</span>
+
+  - [웹사이트](https://www.masterpiecegc.com/Reservation/Reservation.aspx)$\quad$[전화걸기](tel:+82-54-950-2400)
   - 주말/주중/공휴일: **3주전 오전 09:00**
       
       
