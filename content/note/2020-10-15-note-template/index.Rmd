@@ -30,6 +30,10 @@ knitr::opts_chunk$set(echo = TRUE)
 horizontal line
 ***
 
+```{r, include=FALSE}
+printf <- function(...) cat(sprintf(...))
+```
+
 
 `Usage of singe quote`
 

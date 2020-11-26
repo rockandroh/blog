@@ -1,4 +1,0 @@
-"0","sample_variance = function(x){(1/(length(x)-1))*sum((x-mean(x))^2)}"
-"0","bs_est_var = sample_variance(bs_sample_median_vec)"
-"0","printf(""Bootstrap estimate of the variance is: %.2f"", bs_est_var)"
-"1","Bootstrap estimate of the variance is: 0.64"

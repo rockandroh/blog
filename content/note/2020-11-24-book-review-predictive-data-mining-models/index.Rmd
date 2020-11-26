@@ -1,0 +1,38 @@
+---
+title: (Book Review) Risk Management Books
+author: Roh
+date: '2020-11-24'
+slug: book-review-predictive-data-mining-models
+categories:
+  - Book Review
+tags:
+  - Risk management
+---
+
+## Predictive Data Minining Model Intro
+
+Knowledge discovery involves finding interesting patterns from data stored in large databases through use of computer analysis. 
+
+- **Interesting** implies non-trivial, implicit, previously unknown, easily understood, useful and actionable knowledge.
+- **Information** is defined as the pattersn, correlations, rules, or relationships in data providing knowledge useful in decision making.
+
+
+- Descriptive analytics
+  - reports of what has happened. Statistics are big part of that.
+
+- Predictive analytics
+  - extend statistical and/or aritifical intelligence to provide forecasting capability. 
+  
+- Diagnostic analytics
+  - apply analysis to sensor input to direct control systems automatically
+
+Data mining includes descriptive and predictive modeling. Operations research includes all three.
+
+## Handbook of FRM
+
+
+
+
+
+
+

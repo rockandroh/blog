@@ -1,2 +1,0 @@
-"0","ecdf_mpg = ecdf(mpg)"
-"0","plot(ecdf_mpg, xlab = 'x', ylab = 'Fn(x)', main = 'Empirical cdf', col='blue')"

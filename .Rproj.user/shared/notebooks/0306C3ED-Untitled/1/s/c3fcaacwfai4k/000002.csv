@@ -1,7 +1,0 @@
-"0","#install.packages('remotes')"
-"0","#install.packages('reticulate')"
-"0","#install.packages('usethis')"
-"0","library(reticulate)"
-"0","use_python(""/usr/bin/python"")"
-"0","#py_install(packages = ""matplotlib"")"
-"0","#use_python('/usr/bin/python3')"
