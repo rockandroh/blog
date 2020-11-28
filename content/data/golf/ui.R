@@ -31,9 +31,9 @@ shinyUI(navbarPage(title = "공치자",
                               language = "kr",
                               value = Sys.Date()+1, # date value that shows up initially
                               min = Sys.Date(),  # set the minimun date
-                              max = Sys.Date() + 30, # set the maximum date
-                              width = "450px", # set the width of widget
-                              autoclose = FALSE,
+                              max = Sys.Date() + 90, # set the maximum date
+                              width = "100%", # set the width of widget
+                              autoclose = TRUE,
                               format="yyyy-mm-dd") # set the format (default is yyyy-mm-dd)
                             ),
                             br(),
@@ -52,6 +52,7 @@ shinyUI(navbarPage(title = "공치자",
                    
                    tabPanel("골프장별 정보",
                             h4("아래의 주소를 클릭하시면 정리된 골프장 정보를 확인할 수 있습니다."),
+                            hr(),
                             h1(a("클릭", href = "https://www.rockandroh.com/data/golf-club-summary/"))
                             ),
                             

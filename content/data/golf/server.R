@@ -7,8 +7,8 @@ library('shiny')
 library('DT')
 library('lubridate')
 
-club_name = c('군위구니','군위오펠','그레이스','마스터피스',
-              '세븐밸리','힐마루')
+club_name = c('구니cc','군위오펠','그레이스','마스터피스',
+              '세븐밸리','동훈힐마루')
 
 #' Calculate date function 
 printf <- function(...) cat(sprintf(...))
@@ -137,14 +137,13 @@ shinyServer(function(input, output, session) {
                           )
     
     data2 <- eventReactive(input$date, {data.frame('골프장'= club_name,
-                                                   '오픈날짜'= c(format(guni(input$date), "%m월 %d일"), 
-                                                                format(ophel(input$date), "%m월 %d일"),
-                                                                format(grace(input$date), "%m월 %d일"), 
-                                                                format(master(input$date), "%m월 %d일"),
-                                                                format(valley(input$date), "%m월 %d일"), 
-                                                                format(hilmaru(input$date), "%m월 %d일")
-                                                              ),
-                                                   '시간' = c('10시','10시','9시','9시','9시','9시')
+                                                   '오픈날짜'= c(format(guni(input$date), "%m월 %d일 %a요일 10시"), 
+                                                                format(ophel(input$date), "%m월 %d일 %a요일 10시"),
+                                                                format(grace(input$date), "%m월 %d일 %a요일 09시"), 
+                                                                format(master(input$date), "%m월 %d일 %a요일 09시"),
+                                                                format(valley(input$date), "%m월 %d일 %a요일 09시"), 
+                                                                format(hilmaru(input$date), "%m월 %d일 %a요일 09시")
+                                                              )
                                                    )
                                         }
                           )
