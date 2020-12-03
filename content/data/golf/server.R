@@ -5,6 +5,7 @@
 
 library('shiny')
 library('DT')
+library('shinyWidgets')
 library('lubridate')
 
 club_name = c('구니cc','군위오펠','그레이스','마스터피스',
@@ -12,6 +13,8 @@ club_name = c('구니cc','군위오펠','그레이스','마스터피스',
 
 #' Calculate date function 
 printf <- function(...) cat(sprintf(...))
+
+linebreaks <- function(n){HTML(strrep(br(), n))}
 
 prev_n_weekday = function(date, wday, n=1, start = 'Sun'){
     date = as.Date(date)
@@ -122,7 +125,7 @@ master = function(date){
 shinyServer(function(input, output, session) {
 
     output$seldate = renderText ({
-        paste("선택한 날짜는", format(input$date, "%Y년 %m월 %d일"), " 입니다.")
+        paste("선택된 공칠 날짜는", format(input$date, "%Y년 %m월 %d일"), " 입니다.")
         # input$date # this will not output the date in correct format. 
         # Convert to character before using in render function as.character(input$date)
         # as.character(input$date) # to exclusively convert date to character for printing to retain the date format
@@ -137,12 +140,12 @@ shinyServer(function(input, output, session) {
                           )
     
     data2 <- eventReactive(input$date, {data.frame('골프장'= club_name,
-                                                   '오픈날짜'= c(format(guni(input$date), "%m월 %d일 %a요일 10시"), 
-                                                                format(ophel(input$date), "%m월 %d일 %a요일 10시"),
-                                                                format(grace(input$date), "%m월 %d일 %a요일 09시"), 
-                                                                format(master(input$date), "%m월 %d일 %a요일 09시"),
-                                                                format(valley(input$date), "%m월 %d일 %a요일 09시"), 
-                                                                format(hilmaru(input$date), "%m월 %d일 %a요일 09시")
+                                                   '오픈날짜'= c(format(guni(input$date), "%m월 %d일 %a 10시"), 
+                                                                format(ophel(input$date), "%m월 %d일 %a 10시"),
+                                                                format(grace(input$date), "%m월 %d일 %a 09시"), 
+                                                                format(master(input$date), "%m월 %d일 %a 09시"),
+                                                                format(valley(input$date), "%m월 %d일 %a 09시"), 
+                                                                format(hilmaru(input$date), "%m월 %d일 %a 09시")
                                                               )
                                                    )
                                         }
@@ -153,9 +156,11 @@ shinyServer(function(input, output, session) {
                                         }
                           )
   
-    # output$test3 = DT::renderdatatable({data.frame('골프장'=club_name[1:3],
-    #                                     'date' = data2)()})
-    output$test3 = DT::renderDataTable({data2()})
+    # sorted columns are colored now because CSS are attached to them
+    output$test3 = DT::renderDataTable({data2()},
+                                       options = list(orderClasses = TRUE,
+                                                      dom = 't')
+    )
     
     final_df = eventReactive(input$searchbutton, {
         datatable(mtcars[,1:4], class = 'hover') 

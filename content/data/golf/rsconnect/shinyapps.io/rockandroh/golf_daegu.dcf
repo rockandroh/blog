@@ -1,0 +1,13 @@
+name: golf_daegu
+title: golf_daegu
+username:
+account: rockandroh
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3336137
+bundleId: 3932857
+url: https://rockandroh.shinyapps.io/golf_daegu/
+when: 1606915660.89102
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: cal_dates.R
