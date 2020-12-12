@@ -1,0 +1,13 @@
+name: golf_reservation
+title: golf_reservation
+username:
+account: rockandroh
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3305719
+bundleId: 3931039
+url: https://rockandroh.shinyapps.io/golf_reservation/
+when: 1606882458.70707
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: cal_dates.R

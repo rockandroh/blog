@@ -6,7 +6,17 @@
     <description>Recent content in Data on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/data/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/data/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R/Python 활용능력 (1)</title>
+      <link>https://rockandroh.netlify.app/data/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>
+      <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/data/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
+      <description>유형1 R Python    div.rcode pre { background-color:lightgrey; } div.rcode pre.r { background-color:#aabbff !important; }   div.pycode pre { background-color:lightgrey; } div.pycode pre.python { background-color:#ffbbbb !important; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com으로 메일주시면 감사하겠습니다
+유형1  필터링 Filtering: 조건을 기반으로 데이터를 필터링 하기  직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요 엑셀에서는 [데이터] -&amp;gt; [고급필터] 를 통해서 해결 가능!</description>
+    </item>
+    
     <item>
       <title>경상도 골프장 정리</title>
       <link>https://rockandroh.netlify.app/data/golf-club-summary/</link>

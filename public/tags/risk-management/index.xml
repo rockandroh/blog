@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Risk management on Rock &#39;n&#39; Roh</title>
+    <link>https://rockandroh.netlify.app/tags/risk-management/</link>
+    <description>Recent content in Risk management on Rock &#39;n&#39; Roh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 24 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/tags/risk-management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>(Book Review) Risk Management Books</title>
+      <link>https://rockandroh.netlify.app/note/2020/11/24/book-review-predictive-data-mining-models/</link>
+      <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/11/24/book-review-predictive-data-mining-models/</guid>
+      <description>Predictive Data Minining Model Intro Knowledge discovery involves finding interesting patterns from data stored in large databases through use of computer analysis.
+ Interesting implies non-trivial, implicit, previously unknown, easily understood, useful and actionable knowledge.
+ Information is defined as the pattersn, correlations, rules, or relationships in data providing knowledge useful in decision making.
+ Descriptive analytics
+ reports of what has happened. Statistics are big part of that.  Predictive analytics</description>
+    </item>
+    
+  </channel>
+</rss>

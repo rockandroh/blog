@@ -44,13 +44,13 @@
 
 <div id="TOC">
 <ul>
-<li><a href="#head-1">Head 1</a></li>
-<li><a href="#head-2">Head 2</a><ul>
-<li><a href="#r-example">R example</a></li>
-<li><a href="#python-example">Python Example</a></li>
+<li><a href="#head-1"><span class="toc-section-number">1</span> Head 1</a></li>
+<li><a href="#head-2"><span class="toc-section-number">2</span> Head 2</a><ul>
+<li><a href="#r-example"><span class="toc-section-number">2.1</span> R example</a></li>
+<li><a href="#python-example"><span class="toc-section-number">2.2</span> Python Example</a></li>
 </ul></li>
-<li><a href="#latex-example">Latex Example</a><ul>
-<li><a href="#references-example">References (Example)</a></li>
+<li><a href="#latex-example"><span class="toc-section-number">3</span> Latex Example</a><ul>
+<li><a href="#references-example"><span class="toc-section-number">3.0.0.1</span> References (Example)</a></li>
 </ul></li>
 </ul>
 </div>
@@ -58,22 +58,24 @@
 <p><img src="lec_note.jpg" style="width:100.0%" /></p>
 <p><em><strong>Note</strong>: This document is to provide a sample template for the lecture notes in .Rmd</em></p>
 <p><em><strong>Memo</strong>: test</em></p>
+<p>horizontal line
+***</p>
 <p><code>Usage of singe quote</code></p>
 <pre class="r"><code>x = 5  # radius of a circle</code></pre>
 <p>For a circle with the radius 5,
 its area is 78.5398163.</p>
 <div id="head-1" class="section level1">
-<h1>Head 1</h1>
+<h1><span class="header-section-number">1</span> Head 1</h1>
 <p>Add link like this. <a href="https://www.rockandroh.com">Link</a></p>
 <p>Description</p>
 <p>Footnote example<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
 Footnote example2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 </div>
 <div id="head-2" class="section level1">
-<h1>Head 2</h1>
+<h1><span class="header-section-number">2</span> Head 2</h1>
 <p>Refer to the <a href="https://www.rockandroh.com/note/2017/06/13/a-quick-note/">other lecture note in this blog</a></p>
 <div id="r-example" class="section level2">
-<h2>R example</h2>
+<h2><span class="header-section-number">2.1</span> R example</h2>
 <p>Description</p>
 <p>Below chunk is a simple R code and its output</p>
 <pre class="r"><code># R code example
@@ -91,7 +93,7 @@ boxplot(dat[, 1] ~ dat$Species, # draw boxplots by group
     xlab = &quot;Species&quot;
   )
 title(&#39;R example&#39;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>Regarding the option whether to show output or not as well as running the code when knitting, here are the options.</p>
 <ul>
 <li><code>eval</code>: whether to evaluate the code</li>
@@ -103,7 +105,7 @@ title(&#39;R example&#39;)</code></pre>
 </ul>
 </div>
 <div id="python-example" class="section level2">
-<h2>Python Example</h2>
+<h2><span class="header-section-number">2.2</span> Python Example</h2>
 <p>To run python code in R, we simply need install the package called <code>reticulate</code>.</p>
 <pre class="r"><code>#install.packages(&#39;reticulate&#39;)
 library(reticulate)
@@ -114,11 +116,11 @@ x = np.arange(0,3,0.1)
 y = 1 + np.sin(2*np.pi*x)
 plt.plot(x,y)
 plt.title(&#39;python example&#39;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 </div>
 <div id="latex-example" class="section level1">
-<h1>Latex Example</h1>
+<h1><span class="header-section-number">3</span> Latex Example</h1>
 <p>We observe an <span class="math inline">\(iid\)</span> sample of size <span class="math inline">\(n\)</span>, <span class="math inline">\({[X_i]}_{i=1}^{n}\stackrel{iid}{\sim}F\)</span>. Each observation is real-values. We wish to estimate some parameter of the distribution <span class="math inline">\(F\)</span> that can be written as a functional of <span class="math inline">\(F, T(F)\)</span>. Examples include the following.</p>
 <ul>
 <li><span class="math inline">\(\mu = \int{xdF(x)}\)</span></li>
@@ -126,7 +128,7 @@ plt.title(&#39;python example&#39;)</code></pre>
 <li><span class="math inline">\(Var=\int{\left(x-\mu\right)^2dF}\)</span></li>
 </ul>
 <div id="references-example" class="section level4">
-<h4>References (Example)</h4>
+<h4><span class="header-section-number">3.0.0.1</span> References (Example)</h4>
 <p>McDonald, J.H. 2014. Handbook of Biological Statistics (3rd ed.). Sparky House Publishing, Baltimore, Maryland.</p>
 </div>
 </div>

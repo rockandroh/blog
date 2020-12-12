@@ -33,52 +33,60 @@ div.pycode pre.python { background-color:#ffbbbb !important; }
 - 조건부서식
   - 업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 기울임꼴, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.
   - 엑셀에서는 [홈] -> [조건부 서식] -> [새 규칙] -> [수식을 사용하여 서식을 지정할 셀 결정]
-- 
 
-<div class = "rcode">
+
 
 # R 
-
+<div class = "rcode">
 ### 필요한 패키지 준비
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 library(readxl) # read excel
 library(dplyr)
 ```
-
+</div>
 
 ### 모든 예제 데이터 준비
-
+<div class = "rcode">
 ```{r}
+wd_mac = "~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회"
 wd = "C:/Users/ericr/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회"
 fn = list.files(path = wd,
                 pattern = '*실습파일.xlsm')
+fn_mac = list.files(path = getwd())[1]
+
 path = paste(wd,fn,sep = '/')
-print(path)
+path_mac = paste(wd_mac, fn_mac, sep='/')
+print(path_mac)
 ```
+</div>
 
 
 - 모든 sheets을 list 안에다 집어넣기
+
+<div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
-library(readxl)
-tab_names = excel_sheets(path)
+tab_names = excel_sheets(path_mac)
 print(tab_names)
 list_all = lapply(tab_names, 
-                  function(x) read_excel(path = path,
+                  function(x) read_excel(path = path_mac,
                                          sheet = x,))
 summary(list_all)
 ```
+</div>
 
 ### 예제1 데이터 준비
-
+<div class = "rcode">
 ```{r}
 df1 = list_all[[1]]
 glimpse(df1)
 ```
+</div>
 
 ### 필터링 문제풀기
 
 - 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요
 
+<div class = "rcode">
 ```{r}
 df1 %>% 
   # 직위가 과장이거나, 직위가 사원이고 점수가 80이상인
@@ -90,21 +98,25 @@ df1 %>%
 
 
 # Python
+
 ```{r}
 #install.packages('reticulate')
 library(reticulate)
 #py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
 ```
 
+<div class = "pycode">
 ```{python}
 import numpy as np
 import matplotlib.pyplot as plt
-
-#modify environment variables to find qgis and qt plugins during qgis.core import
-
-x = np.arange(0,3,0.1)
-y = 1 + np.sin(2*np.pi*x)
-plt.plot(x,y)
-plt.title('abc')
-plt.show()
+import pandas as pd
+df = pd.DataFrame(np.array(([1, 2, 3], [4, 5, 6])),
+                  index=['mouse', 'rabbit'],
+                  columns=['one', 'two', 'three'])
+                  
+# select columns by name
+df.filter(items=['one', 'three'])
+                  
 ```
+</div>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>database on Rock &#39;n&#39; Roh</title>
+    <link>https://rockandroh.netlify.app/tags/database/</link>
+    <description>Recent content in database on Rock &#39;n&#39; Roh</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 23 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/tags/database/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>데이터베이스 일반</title>
+      <link>https://rockandroh.netlify.app/note/2020/11/23/database_intro/</link>
+      <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/11/23/database_intro/</guid>
+      <description>1강 : 개요 2강 : 관계형 데이터 베이스 Reference   1강 : 개요  정의
+ 특정 조직이 업무 수행하는데 필요한 관련성 있는 자료들의 집합체  데이터 베이스 도입 배경
+ 파일 시스템의 문제점을 해결 예시  인사/급여/자재/마케팅의 독립적인 파일들  독립된 파일 단위로 업무와 관련한 데이터를 저장하므로 데이터의 중복성과 데이터 종속성 발생  데이터 무결성 위배 가능성 높음  데이터 베이스를 이용해서 이 문제를 해결하려고 함  데이터 베이스 시스템 구성</description>
+    </item>
+    
+  </channel>
+</rss>

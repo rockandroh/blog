@@ -6,7 +6,31 @@
     <description>Recent content in Notes on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/note/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 24 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/note/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>(Book Review) Risk Management Books</title>
+      <link>https://rockandroh.netlify.app/note/2020/11/24/book-review-predictive-data-mining-models/</link>
+      <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/11/24/book-review-predictive-data-mining-models/</guid>
+      <description>Predictive Data Minining Model Intro Knowledge discovery involves finding interesting patterns from data stored in large databases through use of computer analysis.
+ Interesting implies non-trivial, implicit, previously unknown, easily understood, useful and actionable knowledge.
+ Information is defined as the pattersn, correlations, rules, or relationships in data providing knowledge useful in decision making.
+ Descriptive analytics
+ reports of what has happened. Statistics are big part of that.  Predictive analytics</description>
+    </item>
+    
+    <item>
+      <title>데이터베이스 일반</title>
+      <link>https://rockandroh.netlify.app/note/2020/11/23/database_intro/</link>
+      <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/11/23/database_intro/</guid>
+      <description>1강 : 개요 2강 : 관계형 데이터 베이스 Reference   1강 : 개요  정의
+ 특정 조직이 업무 수행하는데 필요한 관련성 있는 자료들의 집합체  데이터 베이스 도입 배경
+ 파일 시스템의 문제점을 해결 예시  인사/급여/자재/마케팅의 독립적인 파일들  독립된 파일 단위로 업무와 관련한 데이터를 저장하므로 데이터의 중복성과 데이터 종속성 발생  데이터 무결성 위배 가능성 높음  데이터 베이스를 이용해서 이 문제를 해결하려고 함  데이터 베이스 시스템 구성</description>
+    </item>
+    
     <item>
       <title>multiple comparison test</title>
       <link>https://rockandroh.netlify.app/note/2020/11/19/multiple-comparison-test/</link>
@@ -95,13 +119,12 @@ Misc #install.packages(&amp;#39;calendR&amp;#39;) library(calendR) ## ~~ Package
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2020/10/15/note-template/</guid>
-      <description>Head 1 Head 2 R example Python Example  Latex Example References (Example)    Note: This document is to provide a sample template for the lecture notes in .Rmd
+      <description>1 Head 1 2 Head 2 2.1 R example 2.2 Python Example  3 Latex Example 3.0.0.1 References (Example)    Note: This document is to provide a sample template for the lecture notes in .Rmd
 Memo: test
+horizontal line ***
 Usage of singe quote
 x = 5 # radius of a circle For a circle with the radius 5, its area is 78.5398163.
-Head 1 Add link like this. Link
-Description
-Footnote example1 Footnote example22</description>
+1 Head 1 Add link like this.</description>
     </item>
     
     <item>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>R/Python 활용능력 (1) | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/note/">Notes</a></li>
+      
+      <li><a href="/data/">Data</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="http://medium.com/@corr.roh">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">R/Python 활용능력 (1)</span></h1>
+
+<h2 class="date">2020/12/10</h2>
+</div>
+
+<main>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#유형1">유형1</a></li>
+<li><a href="#r">R</a></li>
+<li><a href="#python">Python</a></li>
+</ul>
+</div>
+
+<style>
+div.rcode pre { background-color:lightgrey; }
+div.rcode pre.r { background-color:#aabbff !important; }
+</style>
+<style>
+div.pycode pre { background-color:lightgrey; }
+div.pycode pre.python { background-color:#ffbbbb !important; }
+</style>
+<p><strong>이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 <a href="mailto:metrics@kakao.com으로" class="email">metrics@kakao.com으로</a> 메일주시면 감사하겠습니다</strong></p>
+<div id="유형1" class="section level1">
+<h1>유형1</h1>
+<ul>
+<li>필터링 Filtering: 조건을 기반으로 데이터를 필터링 하기
+<ul>
+<li>직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요</li>
+<li>엑셀에서는 [데이터] -&gt; [고급필터] 를 통해서 해결 가능!</li>
+</ul></li>
+<li>조건부서식
+<ul>
+<li>업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 기울임꼴, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.</li>
+<li>엑셀에서는 [홈] -&gt; [조건부 서식] -&gt; [새 규칙] -&gt; [수식을 사용하여 서식을 지정할 셀 결정]</li>
+</ul></li>
+</ul>
+</div>
+<div id="r" class="section level1">
+<h1>R</h1>
+<div class="rcode">
+<h3 id="필요한-패키지-준비">필요한 패키지 준비</h3>
+<pre class="r"><code>library(readxl) # read excel
+library(dplyr)</code></pre>
+</div>
+<div id="모든-예제-데이터-준비" class="section level3">
+<h3>모든 예제 데이터 준비</h3>
+<div class="rcode">
+<pre class="r"><code>wd_mac = &quot;~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회&quot;
+wd = &quot;C:/Users/ericr/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회&quot;
+fn = list.files(path = wd,
+                pattern = &#39;*실습파일.xlsm&#39;)
+fn_mac = list.files(path = getwd())[1]
+
+path = paste(wd,fn,sep = &#39;/&#39;)
+path_mac = paste(wd_mac, fn_mac, sep=&#39;/&#39;)
+print(path_mac)</code></pre>
+<pre><code>## [1] &quot;~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회/1급A형실습파일.xlsm&quot;</code></pre>
+</div>
+<ul>
+<li>모든 sheets을 list 안에다 집어넣기</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>tab_names = excel_sheets(path_mac)
+print(tab_names)</code></pre>
+<pre><code>## [1] &quot;기본작업-1&quot; &quot;계산작업&quot;   &quot;분석작업-1&quot; &quot;분석작업-2&quot; &quot;기타작업-1&quot;
+## [6] &quot;기타작업-2&quot; &quot;기타작업-3&quot;</code></pre>
+<pre class="r"><code>list_all = lapply(tab_names, 
+                  function(x) read_excel(path = path_mac,
+                                         sheet = x,))
+summary(list_all)</code></pre>
+<pre><code>##      Length Class  Mode
+## [1,] 12     tbl_df list
+## [2,]  9     tbl_df list
+## [3,] 13     tbl_df list
+## [4,]  6     tbl_df list
+## [5,]  5     tbl_df list
+## [6,] 12     tbl_df list
+## [7,]  6     tbl_df list</code></pre>
+</div>
+</div>
+<div id="예제1-데이터-준비" class="section level3">
+<h3>예제1 데이터 준비</h3>
+<div class="rcode">
+<pre class="r"><code>df1 = list_all[[1]]
+glimpse(df1)</code></pre>
+<pre><code>## Rows: 22
+## Columns: 12
+## $ 사원번호 &lt;dbl&gt; 200104, 200126, 200123, 200134, 200114, 200137, 200131, 200133, …
+## $ 이름     &lt;chr&gt; &quot;강감찬&quot;, &quot;김규리&quot;, &quot;김나비&quot;, &quot;김대진&quot;, &quot;김윤선&quot;, &quot;김정식&quot;, &quot;마소희&quot;, &quot;방정환&quot;, &quot;배기성&quot;,…
+## $ 부서명   &lt;chr&gt; &quot;기획부&quot;, &quot;영업부&quot;, &quot;총무부&quot;, &quot;기획부&quot;, &quot;기획부&quot;, &quot;기획부&quot;, &quot;기술부&quot;, &quot;기획부&quot;, &quot;기획부&quot;, …
+## $ 직위     &lt;chr&gt; &quot;대리&quot;, &quot;부장&quot;, &quot;대리&quot;, &quot;과장&quot;, &quot;대리&quot;, &quot;사원&quot;, &quot;사원&quot;, &quot;과장&quot;, &quot;사원&quot;, &quot;사원&quot;, &quot;대…
+## $ 입사일자 &lt;dttm&gt; 1998-01-04, 2000-01-02, 1999-08-12, 2000-01-07, 1999-08-01, 200…
+## $ 업무수행 &lt;dbl&gt; 10, 90, 100, 70, 100, 100, 90, 64, 100, 100, 90, 100, 100, 100, …
+## $ 영어독해 &lt;dbl&gt; 0, 80, 56, 52, 60, 76, 76, 90, 88, 64, 100, 90, 68, 44, 80, 72, …
+## $ 영어듣기 &lt;dbl&gt; 0, 90, 64, 76, 48, 80, 72, 76, 72, 72, 100, 100, 72, 60, 56, 80,…
+## $ 전산이론 &lt;dbl&gt; 90, 80, 80, 90, 90, 100, 100, 90, 100, 90, 95, 90, 90, 90, 80, 1…
+## $ 전산실기 &lt;dbl&gt; 70, 85, 100, 100, 100, 100, 100, 80, 100, 100, 90, 95, 100, 90, …
+## $ 점수     &lt;dbl&gt; 34.0, 85.0, 80.0, 77.6, 79.6, 91.2, 87.6, 80.0, 92.0, 85.2, 95…
+## $ 평가     &lt;chr&gt; &quot;하&quot;, &quot;상&quot;, &quot;중&quot;, &quot;중&quot;, &quot;중&quot;, &quot;상&quot;, &quot;상&quot;, &quot;중&quot;, &quot;상&quot;, &quot;상&quot;, &quot;상&quot;, &quot;상&quot;, &quot;상…</code></pre>
+</div>
+</div>
+<div id="필터링-문제풀기" class="section level3">
+<h3>필터링 문제풀기</h3>
+<ul>
+<li>직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>df1 %&gt;% 
+  # 직위가 과장이거나, 직위가 사원이고 점수가 80이상인
+  filter( (직위 ==&quot;과장&quot;) | (직위 == &quot;사원&quot; &amp; 점수 &gt;= 80)) %&gt;% 
+  # 이름, 부서명, 직위, 점수 평가열 (Column) 선택
+  select(이름, 부서명, 직위, 점수, 평가)</code></pre>
+<pre><code>## # A tibble: 12 x 5
+##    이름   부서명 직위   점수 평가 
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
+##  1 김대진 기획부 과장   77.6 중   
+##  2 김정식 기획부 사원   91.2 상   
+##  3 마소희 기술부 사원   87.6 상   
+##  4 방정환 기획부 과장   80   중   
+##  5 배기성 기획부 사원   92   상   
+##  6 배우리 영업부 사원   85.2 상   
+##  7 아유라 영업부 과장   95   상   
+##  8 유강현 영업부 사원   90.4 상   
+##  9 이순신 기술부 사원   86   상   
+## 10 조용히 영업부 사원   88.4 상   
+## 11 최민정 기술부 과장   41.6 하   
+## 12 홍난수 총무부 과장   89.6 상</code></pre>
+</div>
+</div>
+</div>
+<div id="python" class="section level1">
+<h1>Python</h1>
+<pre class="r"><code>#install.packages(&#39;reticulate&#39;)
+library(reticulate)
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)</code></pre>
+<div class="pycode">
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+df = pd.DataFrame(np.array(([1, 2, 3], [4, 5, 6])),
+                  index=[&#39;mouse&#39;, &#39;rabbit&#39;],
+                  columns=[&#39;one&#39;, &#39;two&#39;, &#39;three&#39;])
+                  
+# select columns by name
+df.filter(items=[&#39;one&#39;, &#39;three&#39;])
+                  </code></pre>
+<pre><code>##         one  three
+## mouse     1      3
+## rabbit    4      6</code></pre>
+</div>
+</div>
+
+</main>
+
+  <footer>
+  <script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.org/js/center-img.js"></script>
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://medium.com/@corr.roh">Medium</a>
+  
+  </footer>
+  </body>
+</html>
+

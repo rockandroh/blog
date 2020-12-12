@@ -6,7 +6,34 @@
     <description>Recent content in Categories on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>data mining</title>
+      <link>https://rockandroh.netlify.app/categories/data-mining/</link>
+      <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/data-mining/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Book Review</title>
+      <link>https://rockandroh.netlify.app/categories/book-review/</link>
+      <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/book-review/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>database</title>
+      <link>https://rockandroh.netlify.app/categories/database/</link>
+      <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/database/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>statistics</title>
       <link>https://rockandroh.netlify.app/categories/statistics/</link>
