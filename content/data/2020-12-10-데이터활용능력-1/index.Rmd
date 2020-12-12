@@ -1,0 +1,110 @@
+---
+title: R/Python 활용능력 (1)
+author:
+date: '2020-12-10'
+slug: 데이터활용능력
+categories:
+  - data mining
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 1
+---
+
+<style>
+div.rcode pre { background-color:lightgrey; }
+div.rcode pre.r { background-color:#aabbff !important; }
+</style>
+
+<style>
+div.pycode pre { background-color:lightgrey; }
+div.pycode pre.python { background-color:#ffbbbb !important; }
+</style>
+
+**이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com으로 메일주시면 감사하겠습니다**
+
+
+# 유형1
+
+- 필터링 Filtering: 조건을 기반으로 데이터를 필터링 하기
+  - 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요
+  - 엑셀에서는 [데이터] -> [고급필터] 를 통해서 해결 가능!
+- 조건부서식
+  - 업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 기울임꼴, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.
+  - 엑셀에서는 [홈] -> [조건부 서식] -> [새 규칙] -> [수식을 사용하여 서식을 지정할 셀 결정]
+- 
+
+<div class = "rcode">
+
+# R 
+
+### 필요한 패키지 준비
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+library(readxl) # read excel
+library(dplyr)
+```
+
+
+### 모든 예제 데이터 준비
+
+```{r}
+wd = "C:/Users/ericr/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회"
+fn = list.files(path = wd,
+                pattern = '*실습파일.xlsm')
+path = paste(wd,fn,sep = '/')
+print(path)
+```
+
+
+- 모든 sheets을 list 안에다 집어넣기
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+library(readxl)
+tab_names = excel_sheets(path)
+print(tab_names)
+list_all = lapply(tab_names, 
+                  function(x) read_excel(path = path,
+                                         sheet = x,))
+summary(list_all)
+```
+
+### 예제1 데이터 준비
+
+```{r}
+df1 = list_all[[1]]
+glimpse(df1)
+```
+
+### 필터링 문제풀기
+
+- 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요
+
+```{r}
+df1 %>% 
+  # 직위가 과장이거나, 직위가 사원이고 점수가 80이상인
+  filter( (직위 =="과장") | (직위 == "사원" & 점수 >= 80)) %>% 
+  # 이름, 부서명, 직위, 점수 평가열 (Column) 선택
+  select(이름, 부서명, 직위, 점수, 평가)
+```
+</div>
+
+
+# Python
+```{r}
+#install.packages('reticulate')
+library(reticulate)
+#py_install(packages = "matplotlib")
+```
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+#modify environment variables to find qgis and qt plugins during qgis.core import
+
+x = np.arange(0,3,0.1)
+y = 1 + np.sin(2*np.pi*x)
+plt.plot(x,y)
+plt.title('abc')
+plt.show()
+```
