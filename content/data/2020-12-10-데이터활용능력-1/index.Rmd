@@ -13,20 +13,44 @@ output:
 ---
 
 <style>
-div.rcode pre { background-color:lightgrey; }
-div.rcode pre.r { background-color:#aabbff !important; }
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
 </style>
 
 <style>
-div.pycode pre { background-color:lightgrey; }
-div.pycode pre.python { background-color:#ffbbbb !important; }
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
 </style>
 
 **이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com으로 메일주시면 감사하겠습니다**
 
+R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다.
+결과창은 동일하게 Ivory 색 블럭으로 표시됩니다. 
+
+### 필요한 패키지 준비
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+library(readxl) # read excel
+library(dplyr)
+#install.packages('reticulate')
+library(reticulate) # Python
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+```
+
+<div class = "rcode">
+```{r}
+print("이것은 R 코드 입니다.")
+```
+</div>
+
+<div class = "pycode">
+```{python}
+print("이것은 Python 코드 입니다.")
+```
+</div>
+
 
 # 유형1
-
 - 필터링 Filtering: 조건을 기반으로 데이터를 필터링 하기
   - 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요
   - 엑셀에서는 [데이터] -> [고급필터] 를 통해서 해결 가능!
@@ -37,13 +61,6 @@ div.pycode pre.python { background-color:#ffbbbb !important; }
 
 
 # R 
-<div class = "rcode">
-### 필요한 패키지 준비
-```{r, warning=FALSE, message=FALSE, error=FALSE}
-library(readxl) # read excel
-library(dplyr)
-```
-</div>
 
 ### 모든 예제 데이터 준비
 <div class = "rcode">
@@ -99,12 +116,6 @@ df1 %>%
 
 # Python
 
-```{r}
-#install.packages('reticulate')
-library(reticulate)
-#py_install(packages = "matplotlib")
-#py_install(packages = "pandas")
-```
 
 <div class = "pycode">
 ```{python}
@@ -119,4 +130,12 @@ df = pd.DataFrame(np.array(([1, 2, 3], [4, 5, 6])),
 df.filter(items=['one', 'three'])
                   
 ```
+```{python}
+x = np.arange(0,3,0.1)
+y = 1 + np.sin(2*np.pi*x)
+plt.plot(x,y)
+plt.show()
+```
+
+
 </div>
