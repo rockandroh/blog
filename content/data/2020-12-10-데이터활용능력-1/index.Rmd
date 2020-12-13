@@ -24,14 +24,15 @@ div.pycode pre.python { background-color:#FFE9E9; }
 
 **이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com으로 메일주시면 감사하겠습니다**
 
-R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다.
-결과창은 동일하게 Ivory 색 블럭으로 표시됩니다. 
+**R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
 
 ### 필요한 패키지 준비
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 library(readxl) # read excel
 library(dplyr)
-#install.packages('reticulate')
+library(DT)
+library(formattable)
+
 library(reticulate) # Python
 #py_install(packages = "matplotlib")
 #py_install(packages = "pandas")
@@ -55,7 +56,7 @@ print("이것은 Python 코드 입니다.")
   - 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요
   - 엑셀에서는 [데이터] -> [고급필터] 를 통해서 해결 가능!
 - 조건부서식
-  - 업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 기울임꼴, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.
+  - 업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 굵은글씨, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.
   - 엑셀에서는 [홈] -> [조건부 서식] -> [새 규칙] -> [수식을 사용하여 서식을 지정할 셀 결정]
 
 
@@ -73,6 +74,7 @@ fn_mac = list.files(path = getwd())[1]
 
 path = paste(wd,fn,sep = '/')
 path_mac = paste(wd_mac, fn_mac, sep='/')
+print(path)
 print(path_mac)
 ```
 </div>
@@ -82,10 +84,14 @@ print(path_mac)
 
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
-tab_names = excel_sheets(path_mac)
+#tab_names_mac = excel_sheets(path_mac)
+tab_names = excel_sheets(path)
 print(tab_names)
+#list_all_mac = lapply(tab_names_mac, 
+#                  function(x) read_excel(path = path_mac,
+#                                         sheet = x,))
 list_all = lapply(tab_names, 
-                  function(x) read_excel(path = path_mac,
+                  function(x) read_excel(path = path,
                                          sheet = x,))
 summary(list_all)
 ```
@@ -113,6 +119,20 @@ df1 %>%
 ```
 </div>
 
+### 조건부 서식
+
+업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 굵은글씨, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.
+
+<div class = "rcode">
+```{r}
+formattable(df1, list(
+  업무수행 = formatter("span",
+                   style = x ~ style(color = if(x < 80)))
+  
+))
+  
+```
+</div>
 
 # Python
 
