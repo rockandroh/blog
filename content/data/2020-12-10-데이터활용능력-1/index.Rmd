@@ -22,7 +22,7 @@ div.pycode pre { background-color:#fffff0; }
 div.pycode pre.python { background-color:#FFE9E9; }
 </style>
 
-**이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com으로 메일주시면 감사하겠습니다**
+**이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다**
 
 **R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
 
@@ -63,7 +63,7 @@ print("이것은 Python 코드 입니다.")
 
 # R 
 
-### 모든 예제 데이터 준비
+## 모든 예제 데이터 준비
 <div class = "rcode">
 ```{r}
 wd_mac = "~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회"
@@ -97,15 +97,15 @@ summary(list_all)
 ```
 </div>
 
-### 예제1 데이터 준비
+## 예제1 데이터 준비
 <div class = "rcode">
 ```{r}
 df1 = list_all[[1]]
-glimpse(df1)
+head(df1)
 ```
 </div>
 
-### 필터링 문제풀기
+## 필터링 문제풀기
 
 - 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요
 
@@ -119,43 +119,48 @@ df1 %>%
 ```
 </div>
 
-### 조건부 서식
+## 조건부 서식
 
 업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 굵은글씨, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.
 
 <div class = "rcode">
 ```{r}
-formattable(df1, list(
-  업무수행 = formatter("span",
-                   style = x ~ style(color = if(x < 80)))
-  
-))
+f1 = formatter("span",
+               style = ~ ifelse(업무수행 < 80 &
+                                영어듣기 < 70, 
+                                style("color:red",
+                                      font.weight = "bold"),
+                                NA
+                                )
+               )
+formattable(df1,
+            list(area(row = 1:nrow(df1)) ~ f1)
+)
   
 ```
 </div>
 
 # Python
 
+## Calling R from Python
+
+We can access to R objects within Python cuhcks via the `r` object. 
 
 <div class = "pycode">
+
 ```{python}
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-df = pd.DataFrame(np.array(([1, 2, 3], [4, 5, 6])),
-                  index=['mouse', 'rabbit'],
-                  columns=['one', 'two', 'three'])
-                  
-# select columns by name
-df.filter(items=['one', 'three'])
-                  
-```
-```{python}
-x = np.arange(0,3,0.1)
-y = 1 + np.sin(2*np.pi*x)
-plt.plot(x,y)
-plt.show()
-```
 
-
+df = r.df1
+df.head()
+```
 </div>
+
+
+## 필터링 문제풀기
+
+위의 똑같은 내용을 Python에서 푸는 경우 다음과 같은 코드를 이용할 수 있다.
+- 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요
+
