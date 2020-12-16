@@ -1,16 +1,45 @@
----
-title: R/Python 활용능력 (1)
-author:
-date: '2020-12-10'
-slug: 데이터활용능력
-categories:
-  - data mining
-tags: []
-output:
-  blogdown::html_page:
-    toc: true
-    toc_depth: 1
----
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>R/Python Example (1) | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/note/">Notes</a></li>
+      
+      <li><a href="/data/">Data</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="http://medium.com/@corr.roh">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">R/Python Example (1)</span></h1>
+
+<h2 class="date">2020/12/10</h2>
+</div>
+
+<main>
 
 
 <div id="TOC">
@@ -79,16 +108,16 @@ fn_mac = list.files(path = getwd())[1]
 path = paste(wd,fn,sep = &#39;/&#39;)
 path_mac = paste(wd_mac, fn_mac, sep=&#39;/&#39;)
 print(path)</code></pre>
-<pre><code>## [1] &quot;C:/Users/ericr/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회/1급A형실습파일.xlsm&quot;</code></pre>
+<pre><code>## [1] &quot;C:/Users/ericr/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회/&quot;</code></pre>
 <pre class="r"><code>print(path_mac)</code></pre>
-<pre><code>## [1] &quot;~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회/1급A형실습파일.xlsm&quot;</code></pre>
+<pre><code>## [1] &quot;~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회/1급A형실습파일.xlsm&quot;</code></pre>
 </div>
 <ul>
 <li>모든 sheets을 list 안에다 집어넣기</li>
 </ul>
 <div class="rcode">
 <pre class="r"><code>#tab_names_mac = excel_sheets(path_mac)
-tab_names = excel_sheets(path)
+tab_names = excel_sheets(path_mac)
 print(tab_names)</code></pre>
 <pre><code>## [1] &quot;기본작업-1&quot; &quot;계산작업&quot;   &quot;분석작업-1&quot; &quot;분석작업-2&quot; &quot;기타작업-1&quot;
 ## [6] &quot;기타작업-2&quot; &quot;기타작업-3&quot;</code></pre>
@@ -96,7 +125,7 @@ print(tab_names)</code></pre>
 #                  function(x) read_excel(path = path_mac,
 #                                         sheet = x,))
 list_all = lapply(tab_names, 
-                  function(x) read_excel(path = path,
+                  function(x) read_excel(path = path_mac,
                                          sheet = x,))
 summary(list_all)</code></pre>
 <pre><code>##      Length Class  Mode
@@ -117,13 +146,13 @@ head(df1)</code></pre>
 <pre><code>## # A tibble: 6 x 12
 ##   사원번호 이름  부서명 직위  입사일자            업무수행 영어독해 영어듣기
 ##      &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dttm&gt;                 &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-## 1   200104 강감찬~ 기획부 대리  1998-01-04 00:00:00       10        0        0
-## 2   200126 김규리~ 영업부 부장  2000-01-02 00:00:00       90       80       90
-## 3   200123 김나비~ 총무부 대리  1999-08-12 00:00:00      100       56       64
-## 4   200134 김대진~ 기획부 과장  2000-01-07 00:00:00       70       52       76
-## 5   200114 김윤선~ 기획부 대리  1999-08-01 00:00:00      100       60       48
-## 6   200137 김정식~ 기획부 사원  2002-01-02 00:00:00      100       76       80
-## # ... with 4 more variables: 전산이론 &lt;dbl&gt;, 전산실기 &lt;dbl&gt;, 점수 &lt;dbl&gt;,
+## 1   200104 강감찬… 기획부 대리  1998-01-04 00:00:00       10        0        0
+## 2   200126 김규리… 영업부 부장  2000-01-02 00:00:00       90       80       90
+## 3   200123 김나비… 총무부 대리  1999-08-12 00:00:00      100       56       64
+## 4   200134 김대진… 기획부 과장  2000-01-07 00:00:00       70       52       76
+## 5   200114 김윤선… 기획부 대리  1999-08-01 00:00:00      100       60       48
+## 6   200137 김정식… 기획부 사원  2002-01-02 00:00:00      100       76       80
+## # … with 4 more variables: 전산이론 &lt;dbl&gt;, 전산실기 &lt;dbl&gt;, 점수 &lt;dbl&gt;,
 ## #   평가 &lt;chr&gt;</code></pre>
 </div>
 </div>
@@ -1078,5 +1107,40 @@ df.head()</code></pre>
 <h2>필터링 문제풀기</h2>
 <p>위의 똑같은 내용을 Python에서 푸는 경우 다음과 같은 코드를 이용할 수 있다.
 - 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요</p>
+<div class="pycode">
+<pre class="python"><code>df.loc[(df[&#39;직위&#39;]==&#39;과장&#39;) | (df[&#39;직위&#39;]==&#39;사원&#39;) &amp; (df[&#39;점수&#39;]&gt;=80) ]</code></pre>
+<pre><code>##         사원번호   이름  부서명  직위       입사일자  ...   영어듣기   전산이론   전산실기    점수  평가
+## 3   200134.0  김대진  기획부  과장 2000-01-07  ...   76.0   90.0  100.0  77.6   중
+## 5   200137.0  김정식  기획부  사원 2002-01-02  ...   80.0  100.0  100.0  91.2   상
+## 6   200131.0  마소희  기술부  사원 2000-01-07  ...   72.0  100.0  100.0  87.6   상
+## 7   200133.0  방정환  기획부  과장 2000-01-07  ...   76.0   90.0   80.0  80.0   중
+## 8   200129.0  배기성  기획부  사원 2000-01-07  ...   72.0  100.0  100.0  92.0   상
+## 9   200127.0  배우리  영업부  사원 2000-01-02  ...   72.0   90.0  100.0  85.2   상
+## 11  200120.0  아유라  영업부  과장 1996-08-07  ...  100.0   90.0   95.0  95.0   상
+## 15  200135.0  유강현  영업부  사원 2002-01-02  ...   80.0  100.0  100.0  90.4   상
+## 17  200130.0  이순신  기술부  사원 2000-01-07  ...   72.0  100.0  100.0  86.0   상
+## 18  200132.0  조용히  영업부  사원 2000-01-07  ...   76.0   90.0  100.0  88.4   상
+## 20  200106.0  최민정  기술부  과장 1998-01-05  ...   28.0    0.0   90.0  41.6   하
+## 21  200136.0  홍난수  총무부  과장 2002-01-02  ...   80.0  100.0  100.0  89.6   상
+## 
+## [12 rows x 12 columns]</code></pre>
 </div>
 </div>
+</div>
+
+</main>
+
+  <footer>
+  <script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.org/js/center-img.js"></script>
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://medium.com/@corr.roh">Medium</a>
+  
+  </footer>
+  </body>
+</html>
+

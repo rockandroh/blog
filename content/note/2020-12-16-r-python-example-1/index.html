@@ -1,0 +1,1100 @@
+---
+title: R/Python Example (1)
+author:
+date: '2020-12-10'
+slug: 데이터활용능력
+categories:
+  - data mining
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 1
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#유형1">유형1</a></li>
+<li><a href="#r">R</a></li>
+<li><a href="#python">Python</a></li>
+</ul>
+</div>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<p><strong>이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</strong></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div id="필요한-패키지-준비" class="section level3">
+<h3>필요한 패키지 준비</h3>
+<pre class="r"><code>library(readxl) # read excel
+library(dplyr)
+library(DT)
+library(formattable)
+
+library(reticulate) # Python
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)</code></pre>
+<div class="rcode">
+<pre class="r"><code>print(&quot;이것은 R 코드 입니다.&quot;)</code></pre>
+<pre><code>## [1] &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>print(&quot;이것은 Python 코드 입니다.&quot;)</code></pre>
+<pre><code>## 이것은 Python 코드 입니다.</code></pre>
+</div>
+</div>
+<div id="유형1" class="section level1">
+<h1>유형1</h1>
+<ul>
+<li>필터링 Filtering: 조건을 기반으로 데이터를 필터링 하기
+<ul>
+<li>직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요</li>
+<li>엑셀에서는 [데이터] -&gt; [고급필터] 를 통해서 해결 가능!</li>
+</ul></li>
+<li>조건부서식
+<ul>
+<li>업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 굵은글씨, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.</li>
+<li>엑셀에서는 [홈] -&gt; <a href="#조건부-서식">조건부 서식</a> -&gt; [새 규칙] -&gt; [수식을 사용하여 서식을 지정할 셀 결정]</li>
+</ul></li>
+</ul>
+</div>
+<div id="r" class="section level1">
+<h1>R</h1>
+<div id="모든-예제-데이터-준비" class="section level2">
+<h2>모든 예제 데이터 준비</h2>
+<div class="rcode">
+<pre class="r"><code>wd_mac = &quot;~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회&quot;
+wd = &quot;C:/Users/ericr/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회&quot;
+fn = list.files(path = wd,
+                pattern = &#39;*실습파일.xlsm&#39;)
+fn_mac = list.files(path = getwd())[1]
+
+path = paste(wd,fn,sep = &#39;/&#39;)
+path_mac = paste(wd_mac, fn_mac, sep=&#39;/&#39;)
+print(path)</code></pre>
+<pre><code>## [1] &quot;C:/Users/ericr/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회/&quot;</code></pre>
+<pre class="r"><code>print(path_mac)</code></pre>
+<pre><code>## [1] &quot;~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회/1급A형실습파일.xlsm&quot;</code></pre>
+</div>
+<ul>
+<li>모든 sheets을 list 안에다 집어넣기</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>#tab_names_mac = excel_sheets(path_mac)
+tab_names = excel_sheets(path_mac)
+print(tab_names)</code></pre>
+<pre><code>## [1] &quot;기본작업-1&quot; &quot;계산작업&quot;   &quot;분석작업-1&quot; &quot;분석작업-2&quot; &quot;기타작업-1&quot;
+## [6] &quot;기타작업-2&quot; &quot;기타작업-3&quot;</code></pre>
+<pre class="r"><code>#list_all_mac = lapply(tab_names_mac, 
+#                  function(x) read_excel(path = path_mac,
+#                                         sheet = x,))
+list_all = lapply(tab_names, 
+                  function(x) read_excel(path = path_mac,
+                                         sheet = x,))
+summary(list_all)</code></pre>
+<pre><code>##      Length Class  Mode
+## [1,] 12     tbl_df list
+## [2,]  9     tbl_df list
+## [3,] 13     tbl_df list
+## [4,]  6     tbl_df list
+## [5,]  5     tbl_df list
+## [6,] 12     tbl_df list
+## [7,]  6     tbl_df list</code></pre>
+</div>
+</div>
+<div id="예제1-데이터-준비" class="section level2">
+<h2>예제1 데이터 준비</h2>
+<div class="rcode">
+<pre class="r"><code>df1 = list_all[[1]]
+head(df1)</code></pre>
+<pre><code>## # A tibble: 6 x 12
+##   사원번호 이름  부서명 직위  입사일자            업무수행 영어독해 영어듣기
+##      &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;dttm&gt;                 &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1   200104 강감찬… 기획부 대리  1998-01-04 00:00:00       10        0        0
+## 2   200126 김규리… 영업부 부장  2000-01-02 00:00:00       90       80       90
+## 3   200123 김나비… 총무부 대리  1999-08-12 00:00:00      100       56       64
+## 4   200134 김대진… 기획부 과장  2000-01-07 00:00:00       70       52       76
+## 5   200114 김윤선… 기획부 대리  1999-08-01 00:00:00      100       60       48
+## 6   200137 김정식… 기획부 사원  2002-01-02 00:00:00      100       76       80
+## # … with 4 more variables: 전산이론 &lt;dbl&gt;, 전산실기 &lt;dbl&gt;, 점수 &lt;dbl&gt;,
+## #   평가 &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div id="필터링-문제풀기" class="section level2">
+<h2>필터링 문제풀기</h2>
+<ul>
+<li>직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>df1 %&gt;% 
+  # 직위가 과장이거나, 직위가 사원이고 점수가 80이상인
+  filter( (직위 ==&quot;과장&quot;) | (직위 == &quot;사원&quot; &amp; 점수 &gt;= 80)) %&gt;% 
+  # 이름, 부서명, 직위, 점수 평가열 (Column) 선택
+  select(이름, 부서명, 직위, 점수, 평가)</code></pre>
+<pre><code>## # A tibble: 12 x 5
+##    이름   부서명 직위   점수 평가 
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
+##  1 김대진 기획부 과장   77.6 중   
+##  2 김정식 기획부 사원   91.2 상   
+##  3 마소희 기술부 사원   87.6 상   
+##  4 방정환 기획부 과장   80   중   
+##  5 배기성 기획부 사원   92   상   
+##  6 배우리 영업부 사원   85.2 상   
+##  7 아유라 영업부 과장   95   상   
+##  8 유강현 영업부 사원   90.4 상   
+##  9 이순신 기술부 사원   86   상   
+## 10 조용히 영업부 사원   88.4 상   
+## 11 최민정 기술부 과장   41.6 하   
+## 12 홍난수 총무부 과장   89.6 상</code></pre>
+</div>
+</div>
+<div id="조건부-서식" class="section level2">
+<h2>조건부 서식</h2>
+<p>업무수행이 80 미만이고, 영어듣기가 70 미만인 행 전체에 대해서 글꼴 스타일은 굵은글씨, 글꼴 색을 빨강으로 적용하는 조건부 서식을 작성하시오.</p>
+<div class = "rcode">
+
+<pre class="r"><code>f1 = formatter(&quot;span&quot;,
+               style = ~ ifelse(업무수행 &lt; 80 &amp;
+                                영어듣기 &lt; 70, 
+                                style(&quot;color:red&quot;,
+                                      font.weight = &quot;bold&quot;),
+                                NA
+                                )
+               )
+formattable(df1,
+            list(area(row = 1:nrow(df1)) ~ f1)
+)</code></pre>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th style="text-align:right;">
+사원번호
+</th>
+<th style="text-align:right;">
+이름
+</th>
+<th style="text-align:right;">
+부서명
+</th>
+<th style="text-align:right;">
+직위
+</th>
+<th style="text-align:right;">
+입사일자
+</th>
+<th style="text-align:right;">
+업무수행
+</th>
+<th style="text-align:right;">
+영어독해
+</th>
+<th style="text-align:right;">
+영어듣기
+</th>
+<th style="text-align:right;">
+전산이론
+</th>
+<th style="text-align:right;">
+전산실기
+</th>
+<th style="text-align:right;">
+점수
+</th>
+<th style="text-align:right;">
+평가
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">200104 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">강감찬 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">기획부 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">대리 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">1998-01-04</span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 10 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 0 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 0 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 90 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 70 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">34.0 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">하 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200126 </span>
+</td>
+<td style="text-align:right;">
+<span>김규리 </span>
+</td>
+<td style="text-align:right;">
+<span>영업부 </span>
+</td>
+<td style="text-align:right;">
+<span>부장 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-02</span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 80 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 80 </span>
+</td>
+<td style="text-align:right;">
+<span> 85 </span>
+</td>
+<td style="text-align:right;">
+<span>85.0 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200123 </span>
+</td>
+<td style="text-align:right;">
+<span>김나비 </span>
+</td>
+<td style="text-align:right;">
+<span>총무부 </span>
+</td>
+<td style="text-align:right;">
+<span>대리 </span>
+</td>
+<td style="text-align:right;">
+<span>1999-08-12</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 56 </span>
+</td>
+<td style="text-align:right;">
+<span> 64 </span>
+</td>
+<td style="text-align:right;">
+<span> 80 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>80.0 </span>
+</td>
+<td style="text-align:right;">
+<span>중 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200134 </span>
+</td>
+<td style="text-align:right;">
+<span>김대진 </span>
+</td>
+<td style="text-align:right;">
+<span>기획부 </span>
+</td>
+<td style="text-align:right;">
+<span>과장 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-07</span>
+</td>
+<td style="text-align:right;">
+<span> 70 </span>
+</td>
+<td style="text-align:right;">
+<span> 52 </span>
+</td>
+<td style="text-align:right;">
+<span> 76 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>77.6 </span>
+</td>
+<td style="text-align:right;">
+<span>중 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200114 </span>
+</td>
+<td style="text-align:right;">
+<span>김윤선 </span>
+</td>
+<td style="text-align:right;">
+<span>기획부 </span>
+</td>
+<td style="text-align:right;">
+<span>대리 </span>
+</td>
+<td style="text-align:right;">
+<span>1999-08-01</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 60 </span>
+</td>
+<td style="text-align:right;">
+<span> 48 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>79.6 </span>
+</td>
+<td style="text-align:right;">
+<span>중 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200137 </span>
+</td>
+<td style="text-align:right;">
+<span>김정식 </span>
+</td>
+<td style="text-align:right;">
+<span>기획부 </span>
+</td>
+<td style="text-align:right;">
+<span>사원 </span>
+</td>
+<td style="text-align:right;">
+<span>2002-01-02</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 76 </span>
+</td>
+<td style="text-align:right;">
+<span> 80 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>91.2 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200131 </span>
+</td>
+<td style="text-align:right;">
+<span>마소희 </span>
+</td>
+<td style="text-align:right;">
+<span>기술부 </span>
+</td>
+<td style="text-align:right;">
+<span>사원 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-07</span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 76 </span>
+</td>
+<td style="text-align:right;">
+<span> 72 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>87.6 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200133 </span>
+</td>
+<td style="text-align:right;">
+<span>방정환 </span>
+</td>
+<td style="text-align:right;">
+<span>기획부 </span>
+</td>
+<td style="text-align:right;">
+<span>과장 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-07</span>
+</td>
+<td style="text-align:right;">
+<span> 64 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 76 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 80 </span>
+</td>
+<td style="text-align:right;">
+<span>80.0 </span>
+</td>
+<td style="text-align:right;">
+<span>중 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200129 </span>
+</td>
+<td style="text-align:right;">
+<span>배기성 </span>
+</td>
+<td style="text-align:right;">
+<span>기획부 </span>
+</td>
+<td style="text-align:right;">
+<span>사원 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-07</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 88 </span>
+</td>
+<td style="text-align:right;">
+<span> 72 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>92.0 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200127 </span>
+</td>
+<td style="text-align:right;">
+<span>배우리 </span>
+</td>
+<td style="text-align:right;">
+<span>영업부 </span>
+</td>
+<td style="text-align:right;">
+<span>사원 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-02</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 64 </span>
+</td>
+<td style="text-align:right;">
+<span> 72 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>85.2 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200112 </span>
+</td>
+<td style="text-align:right;">
+<span>소식가 </span>
+</td>
+<td style="text-align:right;">
+<span>영업부 </span>
+</td>
+<td style="text-align:right;">
+<span>대리 </span>
+</td>
+<td style="text-align:right;">
+<span>1999-08-01</span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 95 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>95.0 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200120 </span>
+</td>
+<td style="text-align:right;">
+<span>아유라 </span>
+</td>
+<td style="text-align:right;">
+<span>영업부 </span>
+</td>
+<td style="text-align:right;">
+<span>과장 </span>
+</td>
+<td style="text-align:right;">
+<span>1996-08-07</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 95 </span>
+</td>
+<td style="text-align:right;">
+<span>95.0 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200128 </span>
+</td>
+<td style="text-align:right;">
+<span>엄화정 </span>
+</td>
+<td style="text-align:right;">
+<span>총무부 </span>
+</td>
+<td style="text-align:right;">
+<span>부장 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-02</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 68 </span>
+</td>
+<td style="text-align:right;">
+<span> 72 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>86.0 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200119 </span>
+</td>
+<td style="text-align:right;">
+<span>왕연 </span>
+</td>
+<td style="text-align:right;">
+<span>총무부 </span>
+</td>
+<td style="text-align:right;">
+<span>대리 </span>
+</td>
+<td style="text-align:right;">
+<span>1999-08-07</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 44 </span>
+</td>
+<td style="text-align:right;">
+<span> 60 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>76.8 </span>
+</td>
+<td style="text-align:right;">
+<span>중 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">200116 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">우희진 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">영업부 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">대리 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">1999-08-01</span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 56 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 80 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 56 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 80 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 90 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">72.4 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">중 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200135 </span>
+</td>
+<td style="text-align:right;">
+<span>유강현 </span>
+</td>
+<td style="text-align:right;">
+<span>영업부 </span>
+</td>
+<td style="text-align:right;">
+<span>사원 </span>
+</td>
+<td style="text-align:right;">
+<span>2002-01-02</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 72 </span>
+</td>
+<td style="text-align:right;">
+<span> 80 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>90.4 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200110 </span>
+</td>
+<td style="text-align:right;">
+<span>이기자 </span>
+</td>
+<td style="text-align:right;">
+<span>기획부 </span>
+</td>
+<td style="text-align:right;">
+<span>대리 </span>
+</td>
+<td style="text-align:right;">
+<span>1998-01-09</span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 48 </span>
+</td>
+<td style="text-align:right;">
+<span> 44 </span>
+</td>
+<td style="text-align:right;">
+<span> 80 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>72.4 </span>
+</td>
+<td style="text-align:right;">
+<span>중 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200130 </span>
+</td>
+<td style="text-align:right;">
+<span>이순신 </span>
+</td>
+<td style="text-align:right;">
+<span>기술부 </span>
+</td>
+<td style="text-align:right;">
+<span>사원 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-07</span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span> 68 </span>
+</td>
+<td style="text-align:right;">
+<span> 72 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>86.0 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200132 </span>
+</td>
+<td style="text-align:right;">
+<span>조용히 </span>
+</td>
+<td style="text-align:right;">
+<span>영업부 </span>
+</td>
+<td style="text-align:right;">
+<span>사원 </span>
+</td>
+<td style="text-align:right;">
+<span>2000-01-07</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 76 </span>
+</td>
+<td style="text-align:right;">
+<span> 76 </span>
+</td>
+<td style="text-align:right;">
+<span> 90 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>88.4 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">200124 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">최민영 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">영업부 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">사원 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">2000-01-02</span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 70 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 52 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 64 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 70 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 90 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">69.2 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">하 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">200106 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">최민정 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">기술부 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">과장 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">1998-01-05</span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 50 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 40 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 28 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 0 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold"> 90 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">41.6 </span>
+</td>
+<td style="text-align:right;">
+<span style="color:red; font-weight: bold">하 </span>
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+<span>200136 </span>
+</td>
+<td style="text-align:right;">
+<span>홍난수 </span>
+</td>
+<td style="text-align:right;">
+<span>총무부 </span>
+</td>
+<td style="text-align:right;">
+<span>과장 </span>
+</td>
+<td style="text-align:right;">
+<span>2002-01-02</span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span> 68 </span>
+</td>
+<td style="text-align:right;">
+<span> 80 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>100 </span>
+</td>
+<td style="text-align:right;">
+<span>89.6 </span>
+</td>
+<td style="text-align:right;">
+<span>상 </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="python" class="section level1">
+<h1>Python</h1>
+<div id="calling-r-from-python" class="section level2">
+<h2>Calling R from Python</h2>
+<p>We can access to R objects within Python cuhcks via the <code>r</code> object.</p>
+<div class="pycode">
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+df = r.df1
+df.head()</code></pre>
+<pre><code>##        사원번호   이름  부서명  직위       입사일자   업무수행  영어독해  영어듣기  전산이론   전산실기    점수 평가
+## 0  200104.0  강감찬  기획부  대리 1998-01-04   10.0   0.0   0.0  90.0   70.0  34.0  하
+## 1  200126.0  김규리  영업부  부장 2000-01-02   90.0  80.0  90.0  80.0   85.0  85.0  상
+## 2  200123.0  김나비  총무부  대리 1999-08-12  100.0  56.0  64.0  80.0  100.0  80.0  중
+## 3  200134.0  김대진  기획부  과장 2000-01-07   70.0  52.0  76.0  90.0  100.0  77.6  중
+## 4  200114.0  김윤선  기획부  대리 1999-08-01  100.0  60.0  48.0  90.0  100.0  79.6  중</code></pre>
+</div>
+</div>
+<div id="필터링-문제풀기-1" class="section level2">
+<h2>필터링 문제풀기</h2>
+<p>위의 똑같은 내용을 Python에서 푸는 경우 다음과 같은 코드를 이용할 수 있다.
+- 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요</p>
+<div class="pycode">
+<pre class="python"><code>df.loc[(df[&#39;직위&#39;]==&#39;과장&#39;) | (df[&#39;직위&#39;]==&#39;사원&#39;) &amp; (df[&#39;점수&#39;]&gt;=80) ]</code></pre>
+<pre><code>##         사원번호   이름  부서명  직위       입사일자  ...   영어듣기   전산이론   전산실기    점수  평가
+## 3   200134.0  김대진  기획부  과장 2000-01-07  ...   76.0   90.0  100.0  77.6   중
+## 5   200137.0  김정식  기획부  사원 2002-01-02  ...   80.0  100.0  100.0  91.2   상
+## 6   200131.0  마소희  기술부  사원 2000-01-07  ...   72.0  100.0  100.0  87.6   상
+## 7   200133.0  방정환  기획부  과장 2000-01-07  ...   76.0   90.0   80.0  80.0   중
+## 8   200129.0  배기성  기획부  사원 2000-01-07  ...   72.0  100.0  100.0  92.0   상
+## 9   200127.0  배우리  영업부  사원 2000-01-02  ...   72.0   90.0  100.0  85.2   상
+## 11  200120.0  아유라  영업부  과장 1996-08-07  ...  100.0   90.0   95.0  95.0   상
+## 15  200135.0  유강현  영업부  사원 2002-01-02  ...   80.0  100.0  100.0  90.4   상
+## 17  200130.0  이순신  기술부  사원 2000-01-07  ...   72.0  100.0  100.0  86.0   상
+## 18  200132.0  조용히  영업부  사원 2000-01-07  ...   76.0   90.0  100.0  88.4   상
+## 20  200106.0  최민정  기술부  과장 1998-01-05  ...   28.0    0.0   90.0  41.6   하
+## 21  200136.0  홍난수  총무부  과장 2002-01-02  ...   80.0  100.0  100.0  89.6   상
+## 
+## [12 rows x 12 columns]</code></pre>
+</div>
+</div>
+</div>

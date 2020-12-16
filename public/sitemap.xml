@@ -8,11 +8,6 @@
   </url>
   
   <url>
-    <loc>https://rockandroh.netlify.app/data/</loc>
-    <lastmod>2020-12-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://rockandroh.netlify.app/categories/data-mining/</loc>
     <lastmod>2020-12-10T00:00:00+00:00</lastmod>
   </url>
@@ -23,7 +18,12 @@
   </url>
   
   <url>
-    <loc>https://rockandroh.netlify.app/data/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</loc>
+    <loc>https://rockandroh.netlify.app/note/</loc>
+    <lastmod>2020-12-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</loc>
     <lastmod>2020-12-10T00:00:00+00:00</lastmod>
   </url>
   
@@ -34,11 +34,6 @@
   
   <url>
     <loc>https://rockandroh.netlify.app/categories/book-review/</loc>
-    <lastmod>2020-11-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/note/</loc>
     <lastmod>2020-11-24T00:00:00+00:00</lastmod>
   </url>
   
@@ -85,6 +80,11 @@
   <url>
     <loc>https://rockandroh.netlify.app/categories/statistics/</loc>
     <lastmod>2020-11-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/data/</loc>
+    <lastmod>2020-11-10T00:00:00+00:00</lastmod>
   </url>
   
   <url>

@@ -1,5 +1,5 @@
 ---
-title: R/Python 활용능력 (1)
+title: R/Python Example (1)
 author:
 date: '2020-12-10'
 slug: 데이터활용능력
@@ -85,13 +85,13 @@ print(path_mac)
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 #tab_names_mac = excel_sheets(path_mac)
-tab_names = excel_sheets(path)
+tab_names = excel_sheets(path_mac)
 print(tab_names)
 #list_all_mac = lapply(tab_names_mac, 
 #                  function(x) read_excel(path = path_mac,
 #                                         sheet = x,))
 list_all = lapply(tab_names, 
-                  function(x) read_excel(path = path,
+                  function(x) read_excel(path = path_mac,
                                          sheet = x,))
 summary(list_all)
 ```
@@ -164,3 +164,10 @@ df.head()
 위의 똑같은 내용을 Python에서 푸는 경우 다음과 같은 코드를 이용할 수 있다.
 - 직위가 과장이거나, 직위가 사원이고 점수가 80 이상인 자료의 이름, 부서명, 직위, 점수, 평가열만 순서대로 표시하시요
 
+
+<div class = "pycode">
+```{python}
+df.loc[(df['직위']=='과장') | (df['직위']=='사원') & (df['점수']>=80) ]
+```
+
+</div>
