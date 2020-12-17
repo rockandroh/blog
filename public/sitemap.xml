@@ -4,22 +4,42 @@
   
   <url>
     <loc>https://rockandroh.netlify.app/categories/</loc>
-    <lastmod>2020-12-10T00:00:00+00:00</lastmod>
+    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://rockandroh.netlify.app/categories/data-mining/</loc>
-    <lastmod>2020-12-10T00:00:00+00:00</lastmod>
+    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://rockandroh.netlify.app/</loc>
-    <lastmod>2020-12-10T00:00:00+00:00</lastmod>
+    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://rockandroh.netlify.app/note/</loc>
-    <lastmod>2020-12-10T00:00:00+00:00</lastmod>
+    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/python/</loc>
+    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/r/</loc>
+    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/2020/12/16/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</loc>
+    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/%EC%BB%B4%ED%99%9C/</loc>
+    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -114,11 +134,6 @@
   
   <url>
     <loc>https://rockandroh.netlify.app/tags/r/</loc>
-    <lastmod>2020-10-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/categories/r/</loc>
     <lastmod>2020-10-27T00:00:00+00:00</lastmod>
   </url>
   

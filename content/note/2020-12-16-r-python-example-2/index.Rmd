@@ -1,0 +1,268 @@
+---
+title: R/Python (2) - 계산작업
+author:
+date: '2020-12-16'
+slug: 데이터활용능력
+categories:
+  - data mining
+  - R
+  - Python
+  - 컴활
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 1
+---
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+
+**이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다**
+
+###유형1 - 기본작업은 아래의 링크를 클릭하시면 됩니다.
+###[R/Python (1) 기본작업](https://www.rockandroh.com/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/)**
+
+<div class = "rcode">
+```{r}
+# R 코드입니다.
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# Python 코드입니다.
+```
+</div>
+
+
+## 필요한 패키지 준비
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+library(readxl) # read excel
+library(dplyr)
+library(DT)
+library(formattable)
+
+library(reticulate) # Python
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+```
+
+
+# 유형2 - 계산작업
+
+
+
+# R 
+
+#### 모든 예제 데이터 준비는 유형1과 같으므로 [R/Python (1) 기본작업](https://www.rockandroh.com/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/) 을 참고하시면 되겠습니다.
+
+<div class = "rcode">
+```{r, include=FALSE}
+wd_mac = "~/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회"
+wd = "C:/Users/ericr/Dropbox/컴활1급실기/1-2016버전 엑셀/1-출제유형분석1회"
+fn = list.files(path = wd,
+                pattern = '*실습파일.xlsm')
+fn_mac = list.files(path = getwd())[1]
+
+path = paste(wd,fn,sep = '/')
+path_mac = paste(wd_mac, fn_mac, sep='/')
+print(path)
+print(path_mac)
+```
+</div>
+
+<div class = "rcode">
+```{r, include=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+#tab_names_mac = excel_sheets(path_mac)
+tab_names = excel_sheets(path_mac)
+print(tab_names)
+#list_all_mac = lapply(tab_names_mac, 
+#                  function(x) read_excel(path = path_mac,
+#                                         sheet = x,))
+list_all = lapply(tab_names, 
+                  function(x) read_excel(path = path_mac,
+                                         sheet = x,))
+summary(list_all)
+```
+</div>
+
+## 예제2 데이터 준비
+
+<div class = "rcode">
+```{r, warning=FALSE, error=FALSE, message=FALSE}
+df2 = list_all[[2]]
+new_header = df2[1,]
+colnames(df2) = new_header
+df2 = df2[2:10,] %>%
+  mutate_at(vars(c(단가,할인율,원가비율,판매량,총매출)), as.numeric) %>%
+  mutate_if(is.numeric,round, 3)
+df2
+```
+</div>
+
+## 계산 작업 (1)
+- 제품명은 제품코드 뒤의 두 글짜를 뺀 나머지이며, 대문자로 표시
+
+<div class = "rcode">
+```{r}
+df2_1 = 
+  df2 %>%
+  rowwise() %>%
+  mutate('제품명' = substr(제품코드,1,(nchar(제품코드)-2))) %>%
+  ungroup() %>%
+  mutate('제품명' = toupper(.$제품명)) %>%
+  #head(nrow(.)-1) %>%
+  print()
+```
+</div>
+
+
+## 계산 작업 (2)
+- 판매량이 큰 값부터 1위 ~ 3위는 "상"
+- 판매량이 큰 값부터 4위 ~ 6위는 "중"
+- 나머지 순위에 대해서는 "하"
+
+<div class = "rcode">
+```{r}
+df2_2 = 
+  df2_1 %>%
+  mutate_at(vars(판매량), funs(as.numeric)) %>%
+  mutate('평가' =  
+        ifelse(rank(-as.numeric(df2_1$판매량), ties.method = 'min') %in% 1:3, '상',
+        ifelse(rank(-as.numeric(df2_1$판매량), ties.method = 'min') %in% 4:6, '중',
+        '하'))) %>%
+  print()
+```
+</div>
+
+## 계산 작업 (3)
+- 판매량이 가장 큰 항목의 제품코드를 구하시오
+
+<div class = "rcode">
+```{r}
+df2_2$제품코드[which.max(df2_2$판매량)]
+```
+</div>
+
+## 계산 작업 (4)
+- 등급별 판매량의 합계를 구하시오
+
+<div class = "rcode">
+```{r, error=FALSE, message=FALSE}
+df2_2 %>%
+  group_by(등급) %>%
+  summarise('판매량 합계' = sum(판매량))
+```
+</div>
+
+## 계산 작업 (5)
+- 총매출을 계산할 사용자 정의함수를 만드시오.총매출은 단가(unit cost), 할인율(discount rate), 판매량(sales volume)을 인수로 받아 총매출을 계산하여 되돌려줌.
+- 총매출은 단가 x (1-할인율) x 판매량 으로 계산
+
+<div class = "rcode">
+```{r}
+cal_fun = function(unit_cost, discount_rate, sales_volumne){
+  total = unit_cost * (1-discount_rate) * sales_volumne
+}
+
+df2_5 =
+  df2_2 %>%
+  mutate_at(vars(c(단가,할인율, 판매량)), funs(as.numeric)) %>%
+  mutate('총매출' = cal_fun(단가, 할인율, 판매량)) %>%
+  print()
+```
+</div>
+
+
+
+# Python
+
+## Calling R from Python
+
+We can access to R objects within Python cuhcks via the `r` object. 
+
+<div class = "pycode">
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+df = r.df2
+df.head()
+```
+</div>
+
+
+## 계산 작업 (1)
+- 제품명은 제품코드 뒤의 두 글짜를 뺀 나머지이며, 대문자로 표시
+
+<div class = "pycode">
+```{python}
+df2_1 = df.copy()
+df2_1['제품명'] = df2_1['제품코드'].apply(lambda x: x[:-2]).str.upper()
+df2_1
+```
+</div>
+
+## 계산 작업 (2)
+- 판매량이 큰 값부터 1위 ~ 3위는 평가 "상"
+- 판매량이 큰 값부터 4위 ~ 6위는 평가 "중"
+- 나머지 순위에 대해서는         평가 "하"
+
+<div class = "pycode">
+```{python}
+df2_2 = df2_1.copy()
+df2_2['평가'] =  (-df2_2['판매량']).rank(method='min').apply(
+                      lambda x: '상' if x in range(1,4) else 
+                                  '중'  if x in range(4,7) else
+                                    '하')
+df2_2
+
+# def rank(data):
+#   return np.array([sorted(data).index(x) for x in df2_2['판매량']])
+# np.isin(rank(df2_2['판매량']),range(1,4))
+```
+</div>
+
+## 계산 작업 (3)
+- 판매량이 가장 큰 항목의 제품코드를 구하시오
+
+<div class = "pycode">
+```{python}
+df2_2['제품코드'] [df2_2['판매량'].argmax()]
+```
+</div>
+
+## 계산 작업 (4)
+- 등급별 판매량의 합계를 구하시오
+
+<div class = "pycode">
+```{python}
+df2_2.groupby('등급').sum()['판매량']
+```
+</div>
+
+## 계산 작업 (5)
+- 총매출을 계산할 사용자 정의함수를 만드시오.총매출은 단가(unit cost), 할인율(discount rate), 판매량(sales volume)을 인수로 받아 총매출을 계산하여 되돌려줌.
+- 총매출은 단가 x (1-할인율) x 판매량 으로 계산
+
+<div class = "pycode">
+```{python}
+def cal_fun(unit_cost, discount_rate, sales_volume):
+  return unit_cost * (1-discount_rate) * sales_volume
+
+df2_2['총매출'] = df2_2.apply(lambda x: cal_fun(x['단가'],x['할인율'],x['판매량']), axis=1)
+df2_2
+```
+</div>
+
+
+

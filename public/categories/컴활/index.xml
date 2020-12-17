@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>data mining on Rock &#39;n&#39; Roh</title>
-    <link>https://rockandroh.netlify.app/categories/data-mining/</link>
-    <description>Recent content in data mining on Rock &#39;n&#39; Roh</description>
+    <title>컴활 on Rock &#39;n&#39; Roh</title>
+    <link>https://rockandroh.netlify.app/categories/%EC%BB%B4%ED%99%9C/</link>
+    <description>Recent content in 컴활 on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/data-mining/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/%EC%BB%B4%ED%99%9C/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R/Python (2) - 계산작업</title>
       <link>https://rockandroh.netlify.app/note/2020/12/16/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>

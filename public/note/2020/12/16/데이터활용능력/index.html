@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>R/Python (2) - 계산작업 | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/note/">Notes</a></li>
+      
+      <li><a href="/data/">Data</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="http://medium.com/@corr.roh">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">R/Python (2) - 계산작업</span></h1>
+
+<h2 class="date">2020/12/16</h2>
+</div>
+
+<main>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#유형2---계산작업">유형2 - 계산작업</a></li>
+<li><a href="#r">R</a></li>
+<li><a href="#python">Python</a></li>
+</ul>
+</div>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<p><strong>이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</strong></p>
+<p>###유형1 - 기본작업은 아래의 링크를 클릭하시면 됩니다.
+###<a href="https://www.rockandroh.com/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/">R/Python (1) 기본작업</a>**</p>
+<div class="rcode">
+<pre class="r"><code># R 코드입니다.</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># Python 코드입니다.</code></pre>
+</div>
+<div id="필요한-패키지-준비" class="section level2">
+<h2>필요한 패키지 준비</h2>
+<pre class="r"><code>library(readxl) # read excel
+library(dplyr)
+library(DT)
+library(formattable)
+
+library(reticulate) # Python
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)</code></pre>
+</div>
+<div id="유형2---계산작업" class="section level1">
+<h1>유형2 - 계산작업</h1>
+</div>
+<div id="r" class="section level1">
+<h1>R</h1>
+<div id="모든-예제-데이터-준비는-유형1과-같으므로-rpython-1-기본작업-을-참고하시면-되겠습니다." class="section level4">
+<h4>모든 예제 데이터 준비는 유형1과 같으므로 <a href="https://www.rockandroh.com/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/">R/Python (1) 기본작업</a> 을 참고하시면 되겠습니다.</h4>
+<div class="rcode">
+
+</div>
+<div class="rcode">
+
+</div>
+</div>
+<div id="예제2-데이터-준비" class="section level2">
+<h2>예제2 데이터 준비</h2>
+<div class="rcode">
+<pre class="r"><code>df2 = list_all[[2]]
+new_header = df2[1,]
+colnames(df2) = new_header
+df2 = df2[2:10,] %&gt;%
+  mutate_at(vars(c(단가,할인율,원가비율,판매량,총매출)), as.numeric) %&gt;%
+  mutate_if(is.numeric,round, 3)
+df2</code></pre>
+<pre><code>## # A tibble: 9 x 9
+##   제품코드 제품명 등급   판매량  단가 원가비율 평가  할인율 총매출
+##   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 tv-a     &lt;NA&gt;   고급형     35  1200     0.7  &lt;NA&gt;    0.03     NA
+## 2 tv-b     &lt;NA&gt;   중급형     60   800     0.6  &lt;NA&gt;    0.05     NA
+## 3 tv-c     &lt;NA&gt;   보급형    120   600     0.55 &lt;NA&gt;    0.1      NA
+## 4 vtr-b    &lt;NA&gt;   중급형     10   800     0.7  &lt;NA&gt;    0        NA
+## 5 vtr-b    &lt;NA&gt;   고급형     34  1300     0.6  &lt;NA&gt;    0.03     NA
+## 6 vtr-c    &lt;NA&gt;   보급형     60   800     0.55 &lt;NA&gt;    0.05     NA
+## 7 aud-a    &lt;NA&gt;   고급형     25   600     0.7  &lt;NA&gt;    0        NA
+## 8 aud-b    &lt;NA&gt;   중급형     54   800     0.6  &lt;NA&gt;    0.05     NA
+## 9 aud-c    &lt;NA&gt;   고급형    110   500     0.55 &lt;NA&gt;    0.1      NA</code></pre>
+</div>
+</div>
+<div id="계산-작업-1" class="section level2">
+<h2>계산 작업 (1)</h2>
+<ul>
+<li>제품명은 제품코드 뒤의 두 글짜를 뺀 나머지이며, 대문자로 표시</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>df2_1 = 
+  df2 %&gt;%
+  rowwise() %&gt;%
+  mutate(&#39;제품명&#39; = substr(제품코드,1,(nchar(제품코드)-2))) %&gt;%
+  ungroup() %&gt;%
+  mutate(&#39;제품명&#39; = toupper(.$제품명)) %&gt;%
+  #head(nrow(.)-1) %&gt;%
+  print()</code></pre>
+<pre><code>## # A tibble: 9 x 9
+##   제품코드 제품명 등급   판매량  단가 원가비율 평가  할인율 총매출
+##   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 tv-a     TV     고급형     35  1200     0.7  &lt;NA&gt;    0.03     NA
+## 2 tv-b     TV     중급형     60   800     0.6  &lt;NA&gt;    0.05     NA
+## 3 tv-c     TV     보급형    120   600     0.55 &lt;NA&gt;    0.1      NA
+## 4 vtr-b    VTR    중급형     10   800     0.7  &lt;NA&gt;    0        NA
+## 5 vtr-b    VTR    고급형     34  1300     0.6  &lt;NA&gt;    0.03     NA
+## 6 vtr-c    VTR    보급형     60   800     0.55 &lt;NA&gt;    0.05     NA
+## 7 aud-a    AUD    고급형     25   600     0.7  &lt;NA&gt;    0        NA
+## 8 aud-b    AUD    중급형     54   800     0.6  &lt;NA&gt;    0.05     NA
+## 9 aud-c    AUD    고급형    110   500     0.55 &lt;NA&gt;    0.1      NA</code></pre>
+</div>
+</div>
+<div id="계산-작업-2" class="section level2">
+<h2>계산 작업 (2)</h2>
+<ul>
+<li>판매량이 큰 값부터 1위 ~ 3위는 “상”</li>
+<li>판매량이 큰 값부터 4위 ~ 6위는 “중”</li>
+<li>나머지 순위에 대해서는 “하”</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>df2_2 = 
+  df2_1 %&gt;%
+  mutate_at(vars(판매량), funs(as.numeric)) %&gt;%
+  mutate(&#39;평가&#39; =  
+        ifelse(rank(-as.numeric(df2_1$판매량), ties.method = &#39;min&#39;) %in% 1:3, &#39;상&#39;,
+        ifelse(rank(-as.numeric(df2_1$판매량), ties.method = &#39;min&#39;) %in% 4:6, &#39;중&#39;,
+        &#39;하&#39;))) %&gt;%
+  print()</code></pre>
+<pre><code>## Warning: `funs()` is deprecated as of dplyr 0.8.0.
+## Please use a list of either functions or lambdas: 
+## 
+##   # Simple named list: 
+##   list(mean = mean, median = median)
+## 
+##   # Auto named with `tibble::lst()`: 
+##   tibble::lst(mean, median)
+## 
+##   # Using lambdas
+##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>## # A tibble: 9 x 9
+##   제품코드 제품명 등급   판매량  단가 원가비율 평가  할인율 총매출
+##   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 tv-a     TV     고급형     35  1200     0.7  중      0.03     NA
+## 2 tv-b     TV     중급형     60   800     0.6  상      0.05     NA
+## 3 tv-c     TV     보급형    120   600     0.55 상      0.1      NA
+## 4 vtr-b    VTR    중급형     10   800     0.7  하      0        NA
+## 5 vtr-b    VTR    고급형     34  1300     0.6  하      0.03     NA
+## 6 vtr-c    VTR    보급형     60   800     0.55 상      0.05     NA
+## 7 aud-a    AUD    고급형     25   600     0.7  하      0        NA
+## 8 aud-b    AUD    중급형     54   800     0.6  중      0.05     NA
+## 9 aud-c    AUD    고급형    110   500     0.55 상      0.1      NA</code></pre>
+</div>
+</div>
+<div id="계산-작업-3" class="section level2">
+<h2>계산 작업 (3)</h2>
+<ul>
+<li>판매량이 가장 큰 항목의 제품코드를 구하시오</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>df2_2$제품코드[which.max(df2_2$판매량)]</code></pre>
+<pre><code>## [1] &quot;tv-c&quot;</code></pre>
+</div>
+</div>
+<div id="계산-작업-4" class="section level2">
+<h2>계산 작업 (4)</h2>
+<ul>
+<li>등급별 판매량의 합계를 구하시오</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>df2_2 %&gt;%
+  group_by(등급) %&gt;%
+  summarise(&#39;판매량 합계&#39; = sum(판매량))</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   등급   `판매량 합계`
+##   &lt;chr&gt;          &lt;dbl&gt;
+## 1 고급형           204
+## 2 보급형           180
+## 3 중급형           124</code></pre>
+</div>
+</div>
+<div id="계산-작업-5" class="section level2">
+<h2>계산 작업 (5)</h2>
+<ul>
+<li>총매출을 계산할 사용자 정의함수를 만드시오.총매출은 단가(unit cost), 할인율(discount rate), 판매량(sales volume)을 인수로 받아 총매출을 계산하여 되돌려줌.</li>
+<li>총매출은 단가 x (1-할인율) x 판매량 으로 계산</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>cal_fun = function(unit_cost, discount_rate, sales_volumne){
+  total = unit_cost * (1-discount_rate) * sales_volumne
+}
+
+df2_5 =
+  df2_2 %&gt;%
+  mutate_at(vars(c(단가,할인율, 판매량)), funs(as.numeric)) %&gt;%
+  mutate(&#39;총매출&#39; = cal_fun(단가, 할인율, 판매량)) %&gt;%
+  print()</code></pre>
+<pre><code>## # A tibble: 9 x 9
+##   제품코드 제품명 등급   판매량  단가 원가비율 평가  할인율 총매출
+##   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 tv-a     TV     고급형     35  1200     0.7  중      0.03  40740
+## 2 tv-b     TV     중급형     60   800     0.6  상      0.05  45600
+## 3 tv-c     TV     보급형    120   600     0.55 상      0.1   64800
+## 4 vtr-b    VTR    중급형     10   800     0.7  하      0      8000
+## 5 vtr-b    VTR    고급형     34  1300     0.6  하      0.03  42874
+## 6 vtr-c    VTR    보급형     60   800     0.55 상      0.05  45600
+## 7 aud-a    AUD    고급형     25   600     0.7  하      0     15000
+## 8 aud-b    AUD    중급형     54   800     0.6  중      0.05  41040
+## 9 aud-c    AUD    고급형    110   500     0.55 상      0.1   49500</code></pre>
+</div>
+</div>
+</div>
+<div id="python" class="section level1">
+<h1>Python</h1>
+<div id="calling-r-from-python" class="section level2">
+<h2>Calling R from Python</h2>
+<p>We can access to R objects within Python cuhcks via the <code>r</code> object.</p>
+<div class="pycode">
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+df = r.df2
+df.head()</code></pre>
+<pre><code>##     제품코드 제품명   등급    판매량      단가  원가비율  평가   할인율  총매출
+## 0   tv-a  NA  고급형   35.0  1200.0  0.70  NA  0.03  NaN
+## 1   tv-b  NA  중급형   60.0   800.0  0.60  NA  0.05  NaN
+## 2   tv-c  NA  보급형  120.0   600.0  0.55  NA  0.10  NaN
+## 3  vtr-b  NA  중급형   10.0   800.0  0.70  NA  0.00  NaN
+## 4  vtr-b  NA  고급형   34.0  1300.0  0.60  NA  0.03  NaN</code></pre>
+</div>
+</div>
+<div id="계산-작업-1-1" class="section level2">
+<h2>계산 작업 (1)</h2>
+<ul>
+<li>제품명은 제품코드 뒤의 두 글짜를 뺀 나머지이며, 대문자로 표시</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>df2_1 = df.copy()
+df2_1[&#39;제품명&#39;] = df2_1[&#39;제품코드&#39;].apply(lambda x: x[:-2]).str.upper()
+df2_1</code></pre>
+<pre><code>##     제품코드  제품명   등급    판매량      단가  원가비율  평가   할인율  총매출
+## 0   tv-a   TV  고급형   35.0  1200.0  0.70  NA  0.03  NaN
+## 1   tv-b   TV  중급형   60.0   800.0  0.60  NA  0.05  NaN
+## 2   tv-c   TV  보급형  120.0   600.0  0.55  NA  0.10  NaN
+## 3  vtr-b  VTR  중급형   10.0   800.0  0.70  NA  0.00  NaN
+## 4  vtr-b  VTR  고급형   34.0  1300.0  0.60  NA  0.03  NaN
+## 5  vtr-c  VTR  보급형   60.0   800.0  0.55  NA  0.05  NaN
+## 6  aud-a  AUD  고급형   25.0   600.0  0.70  NA  0.00  NaN
+## 7  aud-b  AUD  중급형   54.0   800.0  0.60  NA  0.05  NaN
+## 8  aud-c  AUD  고급형  110.0   500.0  0.55  NA  0.10  NaN</code></pre>
+</div>
+</div>
+<div id="계산-작업-2-1" class="section level2">
+<h2>계산 작업 (2)</h2>
+<ul>
+<li>판매량이 큰 값부터 1위 ~ 3위는 평가 “상”</li>
+<li>판매량이 큰 값부터 4위 ~ 6위는 평가 “중”</li>
+<li>나머지 순위에 대해서는 평가 “하”</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>df2_2 = df2_1.copy()
+df2_2[&#39;평가&#39;] =  (-df2_2[&#39;판매량&#39;]).rank(method=&#39;min&#39;).apply(
+                      lambda x: &#39;상&#39; if x in range(1,4) else 
+                                  &#39;중&#39;  if x in range(4,7) else
+                                    &#39;하&#39;)
+df2_2
+
+# def rank(data):
+#   return np.array([sorted(data).index(x) for x in df2_2[&#39;판매량&#39;]])
+# np.isin(rank(df2_2[&#39;판매량&#39;]),range(1,4))</code></pre>
+<pre><code>##     제품코드  제품명   등급    판매량      단가  원가비율 평가   할인율  총매출
+## 0   tv-a   TV  고급형   35.0  1200.0  0.70  중  0.03  NaN
+## 1   tv-b   TV  중급형   60.0   800.0  0.60  상  0.05  NaN
+## 2   tv-c   TV  보급형  120.0   600.0  0.55  상  0.10  NaN
+## 3  vtr-b  VTR  중급형   10.0   800.0  0.70  하  0.00  NaN
+## 4  vtr-b  VTR  고급형   34.0  1300.0  0.60  하  0.03  NaN
+## 5  vtr-c  VTR  보급형   60.0   800.0  0.55  상  0.05  NaN
+## 6  aud-a  AUD  고급형   25.0   600.0  0.70  하  0.00  NaN
+## 7  aud-b  AUD  중급형   54.0   800.0  0.60  중  0.05  NaN
+## 8  aud-c  AUD  고급형  110.0   500.0  0.55  상  0.10  NaN</code></pre>
+</div>
+</div>
+<div id="계산-작업-3-1" class="section level2">
+<h2>계산 작업 (3)</h2>
+<ul>
+<li>판매량이 가장 큰 항목의 제품코드를 구하시오</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>df2_2[&#39;제품코드&#39;] [df2_2[&#39;판매량&#39;].argmax()]</code></pre>
+<pre><code>## &#39;tv-c&#39;</code></pre>
+</div>
+</div>
+<div id="계산-작업-4-1" class="section level2">
+<h2>계산 작업 (4)</h2>
+<ul>
+<li>등급별 판매량의 합계를 구하시오</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>df2_2.groupby(&#39;등급&#39;).sum()[&#39;판매량&#39;]</code></pre>
+<pre><code>## 등급
+## 고급형    204.0
+## 보급형    180.0
+## 중급형    124.0
+## Name: 판매량, dtype: float64</code></pre>
+</div>
+</div>
+<div id="계산-작업-5-1" class="section level2">
+<h2>계산 작업 (5)</h2>
+<ul>
+<li>총매출을 계산할 사용자 정의함수를 만드시오.총매출은 단가(unit cost), 할인율(discount rate), 판매량(sales volume)을 인수로 받아 총매출을 계산하여 되돌려줌.</li>
+<li>총매출은 단가 x (1-할인율) x 판매량 으로 계산</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>def cal_fun(unit_cost, discount_rate, sales_volume):
+  return unit_cost * (1-discount_rate) * sales_volume
+
+df2_2[&#39;총매출&#39;] = df2_2.apply(lambda x: cal_fun(x[&#39;단가&#39;],x[&#39;할인율&#39;],x[&#39;판매량&#39;]), axis=1)
+df2_2</code></pre>
+<pre><code>##     제품코드  제품명   등급    판매량      단가  원가비율 평가   할인율      총매출
+## 0   tv-a   TV  고급형   35.0  1200.0  0.70  중  0.03  40740.0
+## 1   tv-b   TV  중급형   60.0   800.0  0.60  상  0.05  45600.0
+## 2   tv-c   TV  보급형  120.0   600.0  0.55  상  0.10  64800.0
+## 3  vtr-b  VTR  중급형   10.0   800.0  0.70  하  0.00   8000.0
+## 4  vtr-b  VTR  고급형   34.0  1300.0  0.60  하  0.03  42874.0
+## 5  vtr-c  VTR  보급형   60.0   800.0  0.55  상  0.05  45600.0
+## 6  aud-a  AUD  고급형   25.0   600.0  0.70  하  0.00  15000.0
+## 7  aud-b  AUD  중급형   54.0   800.0  0.60  중  0.05  41040.0
+## 8  aud-c  AUD  고급형  110.0   500.0  0.55  상  0.10  49500.0</code></pre>
+</div>
+</div>
+</div>
+
+</main>
+
+  <footer>
+  <script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.org/js/center-img.js"></script>
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://medium.com/@corr.roh">Medium</a>
+  
+  </footer>
+  </body>
+</html>
+

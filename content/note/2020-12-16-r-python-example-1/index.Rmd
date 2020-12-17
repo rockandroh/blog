@@ -1,10 +1,13 @@
 ---
-title: R/Python Example (1)
+title: R/Python (1) - 기본작업
 author:
 date: '2020-12-10'
 slug: 데이터활용능력
 categories:
   - data mining
+  - R
+  - Python
+  - 컴활
 tags: []
 output:
   blogdown::html_page:
@@ -40,13 +43,13 @@ library(reticulate) # Python
 
 <div class = "rcode">
 ```{r}
-print("이것은 R 코드 입니다.")
+# "이것은 R 코드 입니다."
 ```
 </div>
 
 <div class = "pycode">
 ```{python}
-print("이것은 Python 코드 입니다.")
+# "이것은 Python 코드 입니다."
 ```
 </div>
 
@@ -167,7 +170,7 @@ df.head()
 
 <div class = "pycode">
 ```{python}
-df.loc[(df['직위']=='과장') | (df['직위']=='사원') & (df['점수']>=80) ]
+df.loc[(df['직위']=='과장') | (df['직위']=='사원') & (df['점수']>=80)][['이름','부서명','직위','점수','평가']]
 ```
 
 </div>

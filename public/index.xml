@@ -6,16 +6,27 @@
     <description>Recent content in Home on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>R/Python Example (1)</title>
+      <title>R/Python (2) - 계산작업</title>
+      <link>https://rockandroh.netlify.app/note/2020/12/16/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>
+      <pubDate>Wed, 16 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/12/16/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
+      <description>유형2 - 계산작업 R Python    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
+###유형1 - 기본작업은 아래의 링크를 클릭하시면 됩니다. ###R/Python (1) 기본작업**
+# R 코드입니다.  # Python 코드입니다.</description>
+    </item>
+    
+    <item>
+      <title>R/Python (1) - 기본작업</title>
       <link>https://rockandroh.netlify.app/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>
       <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
       <description>유형1 R Python    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
 R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.
-필요한 패키지 준비 library(readxl) # read excel library(dplyr) library(DT) library(formattable) library(reticulate) # Python #py_install(packages = &amp;quot;matplotlib&amp;quot;) #py_install(packages = &amp;quot;pandas&amp;quot;) print(&amp;quot;이것은 R 코드 입니다.</description>
+필요한 패키지 준비 library(readxl) # read excel library(dplyr) library(DT) library(formattable) library(reticulate) # Python #py_install(packages = &amp;quot;matplotlib&amp;quot;) #py_install(packages = &amp;quot;pandas&amp;quot;) # &amp;quot;이것은 R 코드 입니다.</description>
     </item>
     
     <item>
