@@ -27,8 +27,9 @@ div.pycode pre.python { background-color:#FFE9E9; }
 
 **이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다**
 
-###유형1 - 기본작업은 아래의 링크를 클릭하시면 됩니다.
-###[R/Python (1) 기본작업](https://www.rockandroh.com/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/)**
+**이 시리즈는 유형2로 유형1을 놓치신 분들은 아래의 링크를 이용하시면 됩니다.** 
+
+### [R/Python (1) - 기본작업](https://www.rockandroh.com/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/)
 
 <div class = "rcode">
 ```{r}
@@ -57,8 +58,6 @@ library(reticulate) # Python
 
 
 # 유형2 - 계산작업
-
-
 
 # R 
 
