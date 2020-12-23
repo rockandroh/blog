@@ -17,6 +17,19 @@ output:
     number_sections: TRUE
 ---
 
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -56,6 +69,12 @@ Footnote example2^[hello]
 # Head 2
 
 Refer to the [other lecture note in this blog](https://www.rockandroh.com/note/2017/06/13/a-quick-note/)
+
+$$\begin{aligned}
+  MR(Q) &= P(Q)\cdot Q-P(Q-1)\cdot(Q-1) \\
+	&< P(Q)\cdot Q-P(Q)\cdot(Q-1)\qquad\because P(Q-1)>P(Q) \\
+	&= P(Q)
+\end{aligned}$$
 
 ## R example
 
