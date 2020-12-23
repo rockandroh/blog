@@ -1,7 +1,7 @@
 ---
-title: R/Python (2) - 계산작업
+title: R/Python (3) - 분석작업
 author:
-date: '2020-12-16'
+date: '2020-12-18'
 slug: 데이터활용능력
 categories:
   - data mining
@@ -14,6 +14,7 @@ output:
     toc: true
     toc_depth: 1
 ---
+
 
 <style>
 div.rcode pre { background-color:#fffff0; }
@@ -32,7 +33,7 @@ div.pycode pre.python { background-color:#FFE9E9; }
 ### [R/Python (1) - 기본작업](https://www.rockandroh.com/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/)
 ### [R/Python (2) - 기본작업](https://www.rockandroh.com/note/2020/12/16/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/)
 
-
+유형3은 피벗 테이블에 관한 내용입니다. 피벗테이블은 데이터를 다양한 방법으로 정리하는 것을 도와주는 강력한 도구입니다. 
 
 
 <div class = "rcode">
@@ -54,6 +55,7 @@ library(readxl) # read excel
 library(dplyr)
 library(DT)
 library(formattable)
+library(skimr)
 
 library(reticulate) # Python
 #py_install(packages = "matplotlib")
@@ -61,7 +63,7 @@ library(reticulate) # Python
 ```
 
 
-# 유형2 - 계산작업
+# 유형3 - 분석작업
 
 # R 
 
@@ -85,48 +87,63 @@ print(path_mac)
 <div class = "rcode">
 ```{r, include=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 #tab_names_mac = excel_sheets(path_mac)
-tab_names = excel_sheets(path_mac)
+tab_names = excel_sheets(path)
 print(tab_names)
 #list_all_mac = lapply(tab_names_mac, 
 #                  function(x) read_excel(path = path_mac,
 #                                         sheet = x,))
 list_all = lapply(tab_names, 
-                  function(x) read_excel(path = path_mac,
+                  function(x) read_excel(path = path,
                                          sheet = x,))
 summary(list_all)
 ```
 </div>
 
-## 예제2 데이터 준비
+## 유형3 데이터 준비
+
+skimr 패키지의 `skim`이라는 함수를 사용하면 `summary` 보다 조금더 자세한 summary를 얻을 수 있다. 특히 numeric column이 아닌경우 `skim`이 더 유용하다.
 
 <div class = "rcode">
 ```{r, warning=FALSE, error=FALSE, message=FALSE}
-df2 = list_all[[2]]
-new_header = df2[1,]
-colnames(df2) = new_header
-df2 = df2[2:10,] %>%
-  mutate_at(vars(c(단가,할인율,원가비율,판매량,총매출)), as.numeric) %>%
-  mutate_if(is.numeric,round, 3)
-df2
+df3 = list_all[[3]]
+skimr::skim(df3)
 ```
 </div>
 
-## 계산 작업 (1)
-- 제품명은 제품코드 뒤의 두 글짜를 뺀 나머지이며, 대문자로 표시
+## 분석 작업 (1)
+- 직위를 '페이지'(필터)로, 부서코드는 '행'으로 처리하고, '데이터'는 전산이론, 전산실기의 평균을 계산하는 피벗테이블을 작성하시오
 
 <div class = "rcode">
-```{r}
-df2_1 = 
-  df2 %>%
-  rowwise() %>%
-  mutate('제품명' = substr(제품코드,1,(nchar(제품코드)-2))) %>%
+```{r, warning=FALSE, error=FALSE, message=FALSE}
+df3 %>%
+  group_by(직위, 부서코드) %>%
+  summarise('전산이론평균' = mean(전산이론),
+            '전산실기평균' = mean(전산실기)) %>%
   ungroup() %>%
-  mutate('제품명' = toupper(.$제품명)) %>%
-  #head(nrow(.)-1) %>%
+  rbind(c('ALL', 'T-001', 
+          mean(df3$전산이론[df3$부서코드=='T-001']), 
+          mean(df3$전산실기[df3$부서코드=='T-001']))) %>%
+  rbind(c('ALL', 'T-002', 
+          mean(df3$전산이론[df3$부서코드=='T-002']), 
+          mean(df3$전산실기[df3$부서코드=='T-002']))) %>%
   print()
+  
 ```
 </div>
 
+<div class = "rcode">
+```{r, warning=FALSE, error=FALSE, message=FALSE}
+df3 %>%
+  group_by(직위, 부서코드) %>%
+  summarise('전산이론평균' = mean(전산이론),
+            '전산실기평균' = mean(전산실기)) %>%
+  ungroup() %>%
+  rbind( cbind(직위='ALL', df3 %>% group_by(부서코드) %>% summarise('전산이론평균' = mean(전산이론),
+            '전산실기평균' = mean(전산실기)))) %>%
+  print()
+  
+```
+</div>
 
 ## 계산 작업 (2)
 - 판매량이 큰 값부터 1위 ~ 3위는 "상"
@@ -266,6 +283,5 @@ df2_2['총매출'] = df2_2.apply(lambda x: cal_fun(x['단가'],x['할인율'],x[
 df2_2
 ```
 </div>
-
 
 
