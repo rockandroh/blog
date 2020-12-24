@@ -6,7 +6,36 @@
     <description>Recent content in Home on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>\[AP Micro\] Unit4</title>
+      <link>https://rockandroh.netlify.app/note/2020/12/24/ap-micro-unit4/</link>
+      <pubDate>Thu, 24 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/12/24/ap-micro-unit4/</guid>
+      <description>4. Imperfect Competition (15-22%) 4.1 Introduction 4.2 Monopolies 4.3 Price discrimination 4.4 Monopolistic competition 4.5 Oligopoly and game theory  Reference   body, td { font-size: 20px; } code.r{ font-size: 12px; } pre { font-size: 12px }  This page is a note for AP micro economics. It is a collection of study materials from sources in the reference list in the bottom and it is reorganized in my preference.</description>
+    </item>
+    
+    <item>
+      <title>\[AP Microecon\] Price Elasticity</title>
+      <link>https://rockandroh.netlify.app/note/2020/12/21/price-elasticity/</link>
+      <pubDate>Mon, 21 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/12/21/price-elasticity/</guid>
+      <description>This page is about the economics term “Price Elasticity”.
+ Setting the right price for your product or service is hard. In fact, determining price is one of the toughest things a marketer has to do, in large part because it has such a big impact on the company’s bottom line. One of the critical elements of pricing is understanding what economists call “price elasticity” - HBR
+ By definition, price elasticity of demand refers to the number calculated by the following formula \[ \epsilon=\frac{\Delta Q/Q}{\Delta P/P}=\frac{\partial Q}{\partial P}\cdot\frac{P}{Q}\] which is a percentage change in quantity demanded divided by a percentage change in price.</description>
+    </item>
+    
+    <item>
+      <title>R/Python (3) - 분석작업</title>
+      <link>https://rockandroh.netlify.app/note/2020/12/18/r-python-3-%EB%B6%84%EC%84%9D%EC%9E%91%EC%97%85/</link>
+      <pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2020/12/18/r-python-3-%EB%B6%84%EC%84%9D%EC%9E%91%EC%97%85/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>R/Python (2) - 계산작업</title>
       <link>https://rockandroh.netlify.app/note/2020/12/16/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>

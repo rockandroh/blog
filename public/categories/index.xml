@@ -6,7 +6,25 @@
     <description>Recent content in Categories on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Economics</title>
+      <link>https://rockandroh.netlify.app/categories/economics/</link>
+      <pubDate>Thu, 24 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/economics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>컴활</title>
+      <link>https://rockandroh.netlify.app/categories/%EC%BB%B4%ED%99%9C/</link>
+      <pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/%EC%BB%B4%ED%99%9C/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>data mining</title>
       <link>https://rockandroh.netlify.app/categories/data-mining/</link>
@@ -31,15 +49,6 @@
       <pubDate>Wed, 16 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/categories/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>컴활</title>
-      <link>https://rockandroh.netlify.app/categories/%EC%BB%B4%ED%99%9C/</link>
-      <pubDate>Wed, 16 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/categories/%EC%BB%B4%ED%99%9C/</guid>
       <description></description>
     </item>
     
