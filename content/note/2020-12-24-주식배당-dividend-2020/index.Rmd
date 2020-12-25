@@ -101,7 +101,7 @@ df %>%
 
 ### 정리
 
-![](D:/myblog\blog\content\note\2020-12-24-주식배당-dividend-2020/fig2.png)
+![](/blog/content/note/2020-12-24-주식배당-dividend-2020/fig2.png){width=100%}
 
 ## 2021년 배당 추정치 기준 상위 10개 종목
 
