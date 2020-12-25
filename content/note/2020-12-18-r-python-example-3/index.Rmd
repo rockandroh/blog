@@ -201,8 +201,6 @@ df2_5 =
 ```
 </div>
 
-
-
 # Python
 
 ## Calling R from Python
