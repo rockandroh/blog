@@ -76,18 +76,50 @@ In a monopoly, equilibrium (profit-maximizing) quantity is determined by equatin
 
 **In a monopoly graph, the demand curve is located above the marginal revenue cost curve. This is because they have to lower their price in order to sell each additional unit.** Their profit-maximizing profit output is where MR=MC. The price is determined by going from where MR=MC, up to the demand curve.
 
-![](/Users/master/Documents/GitHub/blog/content/note/2020-12-24-ap-micro-unit4/fig4_1.png){80%}
+Let's check out the monopoly graph.
+
+![](/Users/master/Documents/GitHub/blog/content/note/2020-12-24-ap-micro-unit4/fig4_1.jpeg){width=80%}
+
+#### How much output should this monopoly produce? why?
+#### How much output would let the company realize the maximum profit?
+#### How much output would let the company realize the maximum total revenue?
+#### What price should this company charge?
+- Monopoly would charge up to what people are going to pay!
 
 #### How much is the revenue?
 #### How much is the cost?
-#### How much is the profit(loss)?
+#### How much is the profit/loss?
+#### How much is the profit/loss per unit?
+#### Should this firm shut down?
 #### How much is the consumer surplus?
-#### How much is the producer surplus?
-#### How much is the dead weight loss?
+#### How much output is the socially optimal quantity?
+#### How much is the dead weight loss for consumer side?
 
 ### Demand does not equal marginal revenue
 
+```{r}
+library(DT)
+P = seq(from = 14, to = 2, by = -2)
+Q = seq(0, 6, 1)
+TR = P*Q # elementwise multiplication
+MR = c(0,diff(TR))
+df = as.data.frame(cbind(P,Q,TR,MR))
+datatable(df, rownames = FALSE)
+```
 
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+library(ggplot2)
+df[2:nrow(df),]%>%
+  ggplot(., aes(x=Q)) +
+  geom_line(aes(y=P), col='blue') +
+  geom_line(aes(y=MR), col='red') +
+  geom_line(aes(y=TR), col='orange') +
+  geom_vline(xintercept = 4)+
+  #geom_smooth(aes(y=TR), col='orange', method = 'lm', formula = y ~ poly(x, 2), se = FALSE) +
+  theme_bw()
+```
+
+From the point where MR=0, the left hand side side is elastic demand and the right hand side is inelastic demand. In the elastic region, a monopoly can lower the price and still increase their total revenue (TR). However, in the inelastic region, if they lower their price, they decrease their total revenue (remember the Total Revenue Test!).
 
 ### Why is the marginal revenue curve below the demand curve in a monoply?^[https://www.albany.edu/~aj4575/LectureNotes/Lecture30.pdf]
 
@@ -138,7 +170,7 @@ For a monopoly there is a price effect. It must reduce price to sell additional 
 
 The demand curve on a monopoly graph have both elastic, inelastic, and unit elastic sections. We use the quantity where MR=0 to determine the difference. We first draw a line from the quantity where MR=0 up to the demand curve. The point where it hits the demand curve is the **unit elastic** point. The section above this point is the **elastic region** of the demand curve, and the section below this point is the **inelastic** region of the demand curve.
 
-In the elastic region, a monopoly can lower the price and still increase their total revenue (TR). However, in the inelastic region, if they lower their price, they decrease their total revenue (remember the Total Revenue Test!). A monopoly will never willingly produce in the inelastic region because it would lower their profits (marginal revenue is negative, while marginal costs continue to increase. In order for them to produce in the inelastic region, the government has to regulate them with a price ceiling or provide support through a subsidy. (See the graph of both a monopoly and a corresponding TR curve below).
+In the elastic region, a monopoly can lower the price and still increase their total revenue (TR). However, in the inelastic region, if they lower their price, they decrease their total revenue (remember the Total Revenue Test!). A monopoly will never willingly produce in the inelastic region because it would lower their profits (marginal revenue is negative, while marginal costs continue to increase). In order for them to produce in the inelastic region, the government has to regulate them with a price ceiling or provide support through a subsidy. (See the graph of both a monopoly and a corresponding TR curve below).
 
 ![](/Users/master/Documents/GitHub/blog/content/note/2020-12-24-ap-micro-unit4/fig4_6.png){width=80%}
 
