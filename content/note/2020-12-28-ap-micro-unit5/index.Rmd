@@ -1,0 +1,91 @@
+---
+title: \[AP Micro\] Unit5 and Unit6
+author: Roh
+date: '2020-12-28'
+slug: ap-micro-unit5
+categories:
+  - Economics
+tags:
+  - AP Econ
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 2
+---
+
+
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
+**This page is a note for AP micro economics. It is a collection of study materials from sources in the reference list in the bottom and it is reorganized in my preference.**
+
+**For other units, please refer to the following links**
+
+- Unit1: 
+- Unit2:
+- Unit3:
+- Unit4:
+- Unit5:
+- Unit6:
+
+***
+
+# 5. Factor Markets (10% – 13%)
+
+
+
+## 5.1 Introduction to factor markets
+
+- The factor (i.e., resource) market is where the factors of production are sold by households to businesses. 
+- The factors of production are land, labor, capital, and entrepreneurship.
+- The corresponding payments for these factors of production are rent, wage, interest, and profit. 
+
+**Derived Demand**
+- the demand for resources is determined (derived) by the products they help to produce
+- Take labor market as an example
+  - What is Demand for Labor?
+    - Demand is the different quantities of workers that business are **willing** and **able** to hire at different wages
+    - When wage level increases, the quantity of inputs demanded decreases.
+    - When wage level decreases, the quantity of inputs demanded increases.
+
+Key terms
+
+- Marginal product
+  - The additional product that is produced by each additional input. We calculated this number by dividing the change in the total product by the change in the number of inputs.
+- Marginal revenue product
+  - The marginal revenue generated for a firm by each additional resource. 
+- Marginal resource cost
+  - The additional cost incurred by hiring or employing one more unit of the resource.
+
+
+
+## 5.2 Changes in factor demand and factor supply
+
+## 5.3 Profit-maximizing behaviour in perfectly competitive factor markets
+
+Characteristics of Perfectly Competitive Labor Market
+
+- Many small firms are hiring workers
+  - No one firm is large enough to manipulate the market.
+- Many workers with identical skills
+- Wage is constant
+- Workers are wage takers
+
+## 5.4 Monopsonistic markets
+
+***
+
+# Source
+
+- Fiveable by Jeanne Stansak
+- AP microeconomics course and exam description
