@@ -1,5 +1,5 @@
 ---
-title: \[AP Micro\] Unit5
+title: \[AP Micro\] Unit5 and Unit6
 author: Roh
 date: '2020-12-28'
 slug: ap-micro-unit5
@@ -13,6 +13,15 @@ output:
     toc_depth: 2
 ---
 
+<script src="index_files/htmlwidgets/htmlwidgets.js"></script>
+<script src="index_files/jquery/jquery.min.js"></script>
+<link href="index_files/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+<script src="index_files/datatables-binding/datatables.js"></script>
+<link href="index_files/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="index_files/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="index_files/dt-core/js/jquery.dataTables.min.js"></script>
+<link href="index_files/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="index_files/crosstalk/js/crosstalk.min.js"></script>
 
 <div id="TOC">
 <ul>
@@ -51,22 +60,112 @@ pre {
 <hr />
 <div id="factor-markets-10-13" class="section level1">
 <h1>5. Factor Markets (10% – 13%)</h1>
+<div id="introduction-to-factor-markets" class="section level2">
+<h2>5.1 Introduction to factor markets</h2>
 <ul>
 <li>The factor (i.e., resource) market is where the factors of production are sold by households to businesses.</li>
 <li>The factors of production are land, labor, capital, and entrepreneurship.</li>
 <li>The corresponding payments for these factors of production are rent, wage, interest, and profit.</li>
 </ul>
-<div id="introduction-to-factor-markets" class="section level2">
-<h2>5.1 Introduction to factor markets</h2>
+<p><strong>Derived Demand</strong>
+- the demand for resources is determined (derived) by the products they help to produce
+- Take labor market as an example
+- What is Demand for Labor?
+- Demand is the different quantities of workers that business are <strong>willing</strong> and <strong>able</strong> to hire at different wages
+- When wage level increases, the quantity of inputs demanded decreases.
+- When wage level decreases, the quantity of inputs demanded increases.</p>
+<p><strong>Key terms</strong></p>
+<ul>
+<li>Marginal product (MP)
+<ul>
+<li>The additional product that is produced by each additional input. We calculated this number by dividing the change in the total product by the change in the number of inputs.</li>
+</ul></li>
+<li>Marginal revenue product (MRP)
+<ul>
+<li>The marginal revenue generated for a firm by each additional resource.</li>
+</ul></li>
+<li>Marginal resource cost (MRC)
+<ul>
+<li>The additional cost incurred by hiring or employing one more unit of the resource.</li>
+</ul></li>
+</ul>
+<p><strong>Rule for hiring labor</strong></p>
+<ul>
+<li>firms will continue to hire workers and resources as long as
+<ul>
+<li>marginal revenue product (MRP) &gt; marginal resource cost (MRC)</li>
+<li>until marginal revenue product (MRP) = marginal resource cost (MRC)</li>
+</ul></li>
+</ul>
+<p><div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"filter":"none","data":[[1,2,3,4],[40,60,75,85],[40,20,15,10],["$3","$3","$3","$3"],["$120","$60","$45","$30"],["$30","$30","$30","$30"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Input<\/th>\n      <th>T_product<\/th>\n      <th>M_product<\/th>\n      <th>Price<\/th>\n      <th>MRP<\/th>\n      <th>MRC<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-center","targets":"_all"}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<strong>From the table above</strong></p>
+<p>Compare the marginal revenue product (MRP) to marginal resource cost (MRC) at each input level in order to find the number that inputs that gets us closest to MRP = MRC, without MRC being greater than MRP.</p>
+<p>In this particular example, 4 inputs makes MRP = MRC (30USD = 30USD), so the firm will hire 4 workers.</p>
 </div>
 <div id="changes-in-factor-demand-and-factor-supply" class="section level2">
 <h2>5.2 Changes in factor demand and factor supply</h2>
+<div id="determinants-of-resource-demand" class="section level3">
+<h3>3 Determinants of Resource Demand</h3>
+<ol style="list-style-type: decimal">
+<li>Changes in the demand for the product
+<ul>
+<li>price increase of the product increases the demand for the rsource</li>
+<li>derived demand</li>
+<li>coffe beans for americano</li>
+</ul></li>
+<li>Changes in productivity of the resource
+<ul>
+<li>new technique is developed that cuts production time in half</li>
+<li>each worker generating a greater marginal revenue product</li>
+<li>increases the demand for labor</li>
+</ul></li>
+<li>Changes in price of other resources
+<ul>
+<li>substitue resources
+<ul>
+<li>if the price of NVIDIA graphic card increases, desktop manufacturer will more willing to demand AMD graphic card</li>
+</ul></li>
+<li>complementary resources
+<ul>
+<li>Both aluminum and sugar are used in the production of soft drinks. If the price of aluminum increases, then we would see the demand for sugar decrease since both products are used to produce soft drinks.</li>
+</ul></li>
+</ul></li>
+</ol>
+</div>
+<div id="determinants-of-resource-supply" class="section level3">
+<h3>3 Determinants of Resource Supply</h3>
+<ol style="list-style-type: decimal">
+<li>Personal values / leisure
+<ul>
+<li>Low-skill workers decide that working at minimum wage isn’t worth their time. This would shift the labor supply curve to the left due to the decrease in the amount of workers.</li>
+<li>The increase in the labor force, especially women, during WWII because people saw it as a patriotic duty to help produce the goods that would help in the war efforts. This would increase the labor supply and shift the curve right.</li>
+</ul></li>
+<li>Government regulation/licensing
+<ul>
+<li>If the government establishes a certification process that makes it harder to be an electrician than we would see the supply of electricians decrease shifting the labor supply curve to the left</li>
+<li>If puffer fish food cooks had to get an advanced degree, supply would fall</li>
+</ul></li>
+<li>Number of qualified workers
+<ul>
+<li>Education, Immigration, Training
+<ul>
+<li>If a country enacts stricter immigration laws than that will shift the labor supply to the left because of the smaller pool of workers.</li>
+</ul></li>
+</ul></li>
+</ol>
+</div>
 </div>
 <div id="profit-maximizing-behaviour-in-perfectly-competitive-factor-markets" class="section level2">
 <h2>5.3 Profit-maximizing behaviour in perfectly competitive factor markets</h2>
+<p>There are two types of factor markets</p>
+<ul>
+<li>Perfectly competitive factor/resource market</li>
+<li></li>
+</ul>
 <p>Characteristics of Perfectly Competitive Labor Market</p>
 <ul>
-<li>Many small firms are hiring workers
+<li>Many small firms hiring workers
 <ul>
 <li>No one firm is large enough to manipulate the market.</li>
 </ul></li>
@@ -74,12 +173,129 @@ pre {
 <li>Wage is constant</li>
 <li>Workers are wage takers</li>
 </ul>
+<p>In the perfectly competitive labor market,</p>
+<ul>
+<li>Demand curve is downward-sloping
+<ul>
+<li>law of diminishing marginal returns</li>
+<li>each additional worker generates less revenue (MRP)</li>
+<li>worth less to the firm</li>
+</ul></li>
+<li>Supply curve is upward-sloping
+<ul>
+<li>incentive to earn higher wages and greater income</li>
+<li>incentive to give up leisure time and offer more of their time as workers</li>
+<li>deter workers from wanting to work more</li>
+</ul></li>
+</ul>
+<div id="graphs" class="section level3">
+<h3>Graphs</h3>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<ul>
+<li>Notice that <span class="math inline">\(S_L\)</span> and <span class="math inline">\(D_L\)</span> are used to describe the supply and demand of labor.</li>
+</ul>
+</div>
+<div id="perfect-competition-product-market-vs-resource-market" class="section level3">
+<h3>Perfect Competition Product Market vs Resource Market</h3>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /><img src="index_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<ul>
+<li>The perfect labor market firm graph looks a little different than it did in the product market.</li>
+<li>The demand for labor, otherwise known as MRP, is downward sloping.</li>
+<li>The supply of labor, otherwise known as MRC, is perfectly elastic.</li>
+<li>This shows that workers are wage takers and that firms hire all workers at the same wage level set by the market.</li>
+<li>The quantity of labor that each individual firm will hire is where MRC = MRP.</li>
+</ul>
+</div>
+<div id="cost-minimizing-combination-of-resources-least-cost-rule" class="section level3">
+<h3>Cost minimizing combination of resources (Least-Cost Rule)</h3>
+<ul>
+<li>Firms must be careful to choose a combination of resources that will minimize their costs</li>
+<li>In order for a firm to be using the combination of resources that will reduce its costs, they have to satisfy the following formula <span class="math display">\[\frac{MP_X}{P_X} = \frac{MP_Y}{P_Y}\]</span></li>
+</ul>
+<p>MP stands for marginal product and P stands for price. The x and y represent different resources.</p>
+<p>Let’s look at an example with robots, a capital resource, and workers, labor resources. For this example, let’s say the firm has a budget of <strong>35USD</strong> and needs to find the combination of resources that will minimize their costs. Robots cost <strong>10USD</strong> each and workers cost <strong>5USD</strong> each.</p>
+<pre class="r"><code>Input = c(1:4)
+MP_Robot = c(30,20,10,5)
+P_Robot = rep(10,4)
+MP_Worker = c(20,15,10,5)
+P_Worker = rep(5,4)
+MP_P_Robot = MP_Robot/P_Robot
+MP_P_Worker = MP_Worker/P_Worker
+
+df = as.data.frame(cbind(Input,MP_Robot,P_Robot, MP_P_Robot,
+                         MP_Worker, P_Worker,MP_P_Worker))
+
+datatable(df, rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = &#39;dt-center&#39;, targets = &quot;_all&quot;)))
+            )</code></pre>
+<div id="htmlwidget-2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"filter":"none","data":[[1,2,3,4],[30,20,10,5],[10,10,10,10],[3,2,1,0.5],[20,15,10,5],[5,5,5,5],[4,3,2,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Input<\/th>\n      <th>MP_Robot<\/th>\n      <th>P_Robot<\/th>\n      <th>MP_P_Robot<\/th>\n      <th>MP_Worker<\/th>\n      <th>P_Worker<\/th>\n      <th>MP_P_Worker<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-center","targets":"_all"}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="from-the-above-graph" class="section level3">
+<h3>From the above graph</h3>
+<ul>
+<li><p>The first step in determining the least cost combination is to decide what resources you are going to purchase. We always start with the resource that has the highest MP/P. In this case that is the first worker. When this firm purchases the first worker, we subtract 5USD off their budget, which leaves them with 30USD (35USD-5USD).</p></li>
+<li><p>They then move on to determine whether they should buy another worker or the first robot. Since the MP/P is the same for both these resources they will purchase a robot and a worker, which will cost them 15USD. This reduces their budget to 15USD (30USD-15USD).</p></li>
+<li><p>They then go on to the 3rd worker and the 2nd robot and see that the MP/P are identical here as well. They will again purchase both the worker and the robot, which will cost them 15USD and will exhaust their budget (15USD-15USD).</p></li>
+</ul>
+</div>
 </div>
 <div id="monopsonistic-markets" class="section level2">
 <h2>5.4 Monopsonistic markets</h2>
+<p>The second type of factor (resource) market is called a monopsony. A monopsony is an imperfectly competitive factor market where only a single firm buys resources.</p>
+<ul>
+<li>Characteristics of Monopsonies
+<ul>
+<li>Onne, large firm hires all workers in a single labor market and is large enough to control the labor market.</li>
+<li>The market is imperfectly competitive</li>
+<li>The firm is a wage maker</li>
+<li>Firms must increase wages in order to hire additional wages</li>
+<li>MRC &gt; wage per worker</li>
+<li>The firm will hire the quantity of labor where MRP = MRC</li>
+<li>The firm will pay workers a wage that they are willing and able to work for below their MRP</li>
+</ul></li>
+</ul>
+<div id="differences-between-a-perfectly-competitive-labor-market-and-a-monopsony" class="section level3">
+<h3>Differences between a perfectly competitive labor market and a monopsony</h3>
+<ul>
+<li>Perfectly competitive
+<ul>
+<li>Supply = MRC</li>
+<li>Hires workers at a quantity where MRP = MRC</li>
+<li>Wage = MRP</li>
+</ul></li>
+<li>Monopsony
+<ul>
+<li>Supply &lt; MRC</li>
+<li>Hires fewer workers than perfectly competitive market because MRC &gt; Supply</li>
+<li>Wage &lt; MRP</li>
+</ul></li>
+</ul>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>In a monopsony, we <strong>determine the number of workers</strong> by finding where MRP = MRC and then going down to the horizontal axis. We <strong>determine wage</strong> by finding MRP = MRC and then going down to the supply curve and over to the vertical axis.</p>
+</div>
+<div id="sample-problem" class="section level3">
+<h3>Sample Problem</h3>
+<p>There is 1 large hospital in a city that hires nurses. There are no other hospitals nearby that nurses are willing or able to travel to. What is the labor cost for this firm based on the graph?</p>
+<ul>
+<li>Answer
+<ul>
+<li>360 USD</li>
+</ul></li>
+<li>Explanation
+<ul>
+<li>Since the large hospital is the only firm hiring nurses, we know that this is a monopsony. Monopsonistic firms hire the quantity where MRP = MRC, but only pay the wage level where the quantity intersects the labor supply curve. Therefore, we know that the equilibrium wage is 12USD and the equilibrium quantity is 30. To find our total labor costs for nurses, we simply multiply the wage by the quantity (12USD x 30 = 360USD).</li>
+</ul></li>
+</ul>
 <hr />
+</div>
 </div>
 </div>
 <div id="source" class="section level1">
 <h1>Source</h1>
+<ul>
+<li>Fiveable by Jeanne Stansak</li>
+<li>AP microeconomics course and exam description</li>
+</ul>
 </div>
