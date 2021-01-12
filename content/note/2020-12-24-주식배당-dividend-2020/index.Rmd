@@ -40,6 +40,7 @@ library(janitor)
 library(ggplot2)
 library(extrafont)
 library(quantmod)
+library(tidyquant)
 library(BatchGetSymbols)
 library(purrr)
 library(reshape2)
@@ -211,13 +212,9 @@ df_melt %>%
 ```
 
 
-## 해당 종목 과거 배당기준일 주가 변동
+## 배당락 회복하는데 걸린 시간
 
-## 2020/12/28일 대응방안
-
-## 300만원으로 직접 투자
-
-## 결과
+To be updated
 
 ***
 참고자료

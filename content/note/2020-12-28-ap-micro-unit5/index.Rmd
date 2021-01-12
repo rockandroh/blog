@@ -1,5 +1,5 @@
 ---
-title: \[AP Micro\] Unit5 and Unit6
+title: \[AP Micro\] Unit5
 author: Roh
 date: '2020-12-28'
 slug: ap-micro-unit5
@@ -46,7 +46,7 @@ pre {
 
 - The factor (i.e., resource) market is where the factors of production are sold by households to businesses. 
 - The factors of production are land, labor, capital, and entrepreneurship.
-- The corresponding payments for these factors of production are rent, wage, interest, and profit. 
+- The corresponding payments for these factors of production are rent, wage, interest, and profit.
 
 **Derived Demand**
 - the demand for resources is determined (derived) by the products they help to produce
@@ -90,6 +90,7 @@ datatable(df, rownames = FALSE,
             columnDefs = list(list(className = 'dt-center', targets = "_all")))
             )
 ```
+
 **From the table above**
 
 Compare the marginal revenue product (MRP) to marginal resource cost (MRC) at each input level in order to find the number that inputs that gets us closest to MRP = MRC, without MRC being greater than MRP.
@@ -109,12 +110,11 @@ In this particular example, 4 inputs makes MRP = MRC (30USD = 30USD), so the fir
     - each worker generating a greater marginal revenue product 
     - increases the demand for labor
 3. Changes in price of other resources
-    - substitue resources
+    - substitute resources
       - if the price of NVIDIA graphic card increases, desktop manufacturer will more willing to demand AMD graphic card
     - complementary resources
       - Both aluminum and sugar are used in the production of soft drinks. If the price of aluminum increases, then we would see the demand for sugar decrease since both products are used to produce soft drinks.
-    
-  
+
 ### 3 Determinants of Resource Supply
 
 1. Personal values / leisure
@@ -127,13 +127,12 @@ In this particular example, 4 inputs makes MRP = MRC (30USD = 30USD), so the fir
     - Education, Immigration, Training
       - If a country enacts stricter immigration laws than that will shift the labor supply to the left because of the smaller pool of workers.
       
-
 ## 5.3 Profit-maximizing behaviour in perfectly competitive factor markets
 
 There are two types of factor markets
 
 - Perfectly competitive factor/resource market
-- 
+- Monopsony market (analogous to monopoly)
 
 Characteristics of Perfectly Competitive Labor Market
 
@@ -159,9 +158,8 @@ In the perfectly competitive labor market,
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 #install.packages('devtools')
 #devtools::install_github("R-CoderDotCom/econocharts")
-#install.packages('latex2exp')
+
 library(econocharts)
-library(latex2exp)
 library(ggplot2)
 
 sdcurve2(data.frame(x=c(1,9),y=c(1,9)),
@@ -248,16 +246,24 @@ datatable(df, rownames = FALSE,
 
 ## 5.4 Monopsonistic markets
 
-The second type of factor (resource) market is called a monopsony. A monopsony is an imperfectly competitive factor market where only a single firm buys resources.
+The second type of factor (resource) market is called a monopsony. A monopsony is an imperfectly competitive factor market where only a single firm buys resources. Here, the company is the buyer of the labor and monopsonist is a single buyer of labor.
 
 - Characteristics of Monopsonies
-  - Onne, large firm hires all workers in a single labor market and is large enough to control the labor market.
+  - One, large firm hires all workers in a single labor market and is large enough to control the labor market.
   - The market is imperfectly competitive
   - The firm is a wage maker
   - Firms must increase wages in order to hire additional wages
   - MRC > wage per worker
   - The firm will hire the quantity of labor where MRP = MRC
   - The firm will pay workers a wage that they are willing and able to work for below their MRP
+  
+To talk more about Monopsony,
+
+- A monopsonist is a single buyer of labour, such as De Beers, the diamond producer, and the major employer of diamond workers in South Africa
+- Monopsonists are common in some small towns, where only one large firm provides the majority of employment
+
+### Why is the MRC curve above the S curve?
+Because the firm pays all workers the same wage, when it increases its wage to attract another worker then the true cost to the firm of that worker is greater than the wage paid to that worker.The worker’s MRC is his or her wage plus the increase in wages for all other workers.
 
 ### Differences between a perfectly competitive labor market and a monopsony
 
@@ -265,10 +271,9 @@ The second type of factor (resource) market is called a monopsony. A monopsony i
   - Supply = MRC
   - Hires workers at a quantity where MRP = MRC
   - Wage = MRP
-  
 - Monopsony
   - Supply < MRC
-  - Hires fewer workers than perfectly competitive market because MRC > Supply
+  - Hires fewer workers than perfectly competitive market because MRC >  Supply
   - Wage < MRP
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
@@ -289,6 +294,27 @@ sdcurve2( data.frame(x=c(1,9),y=c(1,9)), #MRC
 
 In a monopsony, we **determine the number of workers** by finding where MRP = MRC and then going down to the horizontal axis. We **determine wage** by finding MRP = MRC and then going down to the supply curve and over to the vertical axis.
 
+### What if a union fixes a minimum wage?
+
+A union can represent workers and seek to increase the benefits to workers. For example, what would happen if the union of hairdressers sets a minimum wage at £40, the competitive rate?
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+sdcurve2( data.frame(x=c(1,10),y=c(1,10)), #MRC
+          data.frame(x=c(1,10),y=c(1,7)), #supply
+          data.frame(x=c(1,10),y=c(10,1)), #demand
+          data.frame(x=c(1,10),y=c(5,5)), #demand
+         
+          main = 'Monopsony "Product" Market \n
+                  e.g., Large Hospital Hiring Only Nurses',
+          names = c('MRC', 'S', expression(paste(D,'=',MRP)), 'Min Wage'),
+          bg.col = "#fff3cd",
+          equilibrium = FALSE,
+          xlab = expression(Q),
+          ylab = 'Price',
+          linescol = c(1,2,4,3)
+          )
+```
+
 ### Sample Problem
 
 There is 1 large hospital in a city that hires nurses. There are no other hospitals nearby that nurses are willing or able to travel to. What is the labor cost for this firm based on the graph? 
@@ -304,3 +330,4 @@ There is 1 large hospital in a city that hires nurses. There are no other hospit
 
 - Fiveable by Jeanne Stansak
 - AP microeconomics course and exam description
+- https://www.economicsonline.co.uk/Business_economics/Monopsony.html
