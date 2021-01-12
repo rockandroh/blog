@@ -111,7 +111,10 @@ skimr::skim(df3)
 </div>
 
 ## 분석 작업 (1)
+- 지시사항에 따라 피벗 테이블 보고서를 작성하시오.
 - 직위를 '페이지'(필터)로, 부서코드는 '행'으로 처리하고, '데이터'는 전산이론, 전산실기의 평균을 계산하는 피벗테이블을 작성하시오
+- 부서코드 2를 만들되, 첫 문자가 G인 자료는 관리본부로 그리고 첫 문자가 T인 경우는 기술본부로 그룹을 작성하시오.
+- 데이터 열에 표시되는 각 평균 점수들은 소수 2자리로 표시하시오.
 
 <div class = "rcode">
 ```{r, warning=FALSE, error=FALSE, message=FALSE}
@@ -120,28 +123,11 @@ df3 %>%
   summarise('전산이론평균' = mean(전산이론),
             '전산실기평균' = mean(전산실기)) %>%
   ungroup() %>%
-  rbind(c('ALL', 'T-001', 
-          mean(df3$전산이론[df3$부서코드=='T-001']), 
-          mean(df3$전산실기[df3$부서코드=='T-001']))) %>%
-  rbind(c('ALL', 'T-002', 
-          mean(df3$전산이론[df3$부서코드=='T-002']), 
-          mean(df3$전산실기[df3$부서코드=='T-002']))) %>%
-  print()
-  
-```
-</div>
-
-<div class = "rcode">
-```{r, warning=FALSE, error=FALSE, message=FALSE}
-df3 %>%
-  group_by(직위, 부서코드) %>%
-  summarise('전산이론평균' = mean(전산이론),
-            '전산실기평균' = mean(전산실기)) %>%
-  ungroup() %>%
-  rbind( cbind(직위='ALL', df3 %>% group_by(부서코드) %>% summarise('전산이론평균' = mean(전산이론),
-            '전산실기평균' = mean(전산실기)))) %>%
-  print()
-  
+  rbind(cbind(직위='ALL', df3 %>% group_by(부서코드) %>% 
+                  summarise('전산이론평균' = mean(전산이론),
+                            '전산실기평균' = mean(전산실기)))) %>%
+  rowwise() %>%
+  mutate('부서코드2' = )
 ```
 </div>
 
