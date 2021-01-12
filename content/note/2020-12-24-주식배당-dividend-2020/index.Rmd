@@ -186,7 +186,7 @@ df3 = df2 %>%
 ```
 
 
-```{r ,warning=FALSE, message=FALSE, error=FALSE, fig.width="100%"}
+```{r ,warning=FALSE, message=FALSE, error=FALSE}
 colnames(stock_df) = df3$종목명
 df_final = as.data.table(stock_df)
 df_melt = melt(df_final, measure.vars=2:21)
