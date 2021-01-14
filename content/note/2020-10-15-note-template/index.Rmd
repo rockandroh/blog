@@ -45,6 +45,7 @@ horizontal line
 
 ```{r, include=FALSE}
 printf <- function(...) cat(sprintf(...))
+options(scipen=999)
 ```
 
 

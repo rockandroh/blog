@@ -6,7 +6,34 @@
     <description>Recent content in Categories on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>finance</title>
+      <link>https://rockandroh.netlify.app/categories/finance/</link>
+      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/finance/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>highfrequency</title>
+      <link>https://rockandroh.netlify.app/categories/highfrequency/</link>
+      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/highfrequency/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://rockandroh.netlify.app/categories/r/</link>
+      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/categories/r/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Economics</title>
       <link>https://rockandroh.netlify.app/categories/economics/</link>
@@ -53,15 +80,6 @@
     </item>
     
     <item>
-      <title>R</title>
-      <link>https://rockandroh.netlify.app/categories/r/</link>
-      <pubDate>Wed, 16 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/categories/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Book Review</title>
       <link>https://rockandroh.netlify.app/categories/book-review/</link>
       <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
@@ -94,15 +112,6 @@
       <pubDate>Tue, 10 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/categories/golf/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>finance</title>
-      <link>https://rockandroh.netlify.app/categories/finance/</link>
-      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/categories/finance/</guid>
       <description></description>
     </item>
     

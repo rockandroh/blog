@@ -3,6 +3,41 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://rockandroh.netlify.app/categories/</loc>
+    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/finance/</loc>
+    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/highfrequency/</loc>
+    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/</loc>
+    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/</loc>
+    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/categories/r/</loc>
+    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rockandroh.netlify.app/note/2021/01/12/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</loc>
+    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://rockandroh.netlify.app/note/2020/12/28/ap-micro-unit5/</loc>
     <lastmod>2020-12-28T00:00:00+00:00</lastmod>
   </url>
@@ -13,22 +48,7 @@
   </url>
   
   <url>
-    <loc>https://rockandroh.netlify.app/categories/</loc>
-    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://rockandroh.netlify.app/categories/economics/</loc>
-    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/</loc>
-    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/note/</loc>
     <lastmod>2020-12-28T00:00:00+00:00</lastmod>
   </url>
   
@@ -79,11 +99,6 @@
   
   <url>
     <loc>https://rockandroh.netlify.app/categories/python/</loc>
-    <lastmod>2020-12-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/categories/r/</loc>
     <lastmod>2020-12-16T00:00:00+00:00</lastmod>
   </url>
   
@@ -170,11 +185,6 @@
   <url>
     <loc>https://rockandroh.netlify.app/data/golf-club-summary/</loc>
     <lastmod>2020-11-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rockandroh.netlify.app/categories/finance/</loc>
-    <lastmod>2020-10-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>

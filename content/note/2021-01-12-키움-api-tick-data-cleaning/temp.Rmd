@@ -1,0 +1,136 @@
+---
+title: 키움 API Tick Data Cleaning (1)
+author: 'Roh'
+date: '2021-01-12'
+slug: 키움-api-tick-data-cleaning
+categories:
+  - finance
+  - R
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 1
+---
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+
+**이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다**
+
+**R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
+
+<div class = "rcode">
+```{r}
+# "이것은 R 코드 입니다."
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# "이것은 Python 코드 입니다."
+```
+</div>
+
+# 패키지
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+library(dplyr)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+#py_install(packages = 'dfply')
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)
+```
+
+# 데이터
+<div class = "rcode">
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12"
+fn = list.files(path = wd,
+                pattern = '.*stocks_trade.*.*_15.*\\.csv') # 마지막 30분 틱데이터 가지고오기
+path = paste(wd,fn,sep = '/')
+data = readr::read_csv(file = path, 
+                       col_names = c('code','trade_date','timestamp','price','open','high','low',
+                                     'size','cum_size','ask1','bid1'))
+sum(is.na(data))
+```
+</div>
+
+# 데이터 Glimpse
+```{r}
+df = data
+glimpse(df)
+```
+
+수정 해양할 사항
+
+- trade_date 와 timestamp 를 합쳐서 datetime 으로 만들기
+
+```{r}
+df %>%
+  mutate(datetime = timestamp - 20210112000000) %>%
+  tail()
+df$timestamp = as.character(df$timestamp)
+head(substr(df$timestamp,9,nchar(df$timestamp)))
+```
+
+
+```{r}
+temp =
+  tail(df[,1:4], 1000) %>%
+  mutate_at(vars(timestamp), round, 0) %>%
+  mutate_at(vars(timestamp), as.character)
+
+temp %>%
+  mutate_at(vars(timestamp), funs(substr(.$timestamp, 9, nchar(.$timestamp))))
+```
+
+```{r}
+temp =
+  df %>%
+  select(trade_date, timestamp) %>%
+  mutate_at(vars(timestamp), round, 0) %>%
+  mutate_at(vars(timestamp), as.character) %>%
+  mutate_at(vars(timestamp), ~ substr(., 9, length(.))) %>%
+  mutate(diff = trade_date - as.integer(timestamp))
+```
+
+```{r}
+table(temp$diff)
+```
+
+<div class = "pycode">
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+pd.options.display.float_format = '{:.4f}'.format
+df_py = r.data
+df_py.head()
+```
+</div>
+
+<div class = "pycode">
+```{python}
+samsung = df_py.query('code == 005930')
+samsung.head()
+```
+</div>
+
+<div class = "pycode">
+```{python}
+```
+</div>

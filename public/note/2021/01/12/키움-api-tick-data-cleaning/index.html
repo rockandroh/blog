@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>키움 API Tick Data Cleaning (1) | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/note/">Notes</a></li>
+      
+      <li><a href="/data/">Data</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="http://medium.com/@corr.roh">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">키움 API Tick Data Cleaning (1)</span></h1>
+<h2 class="author">Roh</h2>
+<h2 class="date">2021/01/12</h2>
+</div>
+
+<main>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#import-data">Import Data</a></li>
+<li><a href="#filter-for-samsun-electronics-stocks">Filter for “Samsun Electronics” Stocks</a></li>
+<li><a href="#time-data-cleaning">Time Data Cleaning</a></li>
+<li><a href="#get-trade-direction-indicator">Get Trade Direction Indicator</a></li>
+<li><a href="#source">Source</a></li>
+</ul>
+</div>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<p><strong>이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</strong></p>
+<p><strong>데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</strong></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div class="rcode">
+<pre class="r"><code># &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># &quot;이것은 Python 코드 입니다.&quot;</code></pre>
+</div>
+<div id="package" class="section level3">
+<h3>Package</h3>
+<pre class="r"><code>library(dplyr)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+#py_install(packages = &#39;dfply&#39;)
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)</code></pre>
+</div>
+<div id="import-data" class="section level2">
+<h2>Import Data</h2>
+<div class="rcode">
+<pre class="r"><code>wd = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12&quot;
+fn = list.files(path = wd,
+                pattern = &#39;.*stocks_trade.*.*_15.*\\.csv&#39;) # 마지막 30분 틱데이터 가지고오기
+path = paste(wd,fn,sep = &#39;/&#39;)
+data = readr::read_csv(file = path, 
+                       col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
+                                     &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;))
+sum(is.na(data))</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from datetime import datetime, timedelta
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+pd.options.display.float_format = &#39;{:.4f}&#39;.format
+df_py = r.data
+df_py.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp  ...     cum_size        ask1        bid1
+## 0  251270 150000.0000 20210112150000.0234  ...  484291.0000 124500.0000 124000.0000
+## 1  014680 150000.0000 20210112150000.0312  ...  104757.0000 187500.0000 187000.0000
+## 2  182400 150000.0000 20210112150000.0312  ...  668275.0000  19700.0000  19650.0000
+## 3  139480 150000.0000 20210112150000.0312  ... 1076253.0000 183000.0000 182500.0000
+## 4  225220 150000.0000 20210112150000.0312  ...   64880.0000  25600.0000  25500.0000
+## 
+## [5 rows x 11 columns]</code></pre>
+</div>
+</div>
+<div id="filter-for-samsun-electronics-stocks" class="section level2">
+<h2>Filter for “Samsun Electronics” Stocks</h2>
+<ul>
+<li>Code = ‘005930’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = df_py[df_py.code == &#39;005930&#39;].reset_index(drop=True)
+ss.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp  ...      cum_size       ask1       bid1
+## 0  005930 150000.0000 20210112150000.0820  ... 43854436.0000 89500.0000 89400.0000
+## 1  005930 150000.0000 20210112150000.1484  ... 43854437.0000 89500.0000 89400.0000
+## 2  005930 150000.0000 20210112150000.1562  ... 43854461.0000 89500.0000 89400.0000
+## 3  005930 150000.0000 20210112150000.1953  ... 43854462.0000 89500.0000 89400.0000
+## 4  005930 150000.0000 20210112150000.3398  ... 43854466.0000 89500.0000 89400.0000
+## 
+## [5 rows x 11 columns]</code></pre>
+</div>
+</div>
+<div id="time-data-cleaning" class="section level2">
+<h2>Time Data Cleaning</h2>
+<p>Tasks to be done</p>
+<ol style="list-style-type: decimal">
+<li>Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”</li>
+<li>Delete where second does not line between [0:59]</li>
+<li>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time</li>
+</ol>
+<div class="pycode">
+<pre class="python"><code># Task 1 &amp; 2
+ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
+
+# Task 3
+diff = ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss[&#39;trade_date&#39;]
+print(diff.value_counts())</code></pre>
+<pre><code>## -1.0000     17471
+## 0.0000       1519
+## 1.0000        427
+## -41.0000      332
+## -2.0000         1
+## dtype: int64</code></pre>
+<pre class="python"><code>ss = ss[abs(diff) &lt;=1]
+
+ss = ss.assign(time = ss[&#39;timestamp&#39;].apply(lambda x: datetime(year = int(str(int(x*1000000))[0:4]),
+                month = int(str(int(x*1000000))[4:6]),
+                day = int(str(int(x*1000000))[6:8]),
+                hour = int(str(int(x*1000000))[8:10]),
+                minute = int(str(int(x*1000000))[10:12]),
+                second = int(str(int(x*1000000))[12:14]),
+                microsecond = int(str(int(x*1000000))[14:20])).strftime(&quot;%H:%M:%S.%f&quot;)[:-3]
+               )
+
+)</code></pre>
+</div>
+</div>
+<div id="get-trade-direction-indicator" class="section level2">
+<h2>Get Trade Direction Indicator</h2>
+<p>If price is large than midprice, then it is buyer-initiated.
+If price is less than midprice, then it is seller-initated.
+It is tricky if price is same as midprice. In that case, we use the following rule.</p>
+<blockquote>
+<p>The tick rule is the most commonly used level-1 algorithm. This rule is rather simple and classifies a trade as buyer-initiated if the trade price is above the preceding trade price (an uptick trade) and as seller-initiated if the trade price is below the preceding trade price (a downtick trade). If the trade price is the same as the previous trade price (a zero-tick trade), the rule looks for the closest prior price that differs from the current trade price. Zero-uptick trades are classified as buys, and zero-downtick trades are classified as sells.</p>
+</blockquote>
+<p>The rule above can be simply implemented through the code below.</p>
+<div class="pycode">
+<pre class="python"><code>ss = ss.assign(spread = ss[&#39;ask1&#39;] - ss[&#39;bid1&#39;],
+               mid = (ss[&#39;bid1&#39;] + ss[&#39;ask1&#39;])*.5,
+               ind = 0,
+               price1 = ss[&#39;price&#39;].shift(1, fill_value=0),
+               price2 = ss[&#39;price&#39;].shift(2, fill_value=0)
+              )
+              
+buy = ((ss[&#39;price&#39;] &gt; ss[&#39;mid&#39;]) |
+        ((ss[&#39;price&#39;] == ss[&#39;mid&#39;]) &amp; (ss[&#39;price&#39;] &gt; ss[&#39;price1&#39;])) |
+        ((ss[&#39;price&#39;] == ss[&#39;mid&#39;]) &amp; (ss[&#39;price&#39;] == ss[&#39;price1&#39;]) &amp; (ss[&#39;price&#39;] &gt; ss[&#39;price2&#39;])))
+        
+ss.loc[buy, &#39;ind&#39;] = 1
+ss.loc[~buy, &#39;ind&#39;] = -1
+
+ss1 = ss[[&#39;time&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;ind&#39;,&#39;spread&#39;]]
+
+ss1.head(5)</code></pre>
+<pre><code>##            time      price     size       ask1       bid1  ind   spread
+## 0  15:00:00.082 89400.0000 130.0000 89500.0000 89400.0000   -1 100.0000
+## 1  15:00:00.148 89500.0000   1.0000 89500.0000 89400.0000    1 100.0000
+## 2  15:00:00.156 89400.0000  24.0000 89500.0000 89400.0000   -1 100.0000
+## 3  15:00:00.193 89500.0000   1.0000 89500.0000 89400.0000    1 100.0000
+## 4  15:00:00.340 89400.0000   4.0000 89500.0000 89400.0000   -1 100.0000</code></pre>
+</div>
+<div id="we-will-discuss-what-to-do-more-with-using-trading-indicator-value-along-with-other-variables-extracted-from-tick-data." class="section level3">
+<h3>We will discuss what to do more with using trading indicator value along with other variables extracted from tick data.</h3>
+</div>
+</div>
+<div id="source" class="section level2">
+<h2>Source</h2>
+<ul>
+<li>데이터 provided by 00 Team</li>
+<li><a href="http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf" class="uri">http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf</a></li>
+</ul>
+</div>
+
+</main>
+
+  <footer>
+  <script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.org/js/center-img.js"></script>
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://medium.com/@corr.roh">Medium</a>
+  
+  </footer>
+  </body>
+</html>
+
