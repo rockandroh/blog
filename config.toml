@@ -41,12 +41,12 @@ footnotereturnlinkcontents = "↩"
     weight = 7
 [[menu.main]]
     name = "Medium"
-    url = "http://medium.com/@corr.roh"
+    url = "https://corr-roh.medium.com/"
     weight = 10
 
 [params]
     description = "A website built through Hugo and blogdown."
-    footer = "&copy; [Roh](/) 2020 | [Github](https://github.com/rockandroh) | [Medium](https://medium.com/@corr.roh)"
+    footer = "&copy; [Roh](/) 2020 | [Github](https://github.com/rockandroh) | [Medium](https://corr-roh.medium.com/)"
 
 [markup]
   [markup.goldmark]
