@@ -23,7 +23,20 @@ div.pycode pre { background-color:#fffff0; }
 div.pycode pre.python { background-color:#FFE9E9; }
 </style>
 
-**이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다**
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+
+*__Note__: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다*
 
 **데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다**
 
@@ -55,7 +68,7 @@ options(max.print = 99999999)
 options(digits=10)
 ```
 
-## Import Data
+### Import Data
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12"
@@ -83,9 +96,11 @@ df_py.head()
 ```
 </div>
 
-## Filter for "Samsun Electronics" Stocks
+# Contents
 
-- Code = '005930'
+## 1. Filter for "Samsung Electronics" Stocks
+
+- KOSPI Code for Samsung Electronics is '005930'
 
 <div class = "pycode">
 ```{python}
@@ -94,24 +109,20 @@ ss.head()
 ```
 </div>
 
-## Time Data Cleaning
 
-Tasks to be done
 
-1. Transform data type to str to use substring to make the format like "%Y-%m-%d %H:%M:%S.%f"
-2. Delete where second does not line between [0:59]
-3. Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time 
+## 1. Use time object in python
+
+1. Delete rows where "second" does not lie between 0 and 59.
+
+2. Transform data type to str to use substring to make the format like "%Y-%m-%d %H:%M:%S.%f". 
 
 <div class = "pycode">
 ```{python}
-# Task 1 & 2
+# Task 1
 ss = ss[ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[12:14])) < 60 ]
 
-# Task 3
-diff = ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss['trade_date']
-print(diff.value_counts())
-ss = ss[abs(diff) <=1]
-
+# Task4
 ss = ss.assign(time = ss['timestamp'].apply(lambda x: datetime(year = int(str(int(x*1000000))[0:4]),
                 month = int(str(int(x*1000000))[4:6]),
                 day = int(str(int(x*1000000))[6:8]),
@@ -119,11 +130,61 @@ ss = ss.assign(time = ss['timestamp'].apply(lambda x: datetime(year = int(str(in
                 minute = int(str(int(x*1000000))[10:12]),
                 second = int(str(int(x*1000000))[12:14]),
                 microsecond = int(str(int(x*1000000))[14:20])).strftime("%H:%M:%S.%f")[:-3]
+                                            ),
+                minute = ss['timestamp'].apply(lambda x: str(int(x*1000000))[10:12])
                )
-
-)
+ss1 = ss[['time', 'minute', 'price','size','ask1','bid1']]
+ss1.head(10)
 ```
 </div>
+
+## 2. Calculate latency and clean it
+
+2. Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.
+
+<div class = "pycode">
+```{python}
+# Task 2 & 3
+latency = ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss['trade_date']
+print(latency.value_counts())
+ss1['latency'] = latency
+ss1.head()
+```
+</div>
+
+<div class = "pycode">
+```{python}
+plt.plot(ss1.latency)
+plt.title('Latency Over Time Before Cleaning')
+```
+</div>
+
+3. Check the time where large discrepancy happened!
+
+<div class = "pycode">
+```{python}
+ss1 = ss1[latency <=1]
+plt.plot(ss1.latency)
+plt.title('Latency Over Time After Cleaning')
+```
+</div>
+
+
+4. Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- one second at maximum.
+
+<div class = "pycode">
+```{python}
+ss = ss[abs(latency) <=1]
+plt.plot(ss1.latency)
+plt.title('Latency Over Time After Cleaning')
+```
+</div>
+
+
+
+
+## 5. Analyze the latency
+
 
 ## Get Trade Direction Indicator
 

@@ -17,11 +17,14 @@ output:
 
 <div id="TOC">
 <ul>
-<li><a href="#import-data">Import Data</a></li>
-<li><a href="#filter-for-samsun-electronics-stocks">Filter for “Samsun Electronics” Stocks</a></li>
-<li><a href="#time-data-cleaning">Time Data Cleaning</a></li>
+<li><a href="#contents">Contents</a><ul>
+<li><a href="#filter-for-samsung-electronics-stocks">Filter for “Samsung Electronics” Stocks</a></li>
+<li><a href="#calculate-latency-and-clean-it">Calculate latency and clean it</a></li>
+<li><a href="#use-time-object-in-python">Use time object in python</a></li>
+<li><a href="#analyze-the-latency">Analyze the latency</a></li>
 <li><a href="#get-trade-direction-indicator">Get Trade Direction Indicator</a></li>
 <li><a href="#source">Source</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -33,7 +36,19 @@ div.rcode pre.r { background-color:#EDF6FA; }
 div.pycode pre { background-color:#fffff0; }
 div.pycode pre.python { background-color:#FFE9E9; }
 </style>
-<p><strong>이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</strong></p>
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+<p><em><strong>Note</strong>: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</em></p>
 <p><strong>데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</strong></p>
 <p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
 <div class="rcode">
@@ -55,8 +70,8 @@ options(scipen=999)
 options(max.print = 99999999)
 options(digits=10)</code></pre>
 </div>
-<div id="import-data" class="section level2">
-<h2>Import Data</h2>
+<div id="import-data" class="section level3">
+<h3>Import Data</h3>
 <div class="rcode">
 <pre class="r"><code>wd = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12&quot;
 fn = list.files(path = wd,
@@ -88,10 +103,12 @@ df_py.head()</code></pre>
 ## [5 rows x 11 columns]</code></pre>
 </div>
 </div>
-<div id="filter-for-samsun-electronics-stocks" class="section level2">
-<h2>Filter for “Samsun Electronics” Stocks</h2>
+<div id="contents" class="section level1">
+<h1>Contents</h1>
+<div id="filter-for-samsung-electronics-stocks" class="section level2">
+<h2>Filter for “Samsung Electronics” Stocks</h2>
 <ul>
-<li>Code = ‘005930’</li>
+<li>KOSPI Code for Samsung Electronics is ‘005930’</li>
 </ul>
 <div class="pycode">
 <pre class="python"><code>ss = df_py[df_py.code == &#39;005930&#39;].reset_index(drop=True)
@@ -106,29 +123,34 @@ ss.head()</code></pre>
 ## [5 rows x 11 columns]</code></pre>
 </div>
 </div>
-<div id="time-data-cleaning" class="section level2">
-<h2>Time Data Cleaning</h2>
-<p>Tasks to be done</p>
+<div id="calculate-latency-and-clean-it" class="section level2">
+<h2>Calculate latency and clean it</h2>
 <ol style="list-style-type: decimal">
-<li>Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”</li>
-<li>Delete where second does not line between [0:59]</li>
-<li>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time</li>
+<li><p>Delete rows where “second” does not lie between 0 and 59.</p></li>
+<li><p>Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</p></li>
+<li><p>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- one second at maximum.</p></li>
 </ol>
 <div class="pycode">
-<pre class="python"><code># Task 1 &amp; 2
+<pre class="python"><code># Task 1
 ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
 
-# Task 3
-diff = ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss[&#39;trade_date&#39;]
-print(diff.value_counts())</code></pre>
+# Task 2 &amp; 3
+latency = ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss[&#39;trade_date&#39;]
+print(latency.value_counts())</code></pre>
 <pre><code>## -1.0000     17471
 ## 0.0000       1519
 ## 1.0000        427
 ## -41.0000      332
 ## -2.0000         1
 ## dtype: int64</code></pre>
-<pre class="python"><code>ss = ss[abs(diff) &lt;=1]
-
+<pre class="python"><code>ss = ss[abs(latency) &lt;=1]</code></pre>
+</div>
+</div>
+<div id="use-time-object-in-python" class="section level2">
+<h2>Use time object in python</h2>
+<p>Task #4: Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”.</p>
+<div class="pycode">
+<pre class="python"><code># Task4
 ss = ss.assign(time = ss[&#39;timestamp&#39;].apply(lambda x: datetime(year = int(str(int(x*1000000))[0:4]),
                 month = int(str(int(x*1000000))[4:6]),
                 day = int(str(int(x*1000000))[6:8]),
@@ -136,9 +158,14 @@ ss = ss.assign(time = ss[&#39;timestamp&#39;].apply(lambda x: datetime(year = in
                 minute = int(str(int(x*1000000))[10:12]),
                 second = int(str(int(x*1000000))[12:14]),
                 microsecond = int(str(int(x*1000000))[14:20])).strftime(&quot;%H:%M:%S.%f&quot;)[:-3]
-               )
+                                            )
+               )</code></pre>
+</div>
+</div>
+<div id="analyze-the-latency" class="section level2">
+<h2>Analyze the latency</h2>
+<div class="pycode">
 
-)</code></pre>
 </div>
 </div>
 <div id="get-trade-direction-indicator" class="section level2">
@@ -185,4 +212,5 @@ ss1.head(5)</code></pre>
 <li>데이터 provided by 00 Team</li>
 <li><a href="http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf" class="uri">http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf</a></li>
 </ul>
+</div>
 </div>

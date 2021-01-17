@@ -1,0 +1,45 @@
+---
+title: Which one has higher volatility?
+author: Roh
+date: '2021-01-15'
+slug: which-one-has-higher-volatility
+categories:
+  - finance
+  - investment
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 2
+---
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+
+**이 페이지는 Volatility에 관한 내용을 담고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다**
+
+**This page is about "Volatility". If there is any error or question, feel free to contact me through metrics@kakao.com **
+
+**R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
+
+<div class = "rcode">
+```{r}
+# "이것은 R 코드 입니다."
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# "이것은 Python 코드 입니다."
+```
+</div>
+
+Think about $ X\times Y \in [5,10] \times [5,10] $ where X represents evenly spaced time (e.g., every one minute) and Y represents the price of certain financial product. 
+
+
