@@ -1,5 +1,5 @@
 ---
-title: 키움 API Tick Data Cleaning (1)
+title: 키움 API Tick Data - Day1 
 author: 'Roh'
 date: '2021-01-12'
 slug: 키움-api-tick-data-cleaning
@@ -7,7 +7,11 @@ categories:
   - finance
   - R
   - highfrequency
-tags: []
+tags:
+  - latency
+  - trade direction indicator
+  - lee and ready
+  
 output:
   blogdown::html_page:
     toc: true
@@ -18,11 +22,11 @@ output:
 <div id="TOC">
 <ul>
 <li><a href="#contents">Contents</a><ul>
-<li><a href="#filter-for-samsung-electronics-stocks">Filter for “Samsung Electronics” Stocks</a></li>
-<li><a href="#calculate-latency-and-clean-it">Calculate latency and clean it</a></li>
-<li><a href="#use-time-object-in-python">Use time object in python</a></li>
-<li><a href="#analyze-the-latency">Analyze the latency</a></li>
-<li><a href="#get-trade-direction-indicator">Get Trade Direction Indicator</a></li>
+<li><a href="#necessity-of-making-precise-time-index">0. Necessity of making precise time index</a></li>
+<li><a href="#filter-for-a-certain-stocks-특정주식으로-필터링-하기">1. Filter for a certain Stocks [특정주식으로 필터링 하기]</a></li>
+<li><a href="#use-time-object-in-python">2. Use time object in python</a></li>
+<li><a href="#calculate-latency-and-clean-it-레이턴시-계산-및-정리">3. Calculate latency and clean it [레이턴시 계산 및 정리]</a></li>
+<li><a href="#get-trade-direction-indicator">4. Get Trade Direction Indicator</a></li>
 <li><a href="#source">Source</a></li>
 </ul></li>
 </ul>
@@ -74,9 +78,10 @@ options(digits=10)</code></pre>
 <h3>Import Data</h3>
 <div class="rcode">
 <pre class="r"><code>wd = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12&quot;
-fn = list.files(path = wd,
+wd2 = &quot;/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12&quot;
+fn = list.files(path = wd2,
                 pattern = &#39;.*stocks_trade.*.*_15.*\\.csv&#39;) # 마지막 30분 틱데이터 가지고오기
-path = paste(wd,fn,sep = &#39;/&#39;)
+path = paste(wd2,fn,sep = &#39;/&#39;)
 data = readr::read_csv(file = path, 
                        col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
                                      &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;))
@@ -105,8 +110,12 @@ df_py.head()</code></pre>
 </div>
 <div id="contents" class="section level1">
 <h1>Contents</h1>
-<div id="filter-for-samsung-electronics-stocks" class="section level2">
-<h2>Filter for “Samsung Electronics” Stocks</h2>
+<div id="necessity-of-making-precise-time-index" class="section level2">
+<h2>0. Necessity of making precise time index</h2>
+<p>거래가 일어난 혹은 호가창 정보가 바뀔때 마다 바뀌는 시간에 대한 정보가 저장되어 다른 가격 정보들과 함께 API로 데이터를 받아온다. 하지만 Kiwoom 에서 제공하는 데이터의 시간 정보는 ‘second’단위이기 때문에 1초에 몇 적게는 몇십번 많게는 몇 백개 몇 천개씩 발생하는 Tick 데이터 가공하는데 ’milisecond’ 단위가 필요한 경우가 많다. 정확하게 milisecond 까지 아는 것도 중요하지만, 당장 Kiwoom 에서 제공하는 시간 정보가 정확한지에 대한 확인도 필요하다. 이러한 이유에서 우리는 키움 API에서 데이터가 live streaming으로 제공될때 시간을 내부적으로 local system time을 기록하여 그 둘을 비교해보고자 한다. 키움 API에서 제공하는 시간정보가 맞다는 가정하에 latency를 계산해서 특이한 점은 없는지 살펴보자.</p>
+</div>
+<div id="filter-for-a-certain-stocks-특정주식으로-필터링-하기" class="section level2">
+<h2>1. Filter for a certain Stocks [특정주식으로 필터링 하기]</h2>
 <ul>
 <li>KOSPI Code for Samsung Electronics is ‘005930’</li>
 </ul>
@@ -123,53 +132,136 @@ ss.head()</code></pre>
 ## [5 rows x 11 columns]</code></pre>
 </div>
 </div>
-<div id="calculate-latency-and-clean-it" class="section level2">
-<h2>Calculate latency and clean it</h2>
-<ol style="list-style-type: decimal">
+<div id="use-time-object-in-python" class="section level2">
+<h2>2. Use time object in python</h2>
+<ul>
 <li><p>Delete rows where “second” does not lie between 0 and 59.</p></li>
-<li><p>Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</p></li>
-<li><p>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- one second at maximum.</p></li>
-</ol>
+<li><p>Substring the timstamp to get each time component.</p></li>
+</ul>
 <div class="pycode">
 <pre class="python"><code># Task 1
 ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
-
-# Task 2 &amp; 3
-latency = ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss[&#39;trade_date&#39;]
-print(latency.value_counts())</code></pre>
+# Task4
+ss = ss.assign( microsecond = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[0:4]))
+ss.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp      price  ...  hour  day  month  year
+## 0  005930 150000.0000 20210112150000.0820 89400.0000  ...    15   12     01  2021
+## 1  005930 150000.0000 20210112150000.1484 89500.0000  ...    15   12     01  2021
+## 2  005930 150000.0000 20210112150000.1562 89400.0000  ...    15   12     01  2021
+## 3  005930 150000.0000 20210112150000.1953 89500.0000  ...    15   12     01  2021
+## 4  005930 150000.0000 20210112150000.3398 89400.0000  ...    15   12     01  2021
+## 
+## [5 rows x 18 columns]</code></pre>
+</div>
+<ul>
+<li>Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;time&#39;] = ss.apply(lambda x: datetime(
+                  year = int(x[&#39;year&#39;]),
+                  month = int(x[&#39;month&#39;]),
+                  day = int(x[&#39;day&#39;]),
+                  hour = int(x[&#39;hour&#39;]),
+                  minute = int(x[&#39;minute&#39;]),
+                  second = int(x[&#39;second&#39;]),
+                  microsecond = int(x[&#39;microsecond&#39;])).strftime(&quot;%H:%M:%S.%f&quot;)[:-3], axis=1)
+                  
+ss[&#39;latency&#39;] = ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss[&#39;trade_date&#39;]
+ss1 = ss[[&#39;time&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;latency&#39;]]
+ss1.head(10)</code></pre>
+<pre><code>##            time hour minute second  ...     size       ask1       bid1  latency
+## 0  15:00:00.082   15     00     00  ... 130.0000 89500.0000 89400.0000   0.0000
+## 1  15:00:00.148   15     00     00  ...   1.0000 89500.0000 89400.0000   0.0000
+## 2  15:00:00.156   15     00     00  ...  24.0000 89500.0000 89400.0000   0.0000
+## 3  15:00:00.193   15     00     00  ...   1.0000 89500.0000 89400.0000   0.0000
+## 4  15:00:00.340   15     00     00  ...   4.0000 89500.0000 89400.0000   0.0000
+## 5  15:00:00.365   15     00     00  ... 100.0000 89500.0000 89400.0000   0.0000
+## 6  15:00:00.488   15     00     00  ...  32.0000 89500.0000 89400.0000   0.0000
+## 7  15:00:00.566   15     00     00  ...   5.0000 89500.0000 89400.0000  -1.0000
+## 8  15:00:00.590   15     00     00  ...  78.0000 89500.0000 89400.0000  -1.0000
+## 9  15:00:00.652   15     00     00  ...   2.0000 89500.0000 89400.0000  -1.0000
+## 
+## [10 rows x 9 columns]</code></pre>
+</div>
+</div>
+<div id="calculate-latency-and-clean-it-레이턴시-계산-및-정리" class="section level2">
+<h2>3. Calculate latency and clean it [레이턴시 계산 및 정리]</h2>
+<p>*Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</p>
+<div class="pycode">
+<pre class="python"><code># Task 2 &amp; 3
+print(ss1.latency.value_counts())</code></pre>
 <pre><code>## -1.0000     17471
 ## 0.0000       1519
 ## 1.0000        427
 ## -41.0000      332
 ## -2.0000         1
-## dtype: int64</code></pre>
-<pre class="python"><code>ss = ss[abs(latency) &lt;=1]</code></pre>
+## Name: latency, dtype: int64</code></pre>
 </div>
-</div>
-<div id="use-time-object-in-python" class="section level2">
-<h2>Use time object in python</h2>
-<p>Task #4: Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”.</p>
 <div class="pycode">
-<pre class="python"><code># Task4
-ss = ss.assign(time = ss[&#39;timestamp&#39;].apply(lambda x: datetime(year = int(str(int(x*1000000))[0:4]),
-                month = int(str(int(x*1000000))[4:6]),
-                day = int(str(int(x*1000000))[6:8]),
-                hour = int(str(int(x*1000000))[8:10]),
-                minute = int(str(int(x*1000000))[10:12]),
-                second = int(str(int(x*1000000))[12:14]),
-                microsecond = int(str(int(x*1000000))[14:20])).strftime(&quot;%H:%M:%S.%f&quot;)[:-3]
-                                            )
-               )</code></pre>
+<pre class="python"><code>plt.plot(ss1.latency)
+plt.title(&#39;Latency Over Time Before Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
-</div>
-<div id="analyze-the-latency" class="section level2">
-<h2>Analyze the latency</h2>
+<ul>
+<li>Check the time where large discrepancy happened!</li>
+<li>It turns out that when the second of time equal 59, it has large latency. It might not be case for the other day, which has to be checked.</li>
+</ul>
 <div class="pycode">
-
+<pre class="python"><code>ss1[ss1.latency == -41].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;mean&#39;,&#39;sum&#39;,&#39;count&#39;])</code></pre>
+<pre><code>##                        mean        sum  count
+## hour minute second                           
+## 15   00     59     -41.0000  -615.0000     15
+##      01     59     -41.0000  -697.0000     17
+##      02     59     -41.0000  -615.0000     15
+##      03     59     -41.0000  -574.0000     14
+##      04     59     -41.0000  -697.0000     17
+##      05     59     -41.0000 -1066.0000     26
+##      06     59     -41.0000  -656.0000     16
+##      07     59     -41.0000  -779.0000     19
+##      08     59     -41.0000  -410.0000     10
+##      09     59     -41.0000  -984.0000     24
+##      10     59     -41.0000  -656.0000     16
+##      11     59     -41.0000  -943.0000     23
+##      12     59     -41.0000  -451.0000     11
+##      13     59     -41.0000  -861.0000     21
+##      14     59     -41.0000  -656.0000     16
+##      15     59     -41.0000 -1066.0000     26
+##      16     59     -41.0000  -533.0000     13
+##      17     59     -41.0000  -574.0000     14
+##      18     59     -41.0000  -779.0000     19</code></pre>
+</div>
+<ul>
+<li>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- one second at maximum.</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss1 = ss1[abs(ss1.latency) &lt;=1]
+print(ss1.latency.value_counts())</code></pre>
+<pre><code>## -1.0000    17471
+## 0.0000      1519
+## 1.0000       427
+## Name: latency, dtype: int64</code></pre>
+<pre class="python"><code>ss1.head()</code></pre>
+<pre><code>##            time hour minute second  ...     size       ask1       bid1  latency
+## 0  15:00:00.082   15     00     00  ... 130.0000 89500.0000 89400.0000   0.0000
+## 1  15:00:00.148   15     00     00  ...   1.0000 89500.0000 89400.0000   0.0000
+## 2  15:00:00.156   15     00     00  ...  24.0000 89500.0000 89400.0000   0.0000
+## 3  15:00:00.193   15     00     00  ...   1.0000 89500.0000 89400.0000   0.0000
+## 4  15:00:00.340   15     00     00  ...   4.0000 89500.0000 89400.0000   0.0000
+## 
+## [5 rows x 9 columns]</code></pre>
+<pre class="python"><code>plt.plot(ss1.latency)
+plt.title(&#39;Latency Over Time After Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 </div>
 <div id="get-trade-direction-indicator" class="section level2">
-<h2>Get Trade Direction Indicator</h2>
+<h2>4. Get Trade Direction Indicator</h2>
 <p>If price is large than midprice, then it is buyer-initiated.
 If price is less than midprice, then it is seller-initated.
 It is tricky if price is same as midprice. In that case, we use the following rule.</p>

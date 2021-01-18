@@ -13,10 +13,10 @@
       <pubDate>Thu, 19 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2020/11/19/multiple-comparison-test/</guid>
-      <description>T-testMultiple Comparison 정리- One sample- Two sample- Multiple sampleT-testcontinuous data 의 평균을 테스트
-\(\text{One smaple} \quad H_0: \mu=\mu_0 \qquad H_A:\mu\neq\mu_0\)\(\text{Two smaple} \quad H_0: \mu_1-\mu_2=0 \qquad H_A:\mu_1-mu_2\neq 0\)Outlier 로 Variance (\(s^2\)) 가 커지는 경우 T-statistic 이 급격히 작아지는 문제가 발생
+      <description>  T-test   Multiple Comparison 정리 - One sample - Two sample - Multiple sample T-test  continuous data 의 평균을 테스트
+ \(\text{One smaple} \quad H_0: \mu=\mu_0 \qquad H_A:\mu\neq\mu_0\) \(\text{Two smaple} \quad H_0: \mu_1-\mu_2=0 \qquad H_A:\mu_1-mu_2\neq 0\)  Outlier 로 Variance (\(s^2\)) 가 커지는 경우 T-statistic 이 급격히 작아지는 문제가 발생
 \[t = \frac{\bar{x}_1-\bar{x}_2}{s\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}\]
-</description>
+    </description>
     </item>
     
   </channel>

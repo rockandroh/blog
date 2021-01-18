@@ -14,7 +14,7 @@
       
       <guid>https://rockandroh.netlify.app/note/2020/10/20/useful-r-packages-1/</guid>
       <description>This page provides a summary and simple examples of contents introduced in the Medium as “The Most Underrated R pakcages: 2020 Edition”.
-Misc#install.packages(&amp;#39;calendR&amp;#39;)library(calendR)## ~~ Package calendR## Visit https://r-coder.com/ for R tutorials ~~calendR(year = 2020, month=10, title.size = 10, subtitle = &amp;quot;Have a nice day&amp;quot;,subtitle.col = &amp;#39;Blue&amp;#39;,day.size = 3,weeknames.size = 4,weeknames.col = &amp;#39;blue&amp;#39;,weeknames = c(&amp;#39;Mon&amp;#39;,&amp;#39;Tue&amp;#39;,&amp;#39;Wed&amp;#39;,&amp;#39;Thu&amp;#39;,&amp;#39;Fri&amp;#39;,&amp;#39;Sat&amp;#39;,&amp;#39;Sun&amp;#39;),start = &amp;#39;M&amp;#39;,special.days = &amp;#39;weekend&amp;#39;,special.</description>
+Misc #install.packages(&amp;#39;calendR&amp;#39;) library(calendR) ## ~~ Package calendR ## Visit https://r-coder.com/ for R tutorials ~~ calendR(year = 2020, month=10, title.size = 10, subtitle = &amp;quot;Have a nice day&amp;quot;, subtitle.col = &amp;#39;Blue&amp;#39;, day.size = 3, weeknames.size = 4, weeknames.col = &amp;#39;blue&amp;#39;, weeknames = c(&amp;#39;Mon&amp;#39;,&amp;#39;Tue&amp;#39;,&amp;#39;Wed&amp;#39;,&amp;#39;Thu&amp;#39;,&amp;#39;Fri&amp;#39;,&amp;#39;Sat&amp;#39;,&amp;#39;Sun&amp;#39;), start = &amp;#39;M&amp;#39;, special.days = &amp;#39;weekend&amp;#39;, special.</description>
     </item>
     
   </channel>

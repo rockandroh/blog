@@ -1,0 +1,516 @@
+---
+title: 키움 API Tick Data - Day2
+author: hyunwooroh
+date: '2021-01-18'
+slug: api-tick-data-day2
+categories:
+  - finance
+  - Python
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 2
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#contents">Contents</a><ul>
+<li><a href="#filter-for-a-certain-stocks-특정주식으로-필터링-하기">1. Filter for a certain Stocks [특정주식으로 필터링 하기]</a></li>
+<li><a href="#use-time-object-in-python">2. Use time object in python</a></li>
+<li><a href="#calculate-latency-and-clean-it-레이턴시-계산-및-정리">3. Calculate latency and clean it [레이턴시 계산 및 정리]</a></li>
+<li><a href="#get-trade-direction-indicator">4. Get Trade Direction Indicator</a></li>
+<li><a href="#source">Source</a></li>
+</ul></li>
+</ul>
+</div>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+<p><em><strong>Note</strong>: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</em></p>
+<p><strong>데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</strong></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div class="rcode">
+<pre class="r"><code># &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># &quot;이것은 Python 코드 입니다.&quot;</code></pre>
+</div>
+<div id="package" class="section level3">
+<h3>Package</h3>
+<pre class="r"><code>library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+#py_install(packages = &#39;dfply&#39;)
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)</code></pre>
+</div>
+<div id="import-data" class="section level3">
+<h3>Import Data</h3>
+<ul>
+<li>Check NA</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>wd = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12&quot;
+wd2 = &quot;/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14&quot;
+fn = list.files(path = wd2,
+                pattern = &#39;.*stocks_trade.*\\.csv&#39;) # 마지막 30분 틱데이터 가지고오기
+path = paste(wd2,fn,sep = &#39;/&#39;)
+
+# data = readr::read_csv(file = path, 
+#                        col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
+#                                      &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;))
+
+tbl =
+  list.files(path = wd2, pattern = &#39;.*stocks_trade.*\\.csv&#39;) %&gt;%
+  map_df(~readr::read_csv(paste(wd2,.,sep = &#39;/&#39;),
+                   col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
+                                     &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;) ))
+
+sum(is.na(tbl))</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from datetime import datetime, timedelta
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+pd.options.display.float_format = &#39;{:.4f}&#39;.format
+pd.set_option(&#39;display.max_rows&#39;, 100)
+df_py = r.tbl
+df_py.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp  ...    cum_size        ask1        bid1
+## 0  000990 100105.0000 20210114100105.3164  ... 679839.0000  60000.0000  59800.0000
+## 1  000990 100105.0000 20210114100105.3164  ... 679798.0000  59900.0000  59800.0000
+## 2  000300 100105.0000 20210114100105.3203  ...  97702.0000    791.0000    790.0000
+## 3  000080 100105.0000 20210114100105.3711  ... 164732.0000  35950.0000  35900.0000
+## 4  001630 100105.0000 20210114100105.5117  ... 108391.0000 127500.0000 127000.0000
+## 
+## [5 rows x 11 columns]</code></pre>
+</div>
+</div>
+<div id="contents" class="section level1">
+<h1>Contents</h1>
+<div id="filter-for-a-certain-stocks-특정주식으로-필터링-하기" class="section level2">
+<h2>1. Filter for a certain Stocks [특정주식으로 필터링 하기]</h2>
+<ul>
+<li>KOSPI Code for Samsung Electronics is ‘005930’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = df_py[df_py.code == &#39;005930&#39;].reset_index(drop=True)
+ss.shape</code></pre>
+<pre><code>## (120366, 11)</code></pre>
+</div>
+</div>
+<div id="use-time-object-in-python" class="section level2">
+<h2>2. Use time object in python</h2>
+<ul>
+<li><p>Delete rows where “second” does not lie between 0 and 59.</p></li>
+<li><p>Substring the timstamp to get each time component.</p></li>
+</ul>
+<div class="pycode">
+<pre class="python"><code># Task 1
+ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
+# Task4
+ss = ss.assign( microsecond = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[0:4]))
+ss.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp      price  ...  hour  day  month  year
+## 0  005930 100105.0000 20210114100105.7930 89500.0000  ...    10   14     01  2021
+## 1  005930 100105.0000 20210114100105.8438 89600.0000  ...    10   14     01  2021
+## 2  005930 100106.0000 20210114100106.0195 89600.0000  ...    10   14     01  2021
+## 3  005930 100106.0000 20210114100106.0195 89500.0000  ...    10   14     01  2021
+## 4  005930 100106.0000 20210114100106.1836 89600.0000  ...    10   14     01  2021
+## 
+## [5 rows x 18 columns]</code></pre>
+</div>
+<ul>
+<li>Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;time&#39;] = ss.apply(lambda x: datetime(
+                  year = int(x[&#39;year&#39;]),
+                  month = int(x[&#39;month&#39;]),
+                  day = int(x[&#39;day&#39;]),
+                  hour = int(x[&#39;hour&#39;]),
+                  minute = int(x[&#39;minute&#39;]),
+                  second = int(x[&#39;second&#39;]),
+                  microsecond = int(x[&#39;microsecond&#39;])).strftime(&quot;%H:%M:%S.%f&quot;)[:-3], axis=1)
+                  
+ss[&#39;latency&#39;] = ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss[&#39;trade_date&#39;]
+ss1 = ss[[&#39;time&#39;, &#39;hour&#39;, &#39;minute&#39;, &#39;second&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;latency&#39;]]
+ss1.head(10)</code></pre>
+<pre><code>##            time hour minute second  ...    size       ask1       bid1  latency
+## 0  10:01:05.793   10     01     05  ...  7.0000 89600.0000 89500.0000   0.0000
+## 1  10:01:05.842   10     01     05  ...  6.0000 89600.0000 89500.0000   0.0000
+## 2  10:01:06.018   10     01     06  ... 10.0000 89600.0000 89500.0000   0.0000
+## 3  10:01:06.018   10     01     06  ... 44.0000 89600.0000 89500.0000   0.0000
+## 4  10:01:06.182   10     01     06  ... 10.0000 89600.0000 89500.0000   0.0000
+## 5  10:01:06.338   10     01     06  ...  1.0000 89600.0000 89500.0000   0.0000
+## 6  10:01:06.366   10     01     06  ...  1.0000 89600.0000 89500.0000   0.0000
+## 7  10:01:06.678   10     01     06  ...  1.0000 89600.0000 89500.0000   0.0000
+## 8  10:01:06.805   10     01     06  ...  1.0000 89600.0000 89500.0000   0.0000
+## 9  10:01:07.264   10     01     07  ... 69.0000 89600.0000 89500.0000   1.0000
+## 
+## [10 rows x 9 columns]</code></pre>
+</div>
+</div>
+<div id="calculate-latency-and-clean-it-레이턴시-계산-및-정리" class="section level2">
+<h2>3. Calculate latency and clean it [레이턴시 계산 및 정리]</h2>
+<p>*Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</p>
+<div class="pycode">
+<pre class="python"><code># Task 2 &amp; 3
+print(ss1.latency.value_counts())</code></pre>
+<pre><code>## 0.0000      84817
+## -1.0000     22633
+## 1.0000        635
+## 2.0000        555
+## -41.0000      376
+##             ...  
+## 71.0000         2
+## 162.0000        2
+## 52.0000         2
+## 143.0000        2
+## 224.0000        1
+## Name: latency, Length: 224, dtype: int64</code></pre>
+<pre class="python"><code>print(ss1.latency.nsmallest(10))</code></pre>
+<pre><code>## 60896   -4041.0000
+## 60897   -4041.0000
+## 82227   -4041.0000
+## 2518      -41.0000
+## 3233      -41.0000
+## 3868      -41.0000
+## 17413     -41.0000
+## 22419     -41.0000
+## 23377     -41.0000
+## 23709     -41.0000
+## Name: latency, dtype: float64</code></pre>
+<pre class="python"><code>print(ss1.latency.nlargest(10))</code></pre>
+<pre><code>## 8908   265.0000
+## 8911   265.0000
+## 8912   265.0000
+## 8913   265.0000
+## 8917   265.0000
+## 8918   265.0000
+## 8924   265.0000
+## 8925   265.0000
+## 8926   265.0000
+## 8927   265.0000
+## Name: latency, dtype: float64</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>plt.plot(ss1.latency)
+plt.title(&#39;Latency Over Time Before Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<ul>
+<li>Check the time where large discrepancy happened!</li>
+<li>It turns out that when the second of time equal 59, it has large latency. It might not be case for the other day, which has to be checked.</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>pd.set_option(&#39;display.max_rows&#39;, 200)
+ss1[ss1.latency == -41].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;mean&#39;,&#39;sum&#39;,&#39;count&#39;])</code></pre>
+<pre><code>##                        mean       sum  count
+## hour minute second                          
+## 10   07     59     -41.0000  -41.0000      1
+##      09     59     -41.0000  -41.0000      1
+##      11     59     -41.0000  -41.0000      1
+##      45     59     -41.0000  -41.0000      1
+##      57     59     -41.0000  -41.0000      1
+## 11   00     59     -41.0000  -41.0000      1
+##      01     59     -41.0000 -123.0000      3
+##      02     59     -41.0000  -41.0000      1
+##      09     59     -41.0000 -164.0000      4
+##      11     59     -41.0000  -41.0000      1
+##      12     59     -41.0000 -123.0000      3
+##      14     59     -41.0000  -41.0000      1
+##      15     59     -41.0000  -41.0000      1
+##      16     59     -41.0000  -41.0000      1
+##      17     59     -41.0000  -82.0000      2
+##      21     59     -41.0000  -41.0000      1
+##      23     59     -41.0000  -82.0000      2
+##      25     59     -41.0000  -41.0000      1
+##      26     59     -41.0000  -41.0000      1
+##      27     59     -41.0000  -41.0000      1
+##      33     59     -41.0000  -41.0000      1
+##      35     59     -41.0000  -41.0000      1
+##      36     59     -41.0000  -82.0000      2
+##      39     59     -41.0000  -41.0000      1
+##      41     59     -41.0000  -41.0000      1
+##      43     59     -41.0000  -41.0000      1
+##      46     59     -41.0000  -82.0000      2
+##      48     59     -41.0000  -41.0000      1
+##      49     59     -41.0000  -41.0000      1
+##      50     59     -41.0000  -41.0000      1
+##      56     59     -41.0000  -82.0000      2
+##      58     59     -41.0000  -41.0000      1
+## 12   02     59     -41.0000  -41.0000      1
+##      03     59     -41.0000  -82.0000      2
+##      05     59     -41.0000  -41.0000      1
+##      07     59     -41.0000  -41.0000      1
+##      09     59     -41.0000  -41.0000      1
+##      10     59     -41.0000  -41.0000      1
+##      12     59     -41.0000  -82.0000      2
+##      13     59     -41.0000  -82.0000      2
+##      14     59     -41.0000  -41.0000      1
+##      16     59     -41.0000  -41.0000      1
+##      17     59     -41.0000  -41.0000      1
+##      19     59     -41.0000  -41.0000      1
+##      20     59     -41.0000  -41.0000      1
+##      21     59     -41.0000  -82.0000      2
+##      22     59     -41.0000  -82.0000      2
+##      27     59     -41.0000  -82.0000      2
+##      28     59     -41.0000  -41.0000      1
+##      29     59     -41.0000  -41.0000      1
+##      30     59     -41.0000  -82.0000      2
+##      34     59     -41.0000  -82.0000      2
+##      35     59     -41.0000  -82.0000      2
+##      36     59     -41.0000  -41.0000      1
+##      37     59     -41.0000  -41.0000      1
+##      38     59     -41.0000  -41.0000      1
+##      39     59     -41.0000  -41.0000      1
+##      40     59     -41.0000  -41.0000      1
+##      41     59     -41.0000  -82.0000      2
+##      42     59     -41.0000  -41.0000      1
+##      43     59     -41.0000  -82.0000      2
+##      45     59     -41.0000 -164.0000      4
+##      47     59     -41.0000  -41.0000      1
+##      49     59     -41.0000  -41.0000      1
+##      50     59     -41.0000  -41.0000      1
+##      51     59     -41.0000  -41.0000      1
+##      53     59     -41.0000  -41.0000      1
+##      55     59     -41.0000  -82.0000      2
+##      56     59     -41.0000  -41.0000      1
+##      57     59     -41.0000  -41.0000      1
+##      58     59     -41.0000  -82.0000      2
+## 13   02     59     -41.0000  -82.0000      2
+##      03     59     -41.0000  -41.0000      1
+##      04     59     -41.0000  -41.0000      1
+##      05     59     -41.0000  -41.0000      1
+##      07     59     -41.0000  -41.0000      1
+##      10     59     -41.0000  -41.0000      1
+##      11     59     -41.0000 -123.0000      3
+##      12     59     -41.0000  -41.0000      1
+##      14     59     -41.0000  -41.0000      1
+##      15     59     -41.0000  -82.0000      2
+##      16     59     -41.0000  -82.0000      2
+##      17     59     -41.0000  -41.0000      1
+##      19     59     -41.0000  -41.0000      1
+##      21     59     -41.0000  -82.0000      2
+##      22     59     -41.0000  -82.0000      2
+##      23     59     -41.0000  -82.0000      2
+##      24     59     -41.0000 -123.0000      3
+##      25     59     -41.0000 -123.0000      3
+##      27     59     -41.0000 -123.0000      3
+##      28     59     -41.0000  -82.0000      2
+##      29     59     -41.0000  -41.0000      1
+##      31     59     -41.0000  -41.0000      1
+##      32     59     -41.0000  -41.0000      1
+##      33     59     -41.0000  -41.0000      1
+##      37     59     -41.0000  -82.0000      2
+##      40     59     -41.0000  -41.0000      1
+##      41     59     -41.0000 -123.0000      3
+##      42     59     -41.0000  -41.0000      1
+##      43     59     -41.0000  -82.0000      2
+##      44     59     -41.0000  -82.0000      2
+##      46     59     -41.0000  -82.0000      2
+##      47     59     -41.0000  -82.0000      2
+##      48     59     -41.0000  -41.0000      1
+##      49     59     -41.0000  -41.0000      1
+##      50     59     -41.0000  -82.0000      2
+##      52     59     -41.0000  -82.0000      2
+##      53     59     -41.0000  -41.0000      1
+##      54     59     -41.0000  -82.0000      2
+##      55     59     -41.0000 -123.0000      3
+##      57     59     -41.0000  -82.0000      2
+##      58     59     -41.0000 -164.0000      4
+## 14   00     59     -41.0000  -41.0000      1
+##      01     59     -41.0000 -164.0000      4
+##      02     59     -41.0000  -82.0000      2
+##      03     59     -41.0000 -123.0000      3
+##      04     59     -41.0000  -41.0000      1
+##      05     59     -41.0000  -41.0000      1
+##      06     59     -41.0000  -82.0000      2
+##      07     59     -41.0000 -205.0000      5
+##      08     59     -41.0000  -82.0000      2
+##      09     59     -41.0000 -123.0000      3
+##      10     59     -41.0000 -123.0000      3
+##      11     59     -41.0000 -164.0000      4
+##      12     59     -41.0000  -41.0000      1
+##      13     59     -41.0000  -82.0000      2
+##      14     59     -41.0000  -41.0000      1
+##      15     59     -41.0000  -41.0000      1
+##      16     59     -41.0000 -123.0000      3
+##      18     59     -41.0000  -82.0000      2
+##      19     59     -41.0000  -41.0000      1
+##      20     59     -41.0000  -41.0000      1
+##      21     59     -41.0000  -82.0000      2
+##      22     59     -41.0000  -82.0000      2
+##      23     59     -41.0000 -123.0000      3
+##      24     59     -41.0000  -82.0000      2
+##      26     59     -41.0000  -41.0000      1
+##      27     59     -41.0000  -41.0000      1
+##      28     59     -41.0000  -82.0000      2
+##      29     59     -41.0000 -287.0000      7
+##      30     59     -41.0000 -164.0000      4
+##      32     59     -41.0000  -82.0000      2
+##      33     59     -41.0000 -246.0000      6
+##      34     59     -41.0000 -164.0000      4
+##      36     59     -41.0000  -41.0000      1
+##      37     59     -41.0000  -41.0000      1
+##      38     59     -41.0000 -164.0000      4
+##      39     59     -41.0000  -82.0000      2
+##      40     59     -41.0000  -41.0000      1
+##      42     59     -41.0000  -41.0000      1
+##      43     59     -41.0000  -82.0000      2
+##      44     59     -41.0000 -205.0000      5
+##      45     59     -41.0000 -164.0000      4
+##      46     59     -41.0000 -164.0000      4
+##      48     59     -41.0000 -123.0000      3
+##      49     59     -41.0000  -82.0000      2
+##      51     59     -41.0000 -205.0000      5
+##      52     59     -41.0000 -164.0000      4
+##      53     59     -41.0000 -246.0000      6
+##      54     59     -41.0000 -164.0000      4
+##      56     59     -41.0000  -82.0000      2
+##      57     59     -41.0000 -205.0000      5
+##      58     59     -41.0000 -123.0000      3
+## 15   00     59     -41.0000 -246.0000      6
+##      02     59     -41.0000 -246.0000      6
+##      03     59     -41.0000 -123.0000      3
+##      04     59     -41.0000 -123.0000      3
+##      05     59     -41.0000  -82.0000      2
+##      06     59     -41.0000 -205.0000      5
+##      07     59     -41.0000  -82.0000      2
+##      08     59     -41.0000 -287.0000      7
+##      09     59     -41.0000  -82.0000      2
+##      10     59     -41.0000  -82.0000      2
+##      11     59     -41.0000  -82.0000      2
+##      12     59     -41.0000 -164.0000      4
+##      13     59     -41.0000  -82.0000      2
+##      14     59     -41.0000 -205.0000      5
+##      15     59     -41.0000 -246.0000      6
+##      16     59     -41.0000 -205.0000      5
+##      17     59     -41.0000  -82.0000      2
+##      18     59     -41.0000 -123.0000      3</code></pre>
+<pre class="python"><code>ss1[ss1.latency == -4041].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;mean&#39;,&#39;sum&#39;,&#39;count&#39;])</code></pre>
+<pre><code>##                          mean        sum  count
+## hour minute second                             
+## 12   59     59     -4041.0000 -8082.0000      2
+## 13   59     59     -4041.0000 -4041.0000      1</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 265].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;mean&#39;,&#39;sum&#39;,&#39;count&#39;])</code></pre>
+<pre><code>##                        mean       sum  count
+## hour minute second                          
+## 10   27     08     265.0000  265.0000      1
+##             09     265.0000  795.0000      3
+##             10     265.0000  530.0000      2
+##             11     265.0000 2120.0000      8
+##             12     265.0000 1325.0000      5
+##             13     265.0000  795.0000      3
+##             14     265.0000  530.0000      2
+##             15     265.0000 1590.0000      6
+##             16     265.0000 1060.0000      4
+##             17     265.0000 1060.0000      4</code></pre>
+</div>
+<ul>
+<li>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- ten second at maximum.</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss2 = ss1[abs(ss1.latency) &lt;=10]
+print(ss2.latency.value_counts())</code></pre>
+<pre><code>## 0.0000     84817
+## -1.0000    22633
+## 1.0000       635
+## 2.0000       555
+## 3.0000       283
+## 6.0000        99
+## 10.0000       98
+## 7.0000        94
+## 4.0000        65
+## 5.0000        61
+## 8.0000        60
+## 9.0000        55
+## Name: latency, dtype: int64</code></pre>
+<pre class="python"><code>plt.plot(ss2.latency)
+plt.title(&#39;Latency Over Time After Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+</div>
+<div id="get-trade-direction-indicator" class="section level2">
+<h2>4. Get Trade Direction Indicator</h2>
+<p>If price is large than midprice, then it is buyer-initiated.
+If price is less than midprice, then it is seller-initated.
+It is tricky if price is same as midprice. In that case, we use the following rule.</p>
+<blockquote>
+<p>The tick rule is the most commonly used level-1 algorithm. This rule is rather simple and classifies a trade as buyer-initiated if the trade price is above the preceding trade price (an uptick trade) and as seller-initiated if the trade price is below the preceding trade price (a downtick trade). If the trade price is the same as the previous trade price (a zero-tick trade), the rule looks for the closest prior price that differs from the current trade price. Zero-uptick trades are classified as buys, and zero-downtick trades are classified as sells.</p>
+</blockquote>
+<p>The rule above can be simply implemented through the code below.</p>
+<div class="pycode">
+<pre class="python"><code>ss = ss.assign(spread = ss[&#39;ask1&#39;] - ss[&#39;bid1&#39;],
+               mid = (ss[&#39;bid1&#39;] + ss[&#39;ask1&#39;])*.5,
+               ind = 0,
+               price1 = ss[&#39;price&#39;].shift(1, fill_value=0),
+               price2 = ss[&#39;price&#39;].shift(2, fill_value=0)
+              )
+              
+buy = ((ss[&#39;price&#39;] &gt; ss[&#39;mid&#39;]) |
+        ((ss[&#39;price&#39;] == ss[&#39;mid&#39;]) &amp; (ss[&#39;price&#39;] &gt; ss[&#39;price1&#39;])) |
+        ((ss[&#39;price&#39;] == ss[&#39;mid&#39;]) &amp; (ss[&#39;price&#39;] == ss[&#39;price1&#39;]) &amp; (ss[&#39;price&#39;] &gt; ss[&#39;price2&#39;])))
+        
+ss.loc[buy, &#39;ind&#39;] = 1
+ss.loc[~buy, &#39;ind&#39;] = -1
+
+ss1 = ss[[&#39;time&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;ind&#39;,&#39;spread&#39;]]
+
+ss1.head(5)</code></pre>
+<pre><code>##            time      price    size       ask1       bid1  ind   spread
+## 0  10:01:05.793 89500.0000  7.0000 89600.0000 89500.0000   -1 100.0000
+## 1  10:01:05.842 89600.0000  6.0000 89600.0000 89500.0000    1 100.0000
+## 2  10:01:06.018 89600.0000 10.0000 89600.0000 89500.0000    1 100.0000
+## 3  10:01:06.018 89500.0000 44.0000 89600.0000 89500.0000   -1 100.0000
+## 4  10:01:06.182 89600.0000 10.0000 89600.0000 89500.0000    1 100.0000</code></pre>
+</div>
+<div id="we-will-discuss-what-to-do-more-with-using-trading-indicator-value-along-with-other-variables-extracted-from-tick-data." class="section level3">
+<h3>We will discuss what to do more with using trading indicator value along with other variables extracted from tick data.</h3>
+</div>
+</div>
+<div id="source" class="section level2">
+<h2>Source</h2>
+<ul>
+<li>데이터 provided by 00 Team</li>
+<li><a href="http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf" class="uri">http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf</a></li>
+</ul>
+</div>
+</div>

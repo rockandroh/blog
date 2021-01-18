@@ -13,7 +13,7 @@
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2020/10/15/bootstrapping-and-its-application-in-r/</guid>
-      <description>AboutEmpirical Bootstrap (a.k.a Nonparametric Bootstrap)What is bootstrapping sample and how to generate it?Let’s take median as a parameter of distribution of our interestWhat is it for?Difference between real world and bootstrap worldEmpirical CDFWhy does it work?Parametric BootstrapReferencesAboutThis page is to provide a gentle introduction of Bootstrapping and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end.</description>
+      <description>About Empirical Bootstrap (a.k.a Nonparametric Bootstrap) What is bootstrapping sample and how to generate it? Let’s take median as a parameter of distribution of our interest What is it for? Difference between real world and bootstrap world Empirical CDF Why does it work?  Parametric Bootstrap References   About This page is to provide a gentle introduction of Bootstrapping and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end.</description>
     </item>
     
   </channel>

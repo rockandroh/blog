@@ -1,0 +1,255 @@
+---
+title: 키움 API Tick Data - Day2
+author: hyunwooroh
+date: '2021-01-18'
+slug: api-tick-data-day2
+categories:
+  - finance
+  - Python
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 2
+---
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+
+*__Note__: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다*
+
+**데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다**
+
+**R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
+
+<div class = "rcode">
+```{r}
+# "이것은 R 코드 입니다."
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# "이것은 Python 코드 입니다."
+```
+</div>
+
+### Package
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+#py_install(packages = 'dfply')
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)
+```
+
+### Import Data
+
+- Check NA
+
+<div class = "rcode">
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12"
+wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
+fn = list.files(path = wd2,
+                pattern = '.*stocks_trade.*\\.csv') # 마지막 30분 틱데이터 가지고오기
+path = paste(wd2,fn,sep = '/')
+
+# data = readr::read_csv(file = path, 
+#                        col_names = c('code','trade_date','timestamp','price','open','high','low',
+#                                      'size','cum_size','ask1','bid1'))
+
+tbl =
+  list.files(path = wd2, pattern = '.*stocks_trade.*\\.csv') %>%
+  map_df(~readr::read_csv(paste(wd2,.,sep = '/'),
+                   col_names = c('code','trade_date','timestamp','price','open','high','low',
+                                     'size','cum_size','ask1','bid1') ))
+
+sum(is.na(tbl))
+```
+</div>
+
+<div class = "pycode">
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from datetime import datetime, timedelta
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+pd.options.display.float_format = '{:.4f}'.format
+pd.set_option('display.max_rows', 100)
+df_py = r.tbl
+df_py.head()
+```
+</div>
+
+```{r, include=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+rm(list = "tbl")
+```
+
+# Contents
+
+## 1. Filter for a certain Stocks [특정주식으로 필터링 하기]
+
+- KOSPI Code for Samsung Electronics is '005930'
+
+<div class = "pycode">
+```{python}
+ss = df_py[df_py.code == '005930'].reset_index(drop=True)
+ss.shape
+```
+</div>
+
+## 2. Use time object in python
+
+* Delete rows where "second" does not lie between 0 and 59.
+
+* Substring the timstamp to get each time component.
+
+<div class = "pycode">
+```{python}
+# Task 1
+ss = ss[ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[12:14])) < 60 ]
+# Task4
+ss = ss.assign( microsecond = ss['timestamp'].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss['timestamp'].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss['timestamp'].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss['timestamp'].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss['timestamp'].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss['timestamp'].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss['timestamp'].apply(lambda x: str(int(x*1000000))[0:4]))
+ss.head()
+```
+</div>
+
+* Transform data type to str to use substring to make the format like "%Y-%m-%d %H:%M:%S.%f"
+
+<div class = "pycode">
+```{python}
+ss['time'] = ss.apply(lambda x: datetime(
+                  year = int(x['year']),
+                  month = int(x['month']),
+                  day = int(x['day']),
+                  hour = int(x['hour']),
+                  minute = int(x['minute']),
+                  second = int(x['second']),
+                  microsecond = int(x['microsecond'])).strftime("%H:%M:%S.%f")[:-3], axis=1)
+                  
+ss['latency'] = ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss['trade_date']
+ss1 = ss[['time', 'hour', 'minute', 'second', 'price','size','ask1','bid1','latency']]
+ss1.head(10)
+```
+</div>
+
+## 3. Calculate latency and clean it [레이턴시 계산 및 정리]
+
+*Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.
+
+<div class = "pycode">
+```{python}
+# Task 2 & 3
+print(ss1.latency.value_counts())
+print(ss1.latency.nsmallest(10))
+print(ss1.latency.nlargest(10))
+```
+</div>
+
+<div class = "pycode">
+```{python}
+plt.plot(ss1.latency)
+plt.title('Latency Over Time Before Cleaning')
+```
+</div>
+
+* Check the time where large discrepancy happened!
+* It turns out that when the second of time equal 59, it has large latency. It might not be case for the other day, which has to be checked.
+
+<div class = "pycode">
+```{python}
+pd.set_option('display.max_rows', 200)
+ss1[ss1.latency == -41].groupby(['hour','minute','second'])['latency'].agg(['mean','sum','count'])
+
+ss1[ss1.latency == -4041].groupby(['hour','minute','second'])['latency'].agg(['mean','sum','count'])
+
+ss1[ss1.latency == 265].groupby(['hour','minute','second'])['latency'].agg(['mean','sum','count'])
+```
+</div>
+
+* Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- ten second at maximum.
+
+<div class = "pycode">
+```{python}
+ss2 = ss1[abs(ss1.latency) <=10]
+print(ss2.latency.value_counts())
+
+plt.plot(ss2.latency)
+plt.title('Latency Over Time After Cleaning')
+```
+</div>
+
+## 4. Get Trade Direction Indicator
+
+If price is large than midprice, then it is buyer-initiated.
+If price is less  than midprice, then it is seller-initated.
+It is tricky if price is same as midprice. In that case, we use the following rule.
+
+> The tick rule is the most commonly used level-1 algorithm. This rule is rather simple and classifies a trade as buyer-initiated if the trade price is above the preceding trade price (an uptick trade) and as seller-initiated if the trade price is below the preceding trade price (a downtick trade). If the trade price is the same as the previous trade price (a zero-tick trade), the rule looks for the closest prior price that differs from the current trade price. Zero-uptick trades are classified as buys, and zero-downtick trades are classified as sells.
+
+The rule above can be simply implemented through the code below.
+
+<div class = "pycode">
+```{python}
+ss = ss.assign(spread = ss['ask1'] - ss['bid1'],
+               mid = (ss['bid1'] + ss['ask1'])*.5,
+               ind = 0,
+               price1 = ss['price'].shift(1, fill_value=0),
+               price2 = ss['price'].shift(2, fill_value=0)
+              )
+              
+buy = ((ss['price'] > ss['mid']) |
+        ((ss['price'] == ss['mid']) & (ss['price'] > ss['price1'])) |
+        ((ss['price'] == ss['mid']) & (ss['price'] == ss['price1']) & (ss['price'] > ss['price2'])))
+        
+ss.loc[buy, 'ind'] = 1
+ss.loc[~buy, 'ind'] = -1
+
+ss1 = ss[['time', 'price','size','ask1','bid1','ind','spread']]
+
+ss1.head(5)
+```
+</div>
+
+
+### We will discuss what to do more with using trading indicator value along with other variables extracted from tick data.
+
+## Source
+
+- 데이터 provided by 00 Team
+- http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf

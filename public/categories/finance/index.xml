@@ -6,15 +6,23 @@
     <description>Recent content in finance on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 12 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/finance/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 18 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/finance/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>키움 API Tick Data Cleaning (1)</title>
+      <title>키움 API Tick Data - Day2</title>
+      <link>https://rockandroh.netlify.app/note/2021/01/18/api-tick-data-day2/</link>
+      <pubDate>Mon, 18 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/note/2021/01/18/api-tick-data-day2/</guid>
+      <description>Contents 1. Filter for a certain Stocks [특정주식으로 필터링 하기] 2. Use time object in python 3. Calculate latency and clean it [레이턴시 계산 및 정리] 4. Get Trade Direction Indicator Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 20px; } code.r{ font-size: 12px; } pre { font-size: 18px }  Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
+    </item>
+    
+    <item>
+      <title>키움 API Tick Data - Day1</title>
       <link>https://rockandroh.netlify.app/note/2021/01/12/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</link>
       <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2021/01/12/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</guid>
-      <description>Import DataFilter for “Samsun Electronics” StocksTime Data CleaningGet Trade Direction IndicatorSourcediv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다
-데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</description>
+      <description>Contents 0. Necessity of making precise time index 1. Filter for a certain Stocks [특정주식으로 필터링 하기] 2. Use time object in python 3. Calculate latency and clean it [레이턴시 계산 및 정리] 4. Get Trade Direction Indicator Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 20px; } code.</description>
     </item>
     
     <item>
@@ -23,7 +31,7 @@
       <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/note/2020/10/27/reproducible-finance-with-r-1/</guid>
-      <description>데이터 불러오기 및 관련 function 연습패키지 준비하기데이터 불러오기csv파일 불러오기엑셀 파일 불러오기Daily 가격 데이터를 Monthly 데이터로 변환하기월말 가격월초 가격월평균 가격수익률 데이터 만들기xts 와 data frame 의 차이Spread()gather()Come back to price dataReference데이터 불러오기 및 관련 function 연습Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
+      <description>데이터 불러오기 및 관련 function 연습 패키지 준비하기 데이터 불러오기 csv파일 불러오기 엑셀 파일 불러오기  Daily 가격 데이터를 Monthly 데이터로 변환하기 월말 가격 월초 가격 월평균 가격 수익률 데이터 만들기 xts 와 data frame 의 차이 Spread() gather()  Come back to price data Reference    데이터 불러오기 및 관련 function 연습 Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
     </item>
     
   </channel>
