@@ -75,7 +75,7 @@ options(digits=10)
 
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
-wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-12"
+wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
 wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
 fn = list.files(path = wd2,
                 pattern = '.*stocks_trade.*\\.csv') # 마지막 30분 틱데이터 가지고오기
@@ -194,11 +194,11 @@ plt.title('Latency Over Time Before Cleaning')
 <div class = "pycode">
 ```{python}
 pd.set_option('display.max_rows', 200)
-ss1[ss1.latency == -41].groupby(['hour','minute','second'])['latency'].agg(['mean','sum','count'])
+ss1[ss1.latency == -41].groupby(['hour','minute','second'])['latency'].agg(['count'])
 
-ss1[ss1.latency == -4041].groupby(['hour','minute','second'])['latency'].agg(['mean','sum','count'])
+ss1[ss1.latency == -4041].groupby(['hour','minute','second'])['latency'].agg(['count'])
 
-ss1[ss1.latency == 265].groupby(['hour','minute','second'])['latency'].agg(['mean','sum','count'])
+ss1[ss1.latency == 265].groupby(['hour','minute','second'])['latency'].agg(['count'])
 ```
 </div>
 

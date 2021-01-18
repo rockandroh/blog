@@ -190,7 +190,7 @@ plt.title('Latency Over Time Before Cleaning')
 
 <div class = "pycode">
 ```{python}
-ss1[ss1.latency == -41].groupby(['hour','minute','second'])['latency'].agg(['mean','sum','count'])
+ss1[ss1.latency == -41].groupby(['hour','minute','second'])['latency'].agg(['count'])
 ```
 </div>
 

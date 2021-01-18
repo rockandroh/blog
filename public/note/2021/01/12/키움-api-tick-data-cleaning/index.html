@@ -236,28 +236,28 @@ plt.title(&#39;Latency Over Time Before Cleaning&#39;)</code></pre>
 <li>It turns out that when the second of time equal 59, it has large latency. It might not be case for the other day, which has to be checked.</li>
 </ul>
 <div class="pycode">
-<pre class="python"><code>ss1[ss1.latency == -41].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;mean&#39;,&#39;sum&#39;,&#39;count&#39;])</code></pre>
-<pre><code>##                        mean        sum  count
-## hour minute second                           
-## 15   00     59     -41.0000  -615.0000     15
-##      01     59     -41.0000  -697.0000     17
-##      02     59     -41.0000  -615.0000     15
-##      03     59     -41.0000  -574.0000     14
-##      04     59     -41.0000  -697.0000     17
-##      05     59     -41.0000 -1066.0000     26
-##      06     59     -41.0000  -656.0000     16
-##      07     59     -41.0000  -779.0000     19
-##      08     59     -41.0000  -410.0000     10
-##      09     59     -41.0000  -984.0000     24
-##      10     59     -41.0000  -656.0000     16
-##      11     59     -41.0000  -943.0000     23
-##      12     59     -41.0000  -451.0000     11
-##      13     59     -41.0000  -861.0000     21
-##      14     59     -41.0000  -656.0000     16
-##      15     59     -41.0000 -1066.0000     26
-##      16     59     -41.0000  -533.0000     13
-##      17     59     -41.0000  -574.0000     14
-##      18     59     -41.0000  -779.0000     19</code></pre>
+<pre class="python"><code>ss1[ss1.latency == -41].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;count&#39;])</code></pre>
+<pre><code>##                     count
+## hour minute second       
+## 15   00     59         15
+##      01     59         17
+##      02     59         15
+##      03     59         14
+##      04     59         17
+##      05     59         26
+##      06     59         16
+##      07     59         19
+##      08     59         10
+##      09     59         24
+##      10     59         16
+##      11     59         23
+##      12     59         11
+##      13     59         21
+##      14     59         16
+##      15     59         26
+##      16     59         13
+##      17     59         14
+##      18     59         19</code></pre>
 </div>
 <ul>
 <li>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- one second at maximum.</li>
