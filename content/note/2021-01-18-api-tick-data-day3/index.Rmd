@@ -1,7 +1,7 @@
 ---
-title: 키움 API Tick Data - Day2
+title: 키움 API Tick Data - Day3
 author: Roh
-date: '2021-01-14'
+date: '2021-01-18'
 slug: api-tick-data-day2
 categories:
   - finance
@@ -11,7 +11,7 @@ tags: []
 output:
   blogdown::html_page:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
 ---
 <style>
 div.rcode pre { background-color:#fffff0; }
@@ -76,10 +76,10 @@ options(digits=10)
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
-wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
+wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-18"
 fn = list.files(path = wd2,
                 pattern = '.*stocks_trade.*\\.csv') # 마지막 30분 틱데이터 가지고오기
-path = paste(wd2,fn,sep = '/')
+path = paste(wd2,fn[1:4],sep = '/')
 
 # data = readr::read_csv(file = path, 
 #                        col_names = c('code','trade_date','timestamp','price','open','high','low',
@@ -112,11 +112,12 @@ df_py.head()
 
 ```{r, include=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 rm(list = "tbl")
+gc()
 ```
 
 # Contents
 
-## 1. Filter for a certain Stocks [특정주식으로 필터링 하기]
+## Samsung Stock
 
 - KOSPI Code for Samsung Electronics is '005930'
 
@@ -127,7 +128,7 @@ ss.shape
 ```
 </div>
 
-## 2. Use time object in python
+### 1. Use time object in python
 
 * Delete rows where "second" does not lie between 0 and 59.
 
@@ -168,7 +169,7 @@ ss1.head(10)
 ```
 </div>
 
-## 3. Calculate latency and clean it [레이턴시 계산 및 정리]
+### 2. Calculate latency and clean it [레이턴시 계산 및 정리]
 
 *Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.
 
@@ -198,15 +199,15 @@ ss1[ss1.latency == -41].groupby(['hour','minute','second'])['latency'].agg(['cou
 
 ss1[ss1.latency == -4041].groupby(['hour','minute','second'])['latency'].agg(['count'])
 
-ss1[ss1.latency == 265].groupby(['hour','minute','second'])['latency'].agg(['count'])
+ss1[ss1.latency == 2].groupby(['hour','minute','second'])['latency'].agg(['count'])
 ```
 </div>
 
-* Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- ten second at maximum.
+* Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- two second at maximum.
 
 <div class = "pycode">
 ```{python}
-ss2 = ss1[abs(ss1.latency) <=10]
+ss2 = ss1[abs(ss1.latency) <=2]
 print(ss2.latency.value_counts())
 
 plt.plot(ss2.latency)
@@ -214,40 +215,107 @@ plt.title('Latency Over Time After Cleaning')
 ```
 </div>
 
-## 4. Get Trade Direction Indicator
+***
 
-If price is large than midprice, then it is buyer-initiated.
-If price is less  than midprice, then it is seller-initated.
-It is tricky if price is same as midprice. In that case, we use the following rule.
+## Hyundai Car Stock
 
-> The tick rule is the most commonly used level-1 algorithm. This rule is rather simple and classifies a trade as buyer-initiated if the trade price is above the preceding trade price (an uptick trade) and as seller-initiated if the trade price is below the preceding trade price (a downtick trade). If the trade price is the same as the previous trade price (a zero-tick trade), the rule looks for the closest prior price that differs from the current trade price. Zero-uptick trades are classified as buys, and zero-downtick trades are classified as sells.
-
-The rule above can be simply implemented through the code below.
+- KOSPI Code for Hyundai Car is '005380'
 
 <div class = "pycode">
 ```{python}
-ss = ss.assign(spread = ss['ask1'] - ss['bid1'],
-               mid = (ss['bid1'] + ss['ask1'])*.5,
-               ind = 0,
-               price1 = ss['price'].shift(1, fill_value=0),
-               price2 = ss['price'].shift(2, fill_value=0)
-              )
-              
-buy = ((ss['price'] > ss['mid']) |
-        ((ss['price'] == ss['mid']) & (ss['price'] > ss['price1'])) |
-        ((ss['price'] == ss['mid']) & (ss['price'] == ss['price1']) & (ss['price'] > ss['price2'])))
-        
-ss.loc[buy, 'ind'] = 1
-ss.loc[~buy, 'ind'] = -1
-
-ss1 = ss[['time', 'price','size','ask1','bid1','ind','spread']]
-
-ss1.head(5)
+ss = df_py[df_py.code == '005380'].reset_index(drop=True)
+ss.shape
 ```
 </div>
 
+### 1. Use time object in python
 
-### We will discuss what to do more with using trading indicator value along with other variables extracted from tick data.
+* Delete rows where "second" does not lie between 0 and 59.
+
+* Substring the timstamp to get each time component.
+
+<div class = "pycode">
+```{python}
+# Task 1
+ss = ss[ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[12:14])) < 60 ]
+# Task4
+ss = ss.assign( microsecond = ss['timestamp'].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss['timestamp'].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss['timestamp'].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss['timestamp'].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss['timestamp'].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss['timestamp'].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss['timestamp'].apply(lambda x: str(int(x*1000000))[0:4]))
+ss.head()
+```
+</div>
+
+* Transform data type to str to use substring to make the format like "%Y-%m-%d %H:%M:%S.%f"
+
+<div class = "pycode">
+```{python}
+ss['time'] = ss.apply(lambda x: datetime(
+                  year = int(x['year']),
+                  month = int(x['month']),
+                  day = int(x['day']),
+                  hour = int(x['hour']),
+                  minute = int(x['minute']),
+                  second = int(x['second']),
+                  microsecond = int(x['microsecond'])).strftime("%H:%M:%S.%f")[:-3], axis=1)
+                  
+ss['latency'] = ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss['trade_date']
+ss1 = ss[['time', 'hour', 'minute', 'second', 'price','size','ask1','bid1','latency']]
+ss1.head(10)
+```
+</div>
+
+### 2. Calculate latency and clean it [레이턴시 계산 및 정리]
+
+*Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.
+
+<div class = "pycode">
+```{python}
+# Task 2 & 3
+print(ss1.latency.value_counts())
+print(ss1.latency.nsmallest(10))
+print(ss1.latency.nlargest(10))
+```
+</div>
+
+<div class = "pycode">
+```{python}
+plt.plot(ss1.latency)
+plt.title('Latency Over Time Before Cleaning')
+```
+</div>
+
+* Check the time where large discrepancy happened!
+* It turns out that when the second of time equal 59, it has large latency. It might not be case for the other day, which has to be checked.
+
+<div class = "pycode">
+```{python}
+pd.set_option('display.max_rows', 200)
+ss1[ss1.latency == -41].groupby(['hour','minute','second'])['latency'].agg(['count'])
+
+ss1[ss1.latency == -4041].groupby(['hour','minute','second'])['latency'].agg(['count'])
+
+ss1[ss1.latency == 2].groupby(['hour','minute','second'])['latency'].agg(['count'])
+```
+</div>
+
+* Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- two second at maximum.
+
+<div class = "pycode">
+```{python}
+ss2 = ss1[abs(ss1.latency) <=2]
+print(ss2.latency.value_counts())
+
+plt.plot(ss2.latency)
+plt.title('Latency Over Time After Cleaning')
+```
+</div>
+
+***
 
 ## Source
 

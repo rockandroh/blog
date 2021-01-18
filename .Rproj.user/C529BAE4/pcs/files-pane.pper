@@ -2,8 +2,8 @@
     "sortOrder": [
         {
             "columnIndex": 2,
-            "ascending": true
+            "ascending": false
         }
     ],
-    "path": "~/Documents/GitHub/blog/content/note/2020-12-24-주식배당-dividend-2020"
+    "path": "~/Documents/GitHub/blog/content/note/2021-01-18-api-tick-data-day3"
 }

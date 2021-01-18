@@ -20,11 +20,24 @@ div.rcode pre.r { background-color:#EDF6FA; }
 <style>
 div.pycode pre { background-color:#fffff0; }
 div.pycode pre.python { background-color:#FFE9E9; }
+
+</style>
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
 </style>
 
-**이 페이지는 Volatility에 관한 내용을 담고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다**
+*__Note__: 이 페이지는 Volatility에 관한 내용입니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다*
 
-**This page is about "Volatility". If there is any error or question, feel free to contact me through metrics@kakao.com **
+**데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다**
 
 **R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
 
@@ -40,6 +53,18 @@ div.pycode pre.python { background-color:#FFE9E9; }
 ```
 </div>
 
-Think about $ X\times Y \in [5,10] \times [5,10] $ where X represents evenly spaced time (e.g., every one minute) and Y represents the price of certain financial product. 
+Think about $ X\times Y \in [5,10] \times [5,10] $ where X represents evenly spaced time (e.g., every one second) and Y represents the price of certain financial product. 
+
+We often hear about the shapes appearing in the prices chart of financial product. 
+
+We are interested in  the volatility of price series using the most commonly used measure that is variance. 
+
+[5,10] 을 5분에서 10분 사이로 생각해보자. ㅈ
+
+```{r}
+x = seq(5, 10, length.out = 100)
+x
+```
+
 
 
