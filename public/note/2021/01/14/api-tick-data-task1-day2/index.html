@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>키움 API Tick Data - Task1 - Day2 | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/note/">Notes</a></li>
+      
+      <li><a href="/data/">Data</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="https://corr-roh.medium.com/">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">키움 API Tick Data - Task1 - Day2</span></h1>
+<h2 class="author">Roh</h2>
+<h2 class="date">2021/01/14</h2>
+</div>
+
+<main>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#contents">Contents</a><ul>
+<li><a href="#filter-for-a-certain-stocks-특정주식으로-필터링-하기">1. Filter for a certain Stocks [특정주식으로 필터링 하기]</a></li>
+<li><a href="#use-time-object-in-python">2. Use time object in python</a></li>
+<li><a href="#calculate-latency-and-clean-it-레이턴시-계산-및-정리">3. Calculate latency and clean it [레이턴시 계산 및 정리]</a></li>
+<li><a href="#get-trade-direction-indicator">4. Get Trade Direction Indicator</a></li>
+<li><a href="#source">Source</a></li>
+</ul></li>
+</ul>
+</div>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+<p><em><strong>Note</strong>: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</em></p>
+<p><strong>데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</strong></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div class="rcode">
+<pre class="r"><code># &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># &quot;이것은 Python 코드 입니다.&quot;</code></pre>
+</div>
+<div id="package" class="section level3">
+<h3>Package</h3>
+<pre class="r"><code>library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+#py_install(packages = &#39;dfply&#39;)
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)</code></pre>
+</div>
+<div id="import-data" class="section level3">
+<h3>Import Data</h3>
+<ul>
+<li>Check NA</li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>wd = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14&quot;
+wd2 = &quot;/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14&quot;
+fn = list.files(path = wd2,
+                pattern = &#39;.*stocks_trade.*\\.csv&#39;) # 마지막 30분 틱데이터 가지고오기
+path = paste(wd2,fn,sep = &#39;/&#39;)
+
+# data = readr::read_csv(file = path, 
+#                        col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
+#                                      &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;))
+
+tbl =
+  list.files(path = wd2, pattern = &#39;.*stocks_trade.*\\.csv&#39;) %&gt;%
+  map_df(~readr::read_csv(paste(wd2,.,sep = &#39;/&#39;),
+                   col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
+                                     &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;) ))
+
+sum(is.na(tbl))</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from datetime import datetime, timedelta
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+pd.options.display.float_format = &#39;{:.4f}&#39;.format
+pd.set_option(&#39;display.max_rows&#39;, 100)
+df_py = r.tbl
+df_py.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp  ...    cum_size        ask1        bid1
+## 0  000990 100105.0000 20210114100105.3164  ... 679839.0000  60000.0000  59800.0000
+## 1  000990 100105.0000 20210114100105.3164  ... 679798.0000  59900.0000  59800.0000
+## 2  000300 100105.0000 20210114100105.3203  ...  97702.0000    791.0000    790.0000
+## 3  000080 100105.0000 20210114100105.3711  ... 164732.0000  35950.0000  35900.0000
+## 4  001630 100105.0000 20210114100105.5117  ... 108391.0000 127500.0000 127000.0000
+## 
+## [5 rows x 11 columns]</code></pre>
+</div>
+</div>
+<div id="contents" class="section level1">
+<h1>Contents</h1>
+<div id="filter-for-a-certain-stocks-특정주식으로-필터링-하기" class="section level2">
+<h2>1. Filter for a certain Stocks [특정주식으로 필터링 하기]</h2>
+<ul>
+<li>KOSPI Code for Samsung Electronics is ‘005930’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = df_py[df_py.code == &#39;005930&#39;].reset_index(drop=True)
+ss.shape</code></pre>
+<pre><code>## (120366, 11)</code></pre>
+</div>
+</div>
+<div id="use-time-object-in-python" class="section level2">
+<h2>2. Use time object in python</h2>
+<ul>
+<li><p>Delete rows where “second” does not lie between 0 and 59.</p></li>
+<li><p>Substring the timstamp to get each time component.</p></li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>
+ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
+
+ss = ss.assign( microsecond = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[0:4]),
+                kw_time = ss[&#39;trade_date&#39;].apply(lambda x: str(int(x))))
+ss.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp      price  ...  day  month  year  kw_time
+## 0  005930 100105.0000 20210114100105.7930 89500.0000  ...   14     01  2021   100105
+## 1  005930 100105.0000 20210114100105.8438 89600.0000  ...   14     01  2021   100105
+## 2  005930 100106.0000 20210114100106.0195 89600.0000  ...   14     01  2021   100106
+## 3  005930 100106.0000 20210114100106.0195 89500.0000  ...   14     01  2021   100106
+## 4  005930 100106.0000 20210114100106.1836 89600.0000  ...   14     01  2021   100106
+## 
+## [5 rows x 19 columns]</code></pre>
+</div>
+<ul>
+<li>Transform to python datetime!</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;time&#39;] = ss.apply(lambda x: datetime(
+                  year = int(x[&#39;year&#39;]),
+                  month = int(x[&#39;month&#39;]),
+                  day = int(x[&#39;day&#39;]),
+                  hour = int(x[&#39;hour&#39;]),
+                  minute = int(x[&#39;minute&#39;]),
+                  second = int(x[&#39;second&#39;]),
+                  microsecond = int(x[&#39;microsecond&#39;])), #.strftime(&quot;%H:%M:%S.%f&quot;)[:-3], 
+                  axis=1)
+ss.head(10)</code></pre>
+<pre><code>##      code  trade_date  ...  kw_time                       time
+## 0  005930 100105.0000  ...   100105 2021-01-14 10:01:05.793536
+## 1  005930 100105.0000  ...   100105 2021-01-14 10:01:05.842688
+## 2  005930 100106.0000  ...   100106 2021-01-14 10:01:06.018816
+## 3  005930 100106.0000  ...   100106 2021-01-14 10:01:06.018816
+## 4  005930 100106.0000  ...   100106 2021-01-14 10:01:06.182656
+## 5  005930 100106.0000  ...   100106 2021-01-14 10:01:06.338304
+## 6  005930 100106.0000  ...   100106 2021-01-14 10:01:06.366976
+## 7  005930 100106.0000  ...   100106 2021-01-14 10:01:06.678272
+## 8  005930 100106.0000  ...   100106 2021-01-14 10:01:06.805248
+## 9  005930 100106.0000  ...   100106 2021-01-14 10:01:07.264000
+## 
+## [10 rows x 20 columns]</code></pre>
+</div>
+<ul>
+<li>Calculate the latency</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kwtime&#39;] = ss.apply(lambda x: datetime(year = int(x[&#39;year&#39;]),
+                                           month = int(x[&#39;month&#39;]),
+                                           day = int(x[&#39;day&#39;]),
+                                           hour = int(x[&#39;kw_time&#39;][0:2]),
+                                           minute = int(x[&#39;kw_time&#39;][2:4]),
+                                           second = int(x[&#39;kw_time&#39;][4:6])),
+                                           axis = 1
+                                           )
+ss[&#39;latency&#39;] = ss.apply(lambda x: x[&#39;kwtime&#39;].second - x[&#39;time&#39;].second,
+                          axis =1
+                          )
+ss1 = ss[[&#39;time&#39;, &#39;kwtime&#39;, &#39;hour&#39;, &#39;minute&#39;, &#39;second&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;latency&#39;]]
+ss1.head(10)</code></pre>
+<pre><code>##                         time              kwtime  ...       bid1 latency
+## 0 2021-01-14 10:01:05.793536 2021-01-14 10:01:05  ... 89500.0000       0
+## 1 2021-01-14 10:01:05.842688 2021-01-14 10:01:05  ... 89500.0000       0
+## 2 2021-01-14 10:01:06.018816 2021-01-14 10:01:06  ... 89500.0000       0
+## 3 2021-01-14 10:01:06.018816 2021-01-14 10:01:06  ... 89500.0000       0
+## 4 2021-01-14 10:01:06.182656 2021-01-14 10:01:06  ... 89500.0000       0
+## 5 2021-01-14 10:01:06.338304 2021-01-14 10:01:06  ... 89500.0000       0
+## 6 2021-01-14 10:01:06.366976 2021-01-14 10:01:06  ... 89500.0000       0
+## 7 2021-01-14 10:01:06.678272 2021-01-14 10:01:06  ... 89500.0000       0
+## 8 2021-01-14 10:01:06.805248 2021-01-14 10:01:06  ... 89500.0000       0
+## 9 2021-01-14 10:01:07.264000 2021-01-14 10:01:06  ... 89500.0000      -1
+## 
+## [10 rows x 10 columns]</code></pre>
+</div>
+</div>
+<div id="calculate-latency-and-clean-it-레이턴시-계산-및-정리" class="section level2">
+<h2>3. Calculate latency and clean it [레이턴시 계산 및 정리]</h2>
+<p>*Calculate the latency by substracting the tiem provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</p>
+<div class="pycode">
+<pre class="python"><code># Task 2 &amp; 3
+print(ss1.latency.value_counts())</code></pre>
+<pre><code>##  0     85028
+##  1     22814
+## -1       861
+## -2       707
+## -3       421
+##        ...  
+## -55        5
+##  57        4
+##  54        3
+## -52        2
+##  38        2
+## Name: latency, Length: 113, dtype: int64</code></pre>
+<pre class="python"><code>print(ss1.latency.nsmallest(10))</code></pre>
+<pre><code>## 2518    -59
+## 3233    -59
+## 3868    -59
+## 13691   -59
+## 13692   -59
+## 13693   -59
+## 13694   -59
+## 13695   -59
+## 17413   -59
+## 22419   -59
+## Name: latency, dtype: int64</code></pre>
+<pre class="python"><code>print(ss1.latency.nlargest(10))</code></pre>
+<pre><code>## 703      59
+## 704      59
+## 705      59
+## 706      59
+## 707      59
+## 708      59
+## 709      59
+## 18443    59
+## 20431    59
+## 20432    59
+## Name: latency, dtype: int64</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>plt.plot(ss1.latency)
+plt.title(&#39;Latency Over Time Before Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<ul>
+<li>Check the time where large discrepancy happened!</li>
+<li>It turns out that when the second of time equal 59, it has large latency. It might not be case for the other day, which has to be checked.</li>
+</ul>
+<div id="when-latency-is--59-it-actually-is-1-second-difference" class="section level4">
+<h4>When latency is -59, it actually is 1 second difference</h4>
+<div class="pycode">
+<pre class="python"><code>ss1[ss1.latency == -59][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                     kwtime hour minute second  latency
+## 2518   2021-01-14 10:08:00   10     07     59      -59
+## 3233   2021-01-14 10:10:00   10     09     59      -59
+## 3868   2021-01-14 10:12:00   10     11     59      -59
+## 13691  2021-01-14 10:38:00   10     38     59      -59
+## 13692  2021-01-14 10:38:00   10     38     59      -59
+## ...                    ...  ...    ...    ...      ...
+## 118298 2021-01-14 15:18:00   15     17     59      -59
+## 118299 2021-01-14 15:18:00   15     17     59      -59
+## 119234 2021-01-14 15:19:00   15     18     59      -59
+## 119235 2021-01-14 15:19:00   15     18     59      -59
+## 119236 2021-01-14 15:19:00   15     18     59      -59
+## 
+## [384 rows x 5 columns]</code></pre>
+</div>
+</div>
+<div id="when-latency-is-59-it-actually-is-1-second-difference" class="section level4">
+<h4>When latency is 59, it actually is 1 second difference</h4>
+<div class="pycode">
+<pre class="python"><code>ss1[ss1.latency == 59][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                    kwtime hour minute second  latency
+## 703   2021-01-14 10:02:59   10     03     00       59
+## 704   2021-01-14 10:02:59   10     03     00       59
+## 705   2021-01-14 10:02:59   10     03     00       59
+## 706   2021-01-14 10:02:59   10     03     00       59
+## 707   2021-01-14 10:02:59   10     03     00       59
+## 708   2021-01-14 10:02:59   10     03     00       59
+## 709   2021-01-14 10:02:59   10     03     00       59
+## 18443 2021-01-14 10:47:59   10     48     00       59
+## 20431 2021-01-14 10:52:59   10     53     00       59
+## 20432 2021-01-14 10:52:59   10     53     00       59
+## 20433 2021-01-14 10:52:59   10     53     00       59
+## 20434 2021-01-14 10:52:59   10     53     00       59
+## 20435 2021-01-14 10:52:59   10     53     00       59</code></pre>
+</div>
+<ul>
+<li>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- five second at maximum.</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss2 = ss1[abs(ss1.latency) &lt;=5]
+print(ss2.latency.value_counts())</code></pre>
+<pre><code>##  0    85028
+##  1    22814
+## -1      861
+## -2      707
+## -3      421
+## -4      369
+## -5      271
+##  4      157
+##  2      148
+##  5      146
+##  3      131
+## Name: latency, dtype: int64</code></pre>
+<pre class="python"><code>plt.plot(ss2.latency)
+plt.title(&#39;Latency Over Time After Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="get-trade-direction-indicator" class="section level2">
+<h2>4. Get Trade Direction Indicator</h2>
+<p>If price is large than midprice, then it is buyer-initiated.
+If price is less than midprice, then it is seller-initated.
+It is tricky if price is same as midprice. In that case, we use the following rule.</p>
+<blockquote>
+<p>The tick rule is the most commonly used level-1 algorithm. This rule is rather simple and classifies a trade as buyer-initiated if the trade price is above the preceding trade price (an uptick trade) and as seller-initiated if the trade price is below the preceding trade price (a downtick trade). If the trade price is the same as the previous trade price (a zero-tick trade), the rule looks for the closest prior price that differs from the current trade price. Zero-uptick trades are classified as buys, and zero-downtick trades are classified as sells.</p>
+</blockquote>
+<p>The rule above can be simply implemented through the code below.</p>
+<div class="pycode">
+<pre class="python"><code>ss = ss.assign(spread = ss[&#39;ask1&#39;] - ss[&#39;bid1&#39;],
+               mid = (ss[&#39;bid1&#39;] + ss[&#39;ask1&#39;])*.5,
+               ind = 0,
+               price1 = ss[&#39;price&#39;].shift(1, fill_value=0),
+               price2 = ss[&#39;price&#39;].shift(2, fill_value=0)
+              )
+              
+buy = ((ss[&#39;price&#39;] &gt; ss[&#39;mid&#39;]) |
+        ((ss[&#39;price&#39;] == ss[&#39;mid&#39;]) &amp; (ss[&#39;price&#39;] &gt; ss[&#39;price1&#39;])) |
+        ((ss[&#39;price&#39;] == ss[&#39;mid&#39;]) &amp; (ss[&#39;price&#39;] == ss[&#39;price1&#39;]) &amp; (ss[&#39;price&#39;] &gt; ss[&#39;price2&#39;])))
+        
+ss.loc[buy, &#39;ind&#39;] = 1
+ss.loc[~buy, &#39;ind&#39;] = -1
+
+ss1 = ss[[&#39;time&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;ind&#39;,&#39;spread&#39;]]
+
+ss1.head(5)</code></pre>
+<pre><code>##                         time      price    size  ...       bid1  ind   spread
+## 0 2021-01-14 10:01:05.793536 89500.0000  7.0000  ... 89500.0000   -1 100.0000
+## 1 2021-01-14 10:01:05.842688 89600.0000  6.0000  ... 89500.0000    1 100.0000
+## 2 2021-01-14 10:01:06.018816 89600.0000 10.0000  ... 89500.0000    1 100.0000
+## 3 2021-01-14 10:01:06.018816 89500.0000 44.0000  ... 89500.0000   -1 100.0000
+## 4 2021-01-14 10:01:06.182656 89600.0000 10.0000  ... 89500.0000    1 100.0000
+## 
+## [5 rows x 7 columns]</code></pre>
+</div>
+<div id="we-will-discuss-what-to-do-more-with-using-trading-indicator-value-along-with-other-variables-extracted-from-tick-data." class="section level3">
+<h3>We will discuss what to do more with using trading indicator value along with other variables extracted from tick data.</h3>
+</div>
+</div>
+<div id="source" class="section level2">
+<h2>Source</h2>
+<ul>
+<li>데이터 provided by 00 Team</li>
+<li><a href="http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf" class="uri">http://dee.uib.es/digitalAssets/234/234006_Pascual.pdf</a></li>
+</ul>
+</div>
+</div>
+
+</main>
+
+  <footer>
+  <script src="//yihui.org/js/math-code.js"></script>
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.org/js/center-img.js"></script>
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://corr-roh.medium.com/">Medium</a>
+  
+  </footer>
+  </body>
+</html>
+
