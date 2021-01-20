@@ -135,21 +135,22 @@ ss.shape
 
 <div class = "pycode">
 ```{python}
-# Task 1
+
 ss = ss[ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[12:14])) < 60 ]
-# Task4
+
 ss = ss.assign( microsecond = ss['timestamp'].apply(lambda x: str(int(x*1000000))[14:20]),
                 second = ss['timestamp'].apply(lambda x: str(int(x*1000000))[12:14]),
                 minute = ss['timestamp'].apply(lambda x: str(int(x*1000000))[10:12]),
                 hour = ss['timestamp'].apply(lambda x: str(int(x*1000000))[8:10]),
                 day = ss['timestamp'].apply(lambda x: str(int(x*1000000))[6:8]),
                 month = ss['timestamp'].apply(lambda x: str(int(x*1000000))[4:6]),
-                year = ss['timestamp'].apply(lambda x: str(int(x*1000000))[0:4]))
+                year = ss['timestamp'].apply(lambda x: str(int(x*1000000))[0:4]),
+                kw_time = ss['trade_date'].apply(lambda x: str(int(x))))
 ss.head()
 ```
 </div>
 
-* Transform data type to str to use substring to make the format like "%Y-%m-%d %H:%M:%S.%f"
+* Transform to python datetime!
 
 <div class = "pycode">
 ```{python}
@@ -160,13 +161,32 @@ ss['time'] = ss.apply(lambda x: datetime(
                   hour = int(x['hour']),
                   minute = int(x['minute']),
                   second = int(x['second']),
-                  microsecond = int(x['microsecond'])).strftime("%H:%M:%S.%f")[:-3], axis=1)
-                  
-ss['latency'] = ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss['trade_date']
-ss1 = ss[['time', 'hour', 'minute', 'second', 'price','size','ask1','bid1','latency']]
+                  microsecond = int(x['microsecond'])), #.strftime("%H:%M:%S.%f")[:-3], 
+                  axis=1)
+ss.head(10)
+```
+</div>
+
+* Calculate the latency
+
+<div class = "pycode">
+```{python}
+ss['kwtime'] = ss.apply(lambda x: datetime(year = int(x['year']),
+                                           month = int(x['month']),
+                                           day = int(x['day']),
+                                           hour = int(x['kw_time'][0:2]),
+                                           minute = int(x['kw_time'][2:4]),
+                                           second = int(x['kw_time'][4:6])),
+                                           axis = 1
+                                           )
+ss['latency'] = ss.apply(lambda x: x['time'].second - x['kwtime'].second,
+                          axis =1
+                          )
+ss1 = ss[['time', 'kwtime', 'hour', 'minute', 'second', 'price','size','ask1','bid1','latency']]
 ss1.head(10)
 ```
 </div>
+
 
 ## 3. Calculate latency and clean it [레이턴시 계산 및 정리]
 
@@ -189,24 +209,28 @@ plt.title('Latency Over Time Before Cleaning')
 </div>
 
 * Check the time where large discrepancy happened!
-* It turns out that when the second of time equal 59, it has large latency. It might not be case for the other day, which has to be checked.
+
+#### When latency is -59/59, it actually is 1 second difference
 
 <div class = "pycode">
 ```{python}
-pd.set_option('display.max_rows', 200)
-ss1[ss1.latency == -41].groupby(['hour','minute','second'])['latency'].agg(['count'])
-
-ss1[ss1.latency == -4041].groupby(['hour','minute','second'])['latency'].agg(['count'])
-
-ss1[ss1.latency == 265].groupby(['hour','minute','second'])['latency'].agg(['count'])
+ss1[ss1.latency == -59][['kwtime','hour','minute','second','latency']]
 ```
 </div>
 
-* Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- ten second at maximum.
+#### When latency is 59, it actually is 1 second difference
 
 <div class = "pycode">
 ```{python}
-ss2 = ss1[abs(ss1.latency) <=10]
+ss1[ss1.latency == 59][['kwtime','hour','minute','second','latency']]
+```
+</div>
+
+* Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- five second at maximum.
+
+<div class = "pycode">
+```{python}
+ss2 = ss1[abs(ss1.latency) <=5]
 print(ss2.latency.value_counts())
 
 plt.plot(ss2.latency)

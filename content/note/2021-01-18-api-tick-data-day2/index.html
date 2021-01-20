@@ -1,8 +1,8 @@
 ---
-title: 키움 API Tick Data - Day2
+title: 키움 API Tick Data - Task1 - Day2
 author: Roh
 date: '2021-01-14'
-slug: api-tick-data-day2
+slug: api-tick-data-task1-day2
 categories:
   - finance
   - Python
@@ -136,28 +136,29 @@ ss.shape</code></pre>
 <li><p>Substring the timstamp to get each time component.</p></li>
 </ul>
 <div class="pycode">
-<pre class="python"><code># Task 1
+<pre class="python"><code>
 ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
-# Task4
+
 ss = ss.assign( microsecond = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[14:20]),
                 second = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[12:14]),
                 minute = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[10:12]),
                 hour = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[8:10]),
                 day = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[6:8]),
                 month = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[4:6]),
-                year = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[0:4]))
+                year = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[0:4]),
+                kw_time = ss[&#39;trade_date&#39;].apply(lambda x: str(int(x))))
 ss.head()</code></pre>
-<pre><code>##      code  trade_date           timestamp      price  ...  hour  day  month  year
-## 0  005930 100105.0000 20210114100105.7930 89500.0000  ...    10   14     01  2021
-## 1  005930 100105.0000 20210114100105.8438 89600.0000  ...    10   14     01  2021
-## 2  005930 100106.0000 20210114100106.0195 89600.0000  ...    10   14     01  2021
-## 3  005930 100106.0000 20210114100106.0195 89500.0000  ...    10   14     01  2021
-## 4  005930 100106.0000 20210114100106.1836 89600.0000  ...    10   14     01  2021
+<pre><code>##      code  trade_date           timestamp      price  ...  day  month  year  kw_time
+## 0  005930 100105.0000 20210114100105.7930 89500.0000  ...   14     01  2021   100105
+## 1  005930 100105.0000 20210114100105.8438 89600.0000  ...   14     01  2021   100105
+## 2  005930 100106.0000 20210114100106.0195 89600.0000  ...   14     01  2021   100106
+## 3  005930 100106.0000 20210114100106.0195 89500.0000  ...   14     01  2021   100106
+## 4  005930 100106.0000 20210114100106.1836 89600.0000  ...   14     01  2021   100106
 ## 
-## [5 rows x 18 columns]</code></pre>
+## [5 rows x 19 columns]</code></pre>
 </div>
 <ul>
-<li>Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”</li>
+<li>Transform to python datetime!</li>
 </ul>
 <div class="pycode">
 <pre class="python"><code>ss[&#39;time&#39;] = ss.apply(lambda x: datetime(
@@ -167,24 +168,53 @@ ss.head()</code></pre>
                   hour = int(x[&#39;hour&#39;]),
                   minute = int(x[&#39;minute&#39;]),
                   second = int(x[&#39;second&#39;]),
-                  microsecond = int(x[&#39;microsecond&#39;])).strftime(&quot;%H:%M:%S.%f&quot;)[:-3], axis=1)
-                  
-ss[&#39;latency&#39;] = ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[8:14])) - ss[&#39;trade_date&#39;]
-ss1 = ss[[&#39;time&#39;, &#39;hour&#39;, &#39;minute&#39;, &#39;second&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;latency&#39;]]
-ss1.head(10)</code></pre>
-<pre><code>##            time hour minute second  ...    size       ask1       bid1  latency
-## 0  10:01:05.793   10     01     05  ...  7.0000 89600.0000 89500.0000   0.0000
-## 1  10:01:05.842   10     01     05  ...  6.0000 89600.0000 89500.0000   0.0000
-## 2  10:01:06.018   10     01     06  ... 10.0000 89600.0000 89500.0000   0.0000
-## 3  10:01:06.018   10     01     06  ... 44.0000 89600.0000 89500.0000   0.0000
-## 4  10:01:06.182   10     01     06  ... 10.0000 89600.0000 89500.0000   0.0000
-## 5  10:01:06.338   10     01     06  ...  1.0000 89600.0000 89500.0000   0.0000
-## 6  10:01:06.366   10     01     06  ...  1.0000 89600.0000 89500.0000   0.0000
-## 7  10:01:06.678   10     01     06  ...  1.0000 89600.0000 89500.0000   0.0000
-## 8  10:01:06.805   10     01     06  ...  1.0000 89600.0000 89500.0000   0.0000
-## 9  10:01:07.264   10     01     07  ... 69.0000 89600.0000 89500.0000   1.0000
+                  microsecond = int(x[&#39;microsecond&#39;])), #.strftime(&quot;%H:%M:%S.%f&quot;)[:-3], 
+                  axis=1)
+ss.head(10)</code></pre>
+<pre><code>##      code  trade_date  ...  kw_time                       time
+## 0  005930 100105.0000  ...   100105 2021-01-14 10:01:05.793536
+## 1  005930 100105.0000  ...   100105 2021-01-14 10:01:05.842688
+## 2  005930 100106.0000  ...   100106 2021-01-14 10:01:06.018816
+## 3  005930 100106.0000  ...   100106 2021-01-14 10:01:06.018816
+## 4  005930 100106.0000  ...   100106 2021-01-14 10:01:06.182656
+## 5  005930 100106.0000  ...   100106 2021-01-14 10:01:06.338304
+## 6  005930 100106.0000  ...   100106 2021-01-14 10:01:06.366976
+## 7  005930 100106.0000  ...   100106 2021-01-14 10:01:06.678272
+## 8  005930 100106.0000  ...   100106 2021-01-14 10:01:06.805248
+## 9  005930 100106.0000  ...   100106 2021-01-14 10:01:07.264000
 ## 
-## [10 rows x 9 columns]</code></pre>
+## [10 rows x 20 columns]</code></pre>
+</div>
+<ul>
+<li>Calculate the latency</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kwtime&#39;] = ss.apply(lambda x: datetime(year = int(x[&#39;year&#39;]),
+                                           month = int(x[&#39;month&#39;]),
+                                           day = int(x[&#39;day&#39;]),
+                                           hour = int(x[&#39;kw_time&#39;][0:2]),
+                                           minute = int(x[&#39;kw_time&#39;][2:4]),
+                                           second = int(x[&#39;kw_time&#39;][4:6])),
+                                           axis = 1
+                                           )
+ss[&#39;latency&#39;] = ss.apply(lambda x: x[&#39;kwtime&#39;].second - x[&#39;time&#39;].second,
+                          axis =1
+                          )
+ss1 = ss[[&#39;time&#39;, &#39;kwtime&#39;, &#39;hour&#39;, &#39;minute&#39;, &#39;second&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;latency&#39;]]
+ss1.head(10)</code></pre>
+<pre><code>##                         time              kwtime  ...       bid1 latency
+## 0 2021-01-14 10:01:05.793536 2021-01-14 10:01:05  ... 89500.0000       0
+## 1 2021-01-14 10:01:05.842688 2021-01-14 10:01:05  ... 89500.0000       0
+## 2 2021-01-14 10:01:06.018816 2021-01-14 10:01:06  ... 89500.0000       0
+## 3 2021-01-14 10:01:06.018816 2021-01-14 10:01:06  ... 89500.0000       0
+## 4 2021-01-14 10:01:06.182656 2021-01-14 10:01:06  ... 89500.0000       0
+## 5 2021-01-14 10:01:06.338304 2021-01-14 10:01:06  ... 89500.0000       0
+## 6 2021-01-14 10:01:06.366976 2021-01-14 10:01:06  ... 89500.0000       0
+## 7 2021-01-14 10:01:06.678272 2021-01-14 10:01:06  ... 89500.0000       0
+## 8 2021-01-14 10:01:06.805248 2021-01-14 10:01:06  ... 89500.0000       0
+## 9 2021-01-14 10:01:07.264000 2021-01-14 10:01:06  ... 89500.0000      -1
+## 
+## [10 rows x 10 columns]</code></pre>
 </div>
 </div>
 <div id="calculate-latency-and-clean-it-레이턴시-계산-및-정리" class="section level2">
@@ -193,279 +223,113 @@ ss1.head(10)</code></pre>
 <div class="pycode">
 <pre class="python"><code># Task 2 &amp; 3
 print(ss1.latency.value_counts())</code></pre>
-<pre><code>## 0.0000      84817
-## -1.0000     22633
-## 1.0000        635
-## 2.0000        555
-## -41.0000      376
-##             ...  
-## 71.0000         2
-## 162.0000        2
-## 52.0000         2
-## 143.0000        2
-## 224.0000        1
-## Name: latency, Length: 224, dtype: int64</code></pre>
+<pre><code>##  0     85028
+##  1     22814
+## -1       861
+## -2       707
+## -3       421
+##        ...  
+## -55        5
+##  57        4
+##  54        3
+## -52        2
+##  38        2
+## Name: latency, Length: 113, dtype: int64</code></pre>
 <pre class="python"><code>print(ss1.latency.nsmallest(10))</code></pre>
-<pre><code>## 60896   -4041.0000
-## 60897   -4041.0000
-## 82227   -4041.0000
-## 2518      -41.0000
-## 3233      -41.0000
-## 3868      -41.0000
-## 17413     -41.0000
-## 22419     -41.0000
-## 23377     -41.0000
-## 23709     -41.0000
-## Name: latency, dtype: float64</code></pre>
+<pre><code>## 2518    -59
+## 3233    -59
+## 3868    -59
+## 13691   -59
+## 13692   -59
+## 13693   -59
+## 13694   -59
+## 13695   -59
+## 17413   -59
+## 22419   -59
+## Name: latency, dtype: int64</code></pre>
 <pre class="python"><code>print(ss1.latency.nlargest(10))</code></pre>
-<pre><code>## 8908   265.0000
-## 8911   265.0000
-## 8912   265.0000
-## 8913   265.0000
-## 8917   265.0000
-## 8918   265.0000
-## 8924   265.0000
-## 8925   265.0000
-## 8926   265.0000
-## 8927   265.0000
-## Name: latency, dtype: float64</code></pre>
+<pre><code>## 703      59
+## 704      59
+## 705      59
+## 706      59
+## 707      59
+## 708      59
+## 709      59
+## 18443    59
+## 20431    59
+## 20432    59
+## Name: latency, dtype: int64</code></pre>
 </div>
 <div class="pycode">
 <pre class="python"><code>plt.plot(ss1.latency)
 plt.title(&#39;Latency Over Time Before Cleaning&#39;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 <ul>
 <li>Check the time where large discrepancy happened!</li>
 <li>It turns out that when the second of time equal 59, it has large latency. It might not be case for the other day, which has to be checked.</li>
 </ul>
+<div id="when-latency-is--59-it-actually-is-1-second-difference" class="section level4">
+<h4>When latency is -59, it actually is 1 second difference</h4>
 <div class="pycode">
-<pre class="python"><code>pd.set_option(&#39;display.max_rows&#39;, 200)
-ss1[ss1.latency == -41].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;count&#39;])</code></pre>
-<pre><code>##                     count
-## hour minute second       
-## 10   07     59          1
-##      09     59          1
-##      11     59          1
-##      45     59          1
-##      57     59          1
-## 11   00     59          1
-##      01     59          3
-##      02     59          1
-##      09     59          4
-##      11     59          1
-##      12     59          3
-##      14     59          1
-##      15     59          1
-##      16     59          1
-##      17     59          2
-##      21     59          1
-##      23     59          2
-##      25     59          1
-##      26     59          1
-##      27     59          1
-##      33     59          1
-##      35     59          1
-##      36     59          2
-##      39     59          1
-##      41     59          1
-##      43     59          1
-##      46     59          2
-##      48     59          1
-##      49     59          1
-##      50     59          1
-##      56     59          2
-##      58     59          1
-## 12   02     59          1
-##      03     59          2
-##      05     59          1
-##      07     59          1
-##      09     59          1
-##      10     59          1
-##      12     59          2
-##      13     59          2
-##      14     59          1
-##      16     59          1
-##      17     59          1
-##      19     59          1
-##      20     59          1
-##      21     59          2
-##      22     59          2
-##      27     59          2
-##      28     59          1
-##      29     59          1
-##      30     59          2
-##      34     59          2
-##      35     59          2
-##      36     59          1
-##      37     59          1
-##      38     59          1
-##      39     59          1
-##      40     59          1
-##      41     59          2
-##      42     59          1
-##      43     59          2
-##      45     59          4
-##      47     59          1
-##      49     59          1
-##      50     59          1
-##      51     59          1
-##      53     59          1
-##      55     59          2
-##      56     59          1
-##      57     59          1
-##      58     59          2
-## 13   02     59          2
-##      03     59          1
-##      04     59          1
-##      05     59          1
-##      07     59          1
-##      10     59          1
-##      11     59          3
-##      12     59          1
-##      14     59          1
-##      15     59          2
-##      16     59          2
-##      17     59          1
-##      19     59          1
-##      21     59          2
-##      22     59          2
-##      23     59          2
-##      24     59          3
-##      25     59          3
-##      27     59          3
-##      28     59          2
-##      29     59          1
-##      31     59          1
-##      32     59          1
-##      33     59          1
-##      37     59          2
-##      40     59          1
-##      41     59          3
-##      42     59          1
-##      43     59          2
-##      44     59          2
-##      46     59          2
-##      47     59          2
-##      48     59          1
-##      49     59          1
-##      50     59          2
-##      52     59          2
-##      53     59          1
-##      54     59          2
-##      55     59          3
-##      57     59          2
-##      58     59          4
-## 14   00     59          1
-##      01     59          4
-##      02     59          2
-##      03     59          3
-##      04     59          1
-##      05     59          1
-##      06     59          2
-##      07     59          5
-##      08     59          2
-##      09     59          3
-##      10     59          3
-##      11     59          4
-##      12     59          1
-##      13     59          2
-##      14     59          1
-##      15     59          1
-##      16     59          3
-##      18     59          2
-##      19     59          1
-##      20     59          1
-##      21     59          2
-##      22     59          2
-##      23     59          3
-##      24     59          2
-##      26     59          1
-##      27     59          1
-##      28     59          2
-##      29     59          7
-##      30     59          4
-##      32     59          2
-##      33     59          6
-##      34     59          4
-##      36     59          1
-##      37     59          1
-##      38     59          4
-##      39     59          2
-##      40     59          1
-##      42     59          1
-##      43     59          2
-##      44     59          5
-##      45     59          4
-##      46     59          4
-##      48     59          3
-##      49     59          2
-##      51     59          5
-##      52     59          4
-##      53     59          6
-##      54     59          4
-##      56     59          2
-##      57     59          5
-##      58     59          3
-## 15   00     59          6
-##      02     59          6
-##      03     59          3
-##      04     59          3
-##      05     59          2
-##      06     59          5
-##      07     59          2
-##      08     59          7
-##      09     59          2
-##      10     59          2
-##      11     59          2
-##      12     59          4
-##      13     59          2
-##      14     59          5
-##      15     59          6
-##      16     59          5
-##      17     59          2
-##      18     59          3</code></pre>
-<pre class="python"><code>ss1[ss1.latency == -4041].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;count&#39;])</code></pre>
-<pre><code>##                     count
-## hour minute second       
-## 12   59     59          2
-## 13   59     59          1</code></pre>
-<pre class="python"><code>ss1[ss1.latency == 265].groupby([&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;])[&#39;latency&#39;].agg([&#39;count&#39;])</code></pre>
-<pre><code>##                     count
-## hour minute second       
-## 10   27     08          1
-##             09          3
-##             10          2
-##             11          8
-##             12          5
-##             13          3
-##             14          2
-##             15          6
-##             16          4
-##             17          4</code></pre>
+<pre class="python"><code>ss1[ss1.latency == -59][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                     kwtime hour minute second  latency
+## 2518   2021-01-14 10:08:00   10     07     59      -59
+## 3233   2021-01-14 10:10:00   10     09     59      -59
+## 3868   2021-01-14 10:12:00   10     11     59      -59
+## 13691  2021-01-14 10:38:00   10     38     59      -59
+## 13692  2021-01-14 10:38:00   10     38     59      -59
+## ...                    ...  ...    ...    ...      ...
+## 118298 2021-01-14 15:18:00   15     17     59      -59
+## 118299 2021-01-14 15:18:00   15     17     59      -59
+## 119234 2021-01-14 15:19:00   15     18     59      -59
+## 119235 2021-01-14 15:19:00   15     18     59      -59
+## 119236 2021-01-14 15:19:00   15     18     59      -59
+## 
+## [384 rows x 5 columns]</code></pre>
+</div>
+</div>
+<div id="when-latency-is-59-it-actually-is-1-second-difference" class="section level4">
+<h4>When latency is 59, it actually is 1 second difference</h4>
+<div class="pycode">
+<pre class="python"><code>ss1[ss1.latency == 59][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                    kwtime hour minute second  latency
+## 703   2021-01-14 10:02:59   10     03     00       59
+## 704   2021-01-14 10:02:59   10     03     00       59
+## 705   2021-01-14 10:02:59   10     03     00       59
+## 706   2021-01-14 10:02:59   10     03     00       59
+## 707   2021-01-14 10:02:59   10     03     00       59
+## 708   2021-01-14 10:02:59   10     03     00       59
+## 709   2021-01-14 10:02:59   10     03     00       59
+## 18443 2021-01-14 10:47:59   10     48     00       59
+## 20431 2021-01-14 10:52:59   10     53     00       59
+## 20432 2021-01-14 10:52:59   10     53     00       59
+## 20433 2021-01-14 10:52:59   10     53     00       59
+## 20434 2021-01-14 10:52:59   10     53     00       59
+## 20435 2021-01-14 10:52:59   10     53     00       59</code></pre>
 </div>
 <ul>
-<li>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- ten second at maximum.</li>
+<li>Delete where time difference goes beyond one second between Kiwoom api time and self-recorded time. In other words, we allow latency +/- five second at maximum.</li>
 </ul>
 <div class="pycode">
-<pre class="python"><code>ss2 = ss1[abs(ss1.latency) &lt;=10]
+<pre class="python"><code>ss2 = ss1[abs(ss1.latency) &lt;=5]
 print(ss2.latency.value_counts())</code></pre>
-<pre><code>## 0.0000     84817
-## -1.0000    22633
-## 1.0000       635
-## 2.0000       555
-## 3.0000       283
-## 6.0000        99
-## 10.0000       98
-## 7.0000        94
-## 4.0000        65
-## 5.0000        61
-## 8.0000        60
-## 9.0000        55
+<pre><code>##  0    85028
+##  1    22814
+## -1      861
+## -2      707
+## -3      421
+## -4      369
+## -5      271
+##  4      157
+##  2      148
+##  5      146
+##  3      131
 ## Name: latency, dtype: int64</code></pre>
 <pre class="python"><code>plt.plot(ss2.latency)
 plt.title(&#39;Latency Over Time After Cleaning&#39;)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
 </div>
 </div>
 <div id="get-trade-direction-indicator" class="section level2">
@@ -495,12 +359,14 @@ ss.loc[~buy, &#39;ind&#39;] = -1
 ss1 = ss[[&#39;time&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;ind&#39;,&#39;spread&#39;]]
 
 ss1.head(5)</code></pre>
-<pre><code>##            time      price    size       ask1       bid1  ind   spread
-## 0  10:01:05.793 89500.0000  7.0000 89600.0000 89500.0000   -1 100.0000
-## 1  10:01:05.842 89600.0000  6.0000 89600.0000 89500.0000    1 100.0000
-## 2  10:01:06.018 89600.0000 10.0000 89600.0000 89500.0000    1 100.0000
-## 3  10:01:06.018 89500.0000 44.0000 89600.0000 89500.0000   -1 100.0000
-## 4  10:01:06.182 89600.0000 10.0000 89600.0000 89500.0000    1 100.0000</code></pre>
+<pre><code>##                         time      price    size  ...       bid1  ind   spread
+## 0 2021-01-14 10:01:05.793536 89500.0000  7.0000  ... 89500.0000   -1 100.0000
+## 1 2021-01-14 10:01:05.842688 89600.0000  6.0000  ... 89500.0000    1 100.0000
+## 2 2021-01-14 10:01:06.018816 89600.0000 10.0000  ... 89500.0000    1 100.0000
+## 3 2021-01-14 10:01:06.018816 89500.0000 44.0000  ... 89500.0000   -1 100.0000
+## 4 2021-01-14 10:01:06.182656 89600.0000 10.0000  ... 89500.0000    1 100.0000
+## 
+## [5 rows x 7 columns]</code></pre>
 </div>
 <div id="we-will-discuss-what-to-do-more-with-using-trading-indicator-value-along-with-other-variables-extracted-from-tick-data." class="section level3">
 <h3>We will discuss what to do more with using trading indicator value along with other variables extracted from tick data.</h3>

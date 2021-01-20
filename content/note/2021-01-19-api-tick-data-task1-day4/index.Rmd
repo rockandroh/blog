@@ -1,17 +1,17 @@
 ---
 title: 키움 API Tick Data - Task1 - Day4
-author: Roh
-date: '2021-01-18'
-slug: api-tick-data-day2
+author: hyunwooroh
+date: '2021-01-19'
+slug: api-tick-data-task1-day4
 categories:
   - finance
-  - Python
   - highfrequency
+  - Python
 tags: []
 output:
   blogdown::html_page:
     toc: true
-    toc_depth: 3
+    toc_depth: 4
 ---
 <style>
 div.rcode pre { background-color:#fffff0; }
@@ -54,7 +54,7 @@ pre {
 ```
 </div>
 
-#### Package
+* Package
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 library(dplyr)
 library(tidyverse)
@@ -69,14 +69,14 @@ options(max.print = 99999999)
 options(digits=10)
 ```
 
-#### Import Data
+* Import Data
 
 - Check NA
 
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
-wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-18"
+wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-19"
 fn = list.files(path = wd2,
                 pattern = '.*stocks_trade.*\\.csv') # 마지막 30분 틱데이터 가지고오기
 path = paste(wd2,fn[1:4],sep = '/')
@@ -86,10 +86,12 @@ path = paste(wd2,fn[1:4],sep = '/')
 #                                      'size','cum_size','ask1','bid1'))
 
 tbl =
-  list.files(path = wd2, pattern = '.*stocks_trade.*\\.csv') %>%
+  list.files(path = wd2, pattern = '.*stocks_trade.*\\.csv')[2:8] %>%
   map_df(~readr::read_csv(paste(wd2,.,sep = '/'),
-                   col_names = c('code','trade_date','timestamp','price','open','high','low',
-                                     'size','cum_size','ask1','bid1') ))
+                          col_names = c('code','trade_date','timestamp','price','open','high','low','size','cum_size','ask1','bid1','rotation','bs_ration', 'mkt_type', 'mkt_cap'),
+                          col_types = cols(.default="d", code = "c")
+                   )
+         )
 
 sum(is.na(tbl))
 ```
@@ -115,7 +117,7 @@ rm(list = "tbl")
 gc()
 ```
 
-# Contents
+# Task1: 레이턴시 체크 및 Buy/Sell 구분하기 
 
 ## Samsung Stock
 
@@ -172,6 +174,23 @@ ss.head(10)
 
 * Calculate the latency by subtracting the time provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.
 
+#### 오전 8시 9시 앞에 '0'을 붙여주기
+
+<div class = "pycode">
+```{python}
+ss['kw_time'].apply(lambda x: x[0:2]).value_counts()
+```
+</div>
+
+
+<div class = "pycode">
+```{python}
+ss['kw_time'] = ss.kw_time.apply(lambda x: '0' + x if ((x[0]=='8') | (x[0]=='9')) else x)
+ss['kw_time'].apply(lambda x: x[0:2]).value_counts()
+```
+</div>
+
+* 키움 타임 만들기
 
 <div class = "pycode">
 ```{python}
@@ -183,10 +202,38 @@ ss['kwtime'] = ss.apply(lambda x: datetime(year = int(x['year']),
                                            second = int(x['kw_time'][4:6])),
                                            axis = 1
                                            )
-ss['latency'] = ss.apply(lambda x: x['time'].second - x['kwtime'].second,
-                          axis =1
-                          )
-ss1 = ss[['time', 'kwtime', 'hour', 'minute', 'second', 'price','size','ask1','bid1','latency']]
+```
+</div>
+
+#### Latency +/- 정보 가지고 오기
+
+* + 인 경우, 로컬 타임이 키움 타임보다 늦는 경우
+* - 인 경우, 로컬 타임이 키움 타임보다 빠른 경우 (weird)  
+
+<div class = "pycode">
+```{python}
+ss['latency_ind']=ss.apply(lambda x: 1 if (int(str(int(x['timestamp']*1000000))[8:14]) > x['trade_date']) else
+                            0 if (int(str(int(x['timestamp']*1000000))[8:14]) == x['trade_date']) else -1, axis=1)
+```
+</div>
+
+
+<div class = "pycode">
+```{python}
+plt.scatter(ss['latency_ind'].reset_index().index,ss['latency_ind'])
+plt.title('latency +/-')
+```
+</div>
+
+#### Latency Value 가지고 오기
+
+<div class = "pycode">
+```{python}
+ss['latency_val'] = ss.apply(lambda x: abs(x['time'].second - x['kwtime'].second),
+                        axis =1
+                        )
+ss['latency'] = ss['latency_val']*ss['latency_ind']
+ss1 = ss[['time', 'kwtime', 'kw_time', 'hour', 'minute', 'second', 'price','size','ask1','bid1','latency']]
 ss1.head(10)
 ```
 </div>
@@ -198,35 +245,76 @@ plt.title('Latency Over Time Before Cleaning')
 ```
 </div>
 
-```{python}
-print(ss1.latency.value_counts())
-print(ss1.latency.nsmallest(10))
-print(ss1.latency.nlargest(10))
-```
-
-* Check the time where large discrepancy happened!
-
-#### When latency is 59, it actually is 1 second difference. We can check it as in below.
-
 <div class = "pycode">
 ```{python}
-ss1[ss1.latency == 59][['kwtime','hour','minute','second','latency']]
-
-ss1[ss1.latency == 2][['kwtime','hour','minute','second','latency']]
+ss1.latency.value_counts().head(10).iloc[::-1].plot.barh(stacked=True)
+plt.title('Latency Top 10 Bar Plot')
 ```
 </div>
 
-### 59초는 -1초로 변경
+<div class = "pycode">
+```{python}
+ss1.latency.value_counts().index
+```
+</div>
 
-When latency is 59, it actually is -1 as we have seen above. 
+* Check the time where large discrepancy happened!
+
+#### over 30 or not!
+
+- We assume that when the latency is minus value, the maximum time difference is 1.
+- 음의 레이턴시가 나오는 경우는 최악의 경우 1초 빠르게 record 하는 경우!!
+- When latency is a number x (e.g. 59) over 30, the actual latency is 60 - x
+- When latency is a number x (e.g. 20) below 30 and over 0, the actual latency is x
+- When latency is a number x (e.g. -59) below (let's say) -5, the actual latency is -(60 + x)
+- We can check it as in below.
+
+
+<div class = "pycode">
+```{python}
+ss1[ss1.latency == -59][['kwtime','hour','minute','second','latency']]
+ss1[ss1.latency == 40][['kwtime','hour','minute','second','latency']]
+ss1[ss1.latency == 39][['kwtime','hour','minute','second','latency']]
+ss1[ss1.latency == 21][['kwtime','hour','minute','second','latency']]
+ss1[ss1.latency == 20][['kwtime','hour','minute','second','latency']]
+```
+</div>
+
+#### Correct the wrongly calculated latency 
 
 <div class = "pycode">
 ```{python}
 ss2 = ss1.copy()
-ss2.loc[ss1['latency']==59, 'latency'] = -1
+ss2['latency']=ss1.apply(lambda x: 60-x['latency'] if (x['latency'] > 30) else \
+                                    (-(60+x['latency']) if (x['latency']<-5) else x['latency']),axis=1)
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# x coordinates for the lines
+
+xcoords = [ ss2.index[ss2['kw_time'] == '090500'][0], 
+            ss2.index[ss2['kw_time'] == '091000'][0],
+            ss2.index[ss2['kw_time'] == '092000'][0] ]
+
+# colors for the lines
+colors = ['darkgreen','green','limegreen']
+
+time = ['09:05:00','09:10:00','09:20:00']
 
 plt.scatter(ss2.reset_index().index, ss2.latency)
+for xc,c,time in zip(xcoords,colors,time):
+    plt.axvline(x=xc, label='time = {}'.format(time), c=c)
+plt.legend()
 plt.title('Latency Over Time After Cleaning')
+```
+</div>
+
+<div class = "pycode">
+```{python}
+ss2.latency.value_counts().iloc[::-1].plot.barh(stacked=True)
+plt.title('Latency Top 10 Bar Plot')
 ```
 </div>
 
@@ -287,6 +375,23 @@ ss.head(10)
 
 * Calculate the latency by subtracting the time provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.
 
+#### 오전 8시 9시 앞에 '0'을 붙여주기
+
+<div class = "pycode">
+```{python}
+ss['kw_time'].apply(lambda x: x[0:2]).value_counts()
+```
+</div>
+
+
+<div class = "pycode">
+```{python}
+ss['kw_time'] = ss.kw_time.apply(lambda x: '0' + x if ((x[0]=='8') | (x[0]=='9')) else x)
+ss['kw_time'].apply(lambda x: x[0:2]).value_counts()
+```
+</div>
+
+* 키움 타임 만들기
 
 <div class = "pycode">
 ```{python}
@@ -298,10 +403,38 @@ ss['kwtime'] = ss.apply(lambda x: datetime(year = int(x['year']),
                                            second = int(x['kw_time'][4:6])),
                                            axis = 1
                                            )
-ss['latency'] = ss.apply(lambda x: x['time'].second - x['kwtime'].second,
-                          axis =1
-                          )
-ss1 = ss[['time', 'kwtime', 'hour', 'minute', 'second', 'price','size','ask1','bid1','latency']]
+```
+</div>
+
+#### Latency +/- 정보 가지고 오기
+
+* + 인 경우, 로컬 타임이 키움 타임보다 늦는 경우
+* - 인 경우, 로컬 타임이 키움 타임보다 빠른 경우 (weird)  
+
+<div class = "pycode">
+```{python}
+ss['latency_ind']=ss.apply(lambda x: 1 if (int(str(int(x['timestamp']*1000000))[8:14]) > x['trade_date']) else -1,
+        axis=1)
+```
+</div>
+
+
+<div class = "pycode">
+```{python}
+plt.scatter(ss['latency_ind'].reset_index().index,ss['latency_ind'])
+plt.title('latency +/-')
+```
+</div>
+
+#### Latency Value 가지고 오기
+
+<div class = "pycode">
+```{python}
+ss['latency_val'] = ss.apply(lambda x: abs(x['time'].second - x['kwtime'].second),
+                        axis =1
+                        )
+ss['latency'] = ss['latency_val']*ss['latency_ind']
+ss1 = ss[['time', 'kwtime', 'kw_time', 'hour', 'minute', 'second', 'price','size','ask1','bid1','latency']]
 ss1.head(10)
 ```
 </div>
@@ -313,35 +446,76 @@ plt.title('Latency Over Time Before Cleaning')
 ```
 </div>
 
-```{python}
-print(ss1.latency.value_counts())
-print(ss1.latency.nsmallest(10))
-print(ss1.latency.nlargest(10))
-```
-
-* Check the time where large discrepancy happened!
-
-#### When latency is 59, it actually is 1 second difference. We can check it as in below.
-
 <div class = "pycode">
 ```{python}
-ss1[ss1.latency == 59][['kwtime','hour','minute','second','latency']]
-
-ss1[ss1.latency == 2][['kwtime','hour','minute','second','latency']]
+ss1.latency.value_counts().head(10).iloc[::-1].plot.barh(stacked=True)
+plt.title('Latency Top 10 Bar Plot')
 ```
 </div>
 
-### 59초는 -1초로 변경
+<div class = "pycode">
+```{python}
+ss1.latency.value_counts().index
+```
+</div>
 
-When latency is 59, it actually is -1 as we have seen above. 
+* Check the time where large discrepancy happened!
+
+#### over 30 or not!
+
+- We assume that when the latency is minus value, the maximum time difference is 1.
+- 음의 레이턴시가 나오는 경우는 최악의 경우 1초 빠르게 record 하는 경우!!
+- When latency is a number x (e.g. 59) over 30, the actual latency is 60 - x
+- When latency is a number x (e.g. 20) below 30 and over 0, the actual latency is x
+- When latency is a number x (e.g. -59) below (let's say) -5, the actual latency is -(60 + x)
+- We can check it as in below.
+
+
+<div class = "pycode">
+```{python}
+ss1[ss1.latency == -59][['kwtime','hour','minute','second','latency']]
+ss1[ss1.latency == 40][['kwtime','hour','minute','second','latency']]
+ss1[ss1.latency == 39][['kwtime','hour','minute','second','latency']]
+ss1[ss1.latency == 21][['kwtime','hour','minute','second','latency']]
+ss1[ss1.latency == 20][['kwtime','hour','minute','second','latency']]
+```
+</div>
+
+#### Correct the wrongly calculated latency 
 
 <div class = "pycode">
 ```{python}
 ss2 = ss1.copy()
-ss2.loc[ss1['latency']==59, 'latency'] = -1
+ss2['latency']=ss1.apply(lambda x: 60-x['latency'] if (x['latency'] > 30) else \
+                                    (-(60+x['latency']) if (x['latency']<-5) else x['latency']),axis=1)
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# x coordinates for the lines
+
+xcoords = [ ss2.index[ss2['kw_time'] == '090500'][0], 
+            ss2.index[ss2['kw_time'] == '091000'][0],
+            ss2.index[ss2['kw_time'] == '092000'][0] ]
+
+# colors for the lines
+colors = ['darkgreen','green','limegreen']
+
+time = ['09:05:00','09:10:00','09:20:00']
 
 plt.scatter(ss2.reset_index().index, ss2.latency)
+for xc,c,time in zip(xcoords,colors,time):
+    plt.axvline(x=xc, label='time = {}'.format(time), c=c)
+plt.legend()
 plt.title('Latency Over Time After Cleaning')
+```
+</div>
+
+<div class = "pycode">
+```{python}
+ss2.latency.value_counts().iloc[::-1].plot.barh(stacked=True)
+plt.title('Latency Top 10 Bar Plot')
 ```
 </div>
 
@@ -350,3 +524,4 @@ plt.title('Latency Over Time After Cleaning')
 ## Source
 
 - 데이터 provided by 00 Team
+---
