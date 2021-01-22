@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>키움 API Tick Data - Task1 - Complete (2) | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+
+    
+    
+      <link rel="stylesheet" href="/css/prism-vs.css" />
+
+    
+    
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="https://corr-roh.medium.com/">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">키움 API Tick Data - Task1 - Complete (2)</span></h1>
+
+<h2 class="date">2021/01/22</h2>
+</div>
+
+<main>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#task1-레이턴시-계산">Task1: 레이턴시 계산</a><ul>
+<li><a href="#samsung-stock">Samsung Stock</a><ul>
+<li><a href="#use-time-object-in-python">1. Use time object in python</a></li>
+<li><a href="#calculate-latency-and-clean-it-레이턴시-계산-및-정리">2. Calculate latency and clean it [레이턴시 계산 및 정리]</a><ul>
+<li><a href="#오전-8시-9시-앞에-0을-붙여주기">오전 8시 9시 앞에 ’0’을 붙여주기</a></li>
+<li><a href="#latency---정보-가지고-오기">Latency +/- 정보 가지고 오기</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#source">Source</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p><img src="tick_plot.png"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/></p>
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+<hr />
+<p><em><strong>Note</strong>: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</em></p>
+<p><strong>데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</strong></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div class="rcode">
+<pre class="r"><code># &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># &quot;이것은 Python 코드 입니다.&quot;</code></pre>
+</div>
+<ul>
+<li>Package</li>
+</ul>
+<pre class="r"><code>library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+#py_install(packages = &#39;dfply&#39;)
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)</code></pre>
+<ul>
+<li><p>Import Data</p></li>
+<li><p>Check NA</p></li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>#wd = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14&quot;
+wd2 = &quot;/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-21&quot;
+fn = list.files(path = wd2,
+                pattern = &#39;.*stocks_trade.*\\.csv&#39;) # 마지막 30분 틱데이터 가지고오기
+
+# data = readr::read_csv(file = path, 
+#                        col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
+#                                      &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;))
+
+tbl =
+  list.files(path = wd2, pattern = &#39;.*stocks_trade.*\\.csv&#39;)[2:4] %&gt;%
+  map_df(~readr::read_csv(paste(wd2,.,sep = &#39;/&#39;),
+                          col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,&#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;rotation&#39;,&#39;bs_ration&#39;, &#39;mkt_type&#39;, &#39;mkt_cap&#39;),
+                          col_types = cols(.default=&quot;d&quot;, code = &quot;c&quot;)
+                   )
+         )
+
+sum(is.na(tbl))</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from datetime import datetime, timedelta
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+pd.options.display.float_format = &#39;{:.4f}&#39;.format
+pd.set_option(&#39;display.max_rows&#39;, 100)
+df_py = r.tbl
+df_py.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp  ...  bs_ration  mkt_type   mkt_cap
+## 0  279540  90000.0000 20210121090000.2734  ...     0.0000    2.0000  153.0000
+## 1  057540  90001.0000 20210121090000.3789  ...     0.0000    2.0000 1152.0000
+## 2  264850  90001.0000 20210121090000.3945  ...     0.0000    2.0000  664.0000
+## 3  318000  90001.0000 20210121090000.5078  ...   500.0000    2.0000  698.0000
+## 4  171120  90001.0000 20210121090000.5078  ...   500.0000    2.0000 1455.0000
+## 
+## [5 rows x 15 columns]</code></pre>
+</div>
+<div id="task1-레이턴시-계산" class="section level1">
+<h1>Task1: 레이턴시 계산</h1>
+<div id="samsung-stock" class="section level2">
+<h2>Samsung Stock</h2>
+<ul>
+<li>KOSPI Code for Samsung Electronics is ‘005930’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = df_py[df_py.code == &#39;005930&#39;].reset_index(drop=True)
+ss.shape</code></pre>
+<pre><code>## (82062, 15)</code></pre>
+</div>
+<div id="use-time-object-in-python" class="section level3">
+<h3>1. Use time object in python</h3>
+<ul>
+<li><p>Delete rows where “second” does not lie between 0 and 59.</p></li>
+<li><p>Substring the timstamp to get each time component.</p></li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
+
+ss = ss.assign( microsecond = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[0:4]),
+                kw_time = ss[&#39;trade_date&#39;].apply(lambda x: str(int(x))))
+ss.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp      price  ...  day  month  year  kw_time
+## 0  005930  90010.0000 20210121090009.6133 87500.0000  ...   21     01  2021    90010
+## 1  005930  90010.0000 20210121090010.0156 87500.0000  ...   21     01  2021    90010
+## 2  005930  90010.0000 20210121090010.2852 87600.0000  ...   21     01  2021    90010
+## 3  005930  90010.0000 20210121090010.3125 87600.0000  ...   21     01  2021    90010
+## 4  005930  90010.0000 20210121090009.6133 87500.0000  ...   21     01  2021    90010
+## 
+## [5 rows x 23 columns]</code></pre>
+</div>
+<ul>
+<li>Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”</li>
+<li>We calculate the latency by subtracting ‘trade_date’ from the ‘timestamp’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;lc_time&#39;] = ss.apply(lambda x: datetime(
+                  year = int(x[&#39;year&#39;]),
+                  month = int(x[&#39;month&#39;]),
+                  day = int(x[&#39;day&#39;]),
+                  hour = int(x[&#39;hour&#39;]),
+                  minute = int(x[&#39;minute&#39;]),
+                  second = int(x[&#39;second&#39;]),
+                  microsecond = int(x[&#39;microsecond&#39;])), #.strftime(&quot;%H:%M:%S.%f&quot;)[:-3], 
+                  axis=1)</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;lc_time_hms&#39;] = ss.apply(lambda x: x[&#39;lc_time&#39;].strftime(&quot;%H:%M:%S&quot;),
+                             axis=1)
+ss.head(10)</code></pre>
+<pre><code>##      code  trade_date  ...                    lc_time  lc_time_hms
+## 0  005930  90010.0000  ... 2021-01-21 09:00:09.612288     09:00:09
+## 1  005930  90010.0000  ... 2021-01-21 09:00:10.013696     09:00:10
+## 2  005930  90010.0000  ... 2021-01-21 09:00:10.284032     09:00:10
+## 3  005930  90010.0000  ... 2021-01-21 09:00:10.312704     09:00:10
+## 4  005930  90010.0000  ... 2021-01-21 09:00:09.612288     09:00:09
+## 5  005930  90010.0000  ... 2021-01-21 09:00:09.759744     09:00:09
+## 6  005930  90010.0000  ... 2021-01-21 09:00:09.767936     09:00:09
+## 7  005930  90010.0000  ... 2021-01-21 09:00:10.021888     09:00:10
+## 8  005930  90010.0000  ... 2021-01-21 09:00:10.165248     09:00:10
+## 9  005930  90010.0000  ... 2021-01-21 09:00:10.013696     09:00:10
+## 
+## [10 rows x 25 columns]</code></pre>
+</div>
+</div>
+<div id="calculate-latency-and-clean-it-레이턴시-계산-및-정리" class="section level3">
+<h3>2. Calculate latency and clean it [레이턴시 계산 및 정리]</h3>
+<ul>
+<li>Calculate the latency by subtracting the time provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</li>
+</ul>
+<div id="오전-8시-9시-앞에-0을-붙여주기" class="section level4">
+<h4>오전 8시 9시 앞에 ’0’을 붙여주기</h4>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kw_time&#39;].apply(lambda x: x[0:2]).value_counts()</code></pre>
+<pre><code>## 10    25315
+## 11    21247
+## 90     9494
+## 91     6416
+## 95     5585
+## 94     4978
+## 92     4731
+## 93     4283
+## 12       10
+## Name: kw_time, dtype: int64</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kw_time&#39;] = ss.kw_time.apply(lambda x: &#39;0&#39; + x if ((x[0]==&#39;8&#39;) | (x[0]==&#39;9&#39;)) else x)
+ss[&#39;kw_time&#39;].apply(lambda x: x[0:2]).value_counts()</code></pre>
+<pre><code>## 09    35487
+## 10    25315
+## 11    21247
+## 12       10
+## Name: kw_time, dtype: int64</code></pre>
+</div>
+<ul>
+<li>키움 타임 만들기</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kw_time&#39;] = ss.apply(lambda x: datetime(year = int(x[&#39;year&#39;]),
+                                           month = int(x[&#39;month&#39;]),
+                                           day = int(x[&#39;day&#39;]),
+                                           hour = int(x[&#39;kw_time&#39;][0:2]),
+                                           minute = int(x[&#39;kw_time&#39;][2:4]),
+                                           second = int(x[&#39;kw_time&#39;][4:6])),
+                                           axis = 1
+                                           )
+                                           
+ss[&#39;kw_time_hms&#39;]= ss.apply(lambda x: x[&#39;kw_time&#39;].strftime(&quot;%H:%M:%S&quot;),
+                             axis=1)</code></pre>
+</div>
+</div>
+<div id="latency---정보-가지고-오기" class="section level4">
+<h4>Latency +/- 정보 가지고 오기</h4>
+<ul>
+<li>Latency가 <span class="math inline">\(+\)</span> 인 경우 = 로컬 타임이 키움 타임보다 늦는 경우</li>
+<li>Latency가 <span class="math inline">\(-\)</span> 인 경우 = 로컬 타임이 키움 타임보다 빠른 경우 (weird)</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;latency&#39;] = (pd.to_datetime(ss[&#39;lc_time_hms&#39;]) - pd.to_datetime(ss[&#39;kw_time_hms&#39;])).dt.total_seconds()</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss.latency</code></pre>
+<pre><code>## 0       -1.0000
+## 1        0.0000
+## 2        0.0000
+## 3        0.0000
+## 4       -1.0000
+##           ...  
+## 82057   -1.0000
+## 82058   -1.0000
+## 82059   -1.0000
+## 82060   -1.0000
+## 82061   -1.0000
+## Name: latency, Length: 82059, dtype: float64</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># x coordinates for the lines
+
+xcoords = [ ss.index[ss[&#39;kw_time_hms&#39;] == &#39;09:05:00&#39;][0], 
+            ss.index[ss[&#39;kw_time_hms&#39;] == &#39;09:10:00&#39;][0],
+            ss.index[ss[&#39;kw_time_hms&#39;] == &#39;09:20:00&#39;][0] ]
+
+# colors for the lines
+colors = [&#39;darkgreen&#39;,&#39;green&#39;,&#39;limegreen&#39;]
+
+time = [&#39;09:05:00&#39;,&#39;09:10:00&#39;,&#39;09:20:00&#39;]
+
+plt.scatter(ss.reset_index().index, ss.latency)
+for xc,c,time in zip(xcoords,colors,time):
+    plt.axvline(x=xc, label=&#39;{}&#39;.format(time), c=c)
+plt.legend()
+plt.title(&#39;Latency Over Time After Cleaning&#39;)
+plt.ylabel(&#39;Seconds&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss.latency.hist()
+plt.title(&#39;Latency Histogram&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<hr />
+</div>
+</div>
+</div>
+<div id="source" class="section level2">
+<h2>Source</h2>
+<ul>
+<li>데이터 provided by 00 Team</li>
+<li>Negative values
+<ul>
+<li><h2 id="link1"><a href="https://stackoverflow.com/questions/8408397/python-timedelta-issue-with-negative-values">link1</a></h2></li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+</main>
+
+
+<br></br>
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/blog/api-tick-data-task1-day5/">키움 API Tick Data - Task1 - Complete</a></span>
+  <span class="nav-next"></span>
+</nav>
+<br></br>
+
+
+  <footer>
+
+  
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.name/js/center-img.js"></script>
+
+
+  
+
+
+
+
+<script>
+var divs = document.querySelectorAll('pre');
+var languages = {'r': true, 'python': true, 'html': true, 'bash': true}
+
+for (var i = 0; i < divs.length; i++) {
+  var classes = divs[i].className.split(/\s+/);
+
+  for (var j = 0; j < classes.length; j++) {
+    if (languages[classes[j]]) {
+      divs[i].classList.add("language-" + classes[j]);
+    }
+  }
+}
+</script>
+
+<script src="/js/prism.js"></script>
+
+<script>
+  Prism.languages.r = Prism.languages.extend('r', {
+    'keyword': /\b(?:if|else|repeat|while|function|for|in|next|break|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_|library)\b/
+  })
+</script>
+
+
+
+  
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://corr-roh.medium.com/">Medium</a>
+  
+  
+    
+    
+    
+    
+      
+    
+    
+  
+  </footer>
+  </body>
+</html>
+

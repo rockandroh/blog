@@ -9,19 +9,19 @@
     <lastBuildDate>Tue, 12 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/r/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>키움 API Tick Data - Day1</title>
-      <link>https://rockandroh.netlify.app/note/2021/01/12/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</link>
+      <link>https://rockandroh.netlify.app/blog/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</link>
       <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2021/01/12/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</guid>
+      <guid>https://rockandroh.netlify.app/blog/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</guid>
       <description>Contents 0. Necessity of making precise time index 1. Filter for a certain Stocks [특정주식으로 필터링 하기] 2. Use time object in python 3. Calculate latency and clean it [레이턴시 계산 및 정리] 4. Get Trade Direction Indicator Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 20px; } code.</description>
     </item>
     
     <item>
       <title>R/Python (2) - 계산작업</title>
-      <link>https://rockandroh.netlify.app/note/2020/12/16/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>
+      <link>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>
       <pubDate>Wed, 16 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2020/12/16/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
+      <guid>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
       <description>유형2 - 계산작업 R Python    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
 이 시리즈는 유형2로 유형1을 놓치신 분들은 아래의 링크를 이용하시면 됩니다.
 R/Python (1) - 기본작업 # R 코드입니다.</description>
@@ -29,10 +29,10 @@ R/Python (1) - 기본작업 # R 코드입니다.</description>
     
     <item>
       <title>R/Python (1) - 기본작업</title>
-      <link>https://rockandroh.netlify.app/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>
+      <link>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>
       <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2020/12/10/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
+      <guid>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
       <description>유형1 R Python    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
 R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.
 필요한 패키지 준비 library(readxl) # read excel library(dplyr) library(DT) library(formattable) library(reticulate) # Python #py_install(packages = &amp;quot;matplotlib&amp;quot;) #py_install(packages = &amp;quot;pandas&amp;quot;) # &amp;quot;이것은 R 코드 입니다.</description>
@@ -40,38 +40,38 @@ R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠�
     
     <item>
       <title>R과 금융데이터 (1) 및 R 연습</title>
-      <link>https://rockandroh.netlify.app/note/2020/10/27/reproducible-finance-with-r-1/</link>
+      <link>https://rockandroh.netlify.app/blog/reproducible-finance-with-r-1/</link>
       <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2020/10/27/reproducible-finance-with-r-1/</guid>
+      <guid>https://rockandroh.netlify.app/blog/reproducible-finance-with-r-1/</guid>
       <description>데이터 불러오기 및 관련 function 연습 패키지 준비하기 데이터 불러오기 csv파일 불러오기 엑셀 파일 불러오기  Daily 가격 데이터를 Monthly 데이터로 변환하기 월말 가격 월초 가격 월평균 가격 수익률 데이터 만들기 xts 와 data frame 의 차이 Spread() gather()  Come back to price data Reference    데이터 불러오기 및 관련 function 연습 Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
     </item>
     
     <item>
       <title>Useful R packages #1</title>
-      <link>https://rockandroh.netlify.app/note/2020/10/20/useful-r-packages-1/</link>
+      <link>https://rockandroh.netlify.app/blog/useful-r-packages-1/</link>
       <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2020/10/20/useful-r-packages-1/</guid>
+      <guid>https://rockandroh.netlify.app/blog/useful-r-packages-1/</guid>
       <description>This page provides a summary and simple examples of contents introduced in the Medium as “The Most Underrated R pakcages: 2020 Edition”.
 Misc #install.packages(&amp;#39;calendR&amp;#39;) library(calendR) ## ~~ Package calendR ## Visit https://r-coder.com/ for R tutorials ~~ calendR(year = 2020, month=10, title.size = 10, subtitle = &amp;quot;Have a nice day&amp;quot;, subtitle.col = &amp;#39;Blue&amp;#39;, day.size = 3, weeknames.size = 4, weeknames.col = &amp;#39;blue&amp;#39;, weeknames = c(&amp;#39;Mon&amp;#39;,&amp;#39;Tue&amp;#39;,&amp;#39;Wed&amp;#39;,&amp;#39;Thu&amp;#39;,&amp;#39;Fri&amp;#39;,&amp;#39;Sat&amp;#39;,&amp;#39;Sun&amp;#39;), start = &amp;#39;M&amp;#39;, special.days = &amp;#39;weekend&amp;#39;, special.</description>
     </item>
     
     <item>
       <title>Bootstrapping and its Implementation in R</title>
-      <link>https://rockandroh.netlify.app/note/2020/10/15/bootstrapping-and-its-application-in-r/</link>
+      <link>https://rockandroh.netlify.app/blog/bootstrapping-and-its-application-in-r/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2020/10/15/bootstrapping-and-its-application-in-r/</guid>
+      <guid>https://rockandroh.netlify.app/blog/bootstrapping-and-its-application-in-r/</guid>
       <description>About Empirical Bootstrap (a.k.a Nonparametric Bootstrap) What is bootstrapping sample and how to generate it? Let’s take median as a parameter of distribution of our interest What is it for? Difference between real world and bootstrap world Empirical CDF Why does it work?  Parametric Bootstrap References   About This page is to provide a gentle introduction of Bootstrapping and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end.</description>
     </item>
     
     <item>
       <title>Hello R Markdown</title>
-      <link>https://rockandroh.netlify.app/note/2015/07/23/hello-r-markdown/</link>
+      <link>https://rockandroh.netlify.app/blog/2015-07-23-r-rmarkdown/</link>
       <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2015/07/23/hello-r-markdown/</guid>
+      <guid>https://rockandroh.netlify.app/blog/2015-07-23-r-rmarkdown/</guid>
       <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
 You can embed an R code chunk like this:
 summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>

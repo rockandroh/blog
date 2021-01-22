@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello R Markdown | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+
+    
+    
+      <link rel="stylesheet" href="/css/prism-vs.css" />
+
+    
+    
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="https://corr-roh.medium.com/">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Hello R Markdown</span></h1>
+<h2 class="author">Frida Gomam</h2>
+<h2 class="date">2015/07/23</h2>
+</div>
+
+<main>
+
+
+
+<div id="r-markdown" class="section level1">
+<h1>R Markdown</h1>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>You can embed an R code chunk like this:</p>
+<pre class="r"><code>summary(cars)
+##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
+fit &lt;- lm(dist ~ speed, data = cars)
+fit
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932</code></pre>
+</div>
+<div id="including-plots" class="section level1">
+<h1>Including Plots</h1>
+<p>You can also embed plots. See Figure <a href="#fig:pie">1</a> for example:</p>
+<pre class="r"><code>par(mar = c(0, 1, 0, 1))
+pie(
+  c(280, 60, 20),
+  c(&#39;Sky&#39;, &#39;Sunny side of pyramid&#39;, &#39;Shady side of pyramid&#39;),
+  col = c(&#39;#0292D8&#39;, &#39;#F7EA39&#39;, &#39;#C4B632&#39;),
+  init.angle = -50, border = NA
+)</code></pre>
+<div class="figure"><span id="fig:pie"></span>
+<img src="index_files/figure-html/pie-1.png" alt="A fancy pie chart." width="672" />
+<p class="caption">
+Figure 1: A fancy pie chart.
+</p>
+</div>
+</div>
+<div id="library" class="section level1">
+<h1>library</h1>
+<pre class="r"><code>#install.packages(&#39;Lock5Data&#39;)
+library(Lock5Data)
+data(CommuteAtlanta)
+str(CommuteAtlanta)
+## &#39;data.frame&#39;:    500 obs. of  5 variables:
+##  $ City    : Factor w/ 1 level &quot;Atlanta&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Age     : int  19 55 48 45 48 43 48 41 47 39 ...
+##  $ Distance: int  10 45 12 4 15 33 15 4 25 1 ...
+##  $ Time    : int  15 60 45 10 30 60 45 10 25 15 ...
+##  $ Sex     : Factor w/ 2 levels &quot;F&quot;,&quot;M&quot;: 2 2 2 1 1 2 2 1 2 1 ...</code></pre>
+</div>
+
+</main>
+
+
+<br></br>
+<nav class="post-nav">
+  <span class="nav-prev"></span>
+  <span class="nav-next"><a href="/blog/useful-website/">Useful Websites</a> &rarr;</span>
+</nav>
+<br></br>
+
+
+  <footer>
+
+  
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.name/js/center-img.js"></script>
+
+
+  
+
+
+
+
+<script>
+var divs = document.querySelectorAll('pre');
+var languages = {'r': true, 'python': true, 'html': true, 'bash': true}
+
+for (var i = 0; i < divs.length; i++) {
+  var classes = divs[i].className.split(/\s+/);
+
+  for (var j = 0; j < classes.length; j++) {
+    if (languages[classes[j]]) {
+      divs[i].classList.add("language-" + classes[j]);
+    }
+  }
+}
+</script>
+
+<script src="/js/prism.js"></script>
+
+<script>
+  Prism.languages.r = Prism.languages.extend('r', {
+    'keyword': /\b(?:if|else|repeat|while|function|for|in|next|break|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_|library)\b/
+  })
+</script>
+
+
+
+  
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://corr-roh.medium.com/">Medium</a>
+  
+  
+    
+    
+    
+    
+      
+    
+    
+  
+  </footer>
+  </body>
+</html>
+

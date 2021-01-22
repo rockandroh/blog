@@ -9,10 +9,10 @@
     <lastBuildDate>Tue, 12 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/tags/lee-and-ready/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>키움 API Tick Data - Day1</title>
-      <link>https://rockandroh.netlify.app/note/2021/01/12/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</link>
+      <link>https://rockandroh.netlify.app/blog/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</link>
       <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2021/01/12/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</guid>
+      <guid>https://rockandroh.netlify.app/blog/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</guid>
       <description>Contents 0. Necessity of making precise time index 1. Filter for a certain Stocks [특정주식으로 필터링 하기] 2. Use time object in python 3. Calculate latency and clean it [레이턴시 계산 및 정리] 4. Get Trade Direction Indicator Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 20px; } code.</description>
     </item>
     

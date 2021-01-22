@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>데이터베이스 일반 | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+
+    
+    
+      <link rel="stylesheet" href="/css/prism-vs.css" />
+
+    
+    
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="https://corr-roh.medium.com/">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">데이터베이스 일반</span></h1>
+<h2 class="author">Roh</h2>
+<h2 class="date">2020/11/23</h2>
+</div>
+
+<main>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#강-개요">1강 : 개요</a></li>
+<li><a href="#강-관계형-데이터-베이스">2강 : 관계형 데이터 베이스</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+</div>
+
+<div id="강-개요" class="section level2">
+<h2>1강 : 개요</h2>
+<ul>
+<li><p>정의</p>
+<ul>
+<li>특정 조직이 업무 수행하는데 필요한 관련성 있는 자료들의 집합체</li>
+</ul></li>
+<li><p>데이터 베이스 도입 배경</p>
+<ul>
+<li>파일 시스템의 문제점을 해결</li>
+<li>예시
+<ul>
+<li>인사/급여/자재/마케팅의 독립적인 파일들</li>
+</ul></li>
+<li>독립된 파일 단위로 업무와 관련한 데이터를 저장하므로 데이터의 중복성과 데이터 종속성 발생
+<ul>
+<li><strong>데이터 무결성 위배 가능성 높음</strong></li>
+</ul></li>
+<li>데이터 베이스를 이용해서 이 문제를 해결하려고 함</li>
+</ul></li>
+<li><p>데이터 베이스 시스템 구성</p>
+<ul>
+<li>DB사용자, 응용프로그램(e.g. 웹사이트)</li>
+<li>DBMS (데이터베이스 관리 시스템)</li>
+<li>DB</li>
+</ul>
+<p>사용자들이 DB에 바로 접근해서 데이터를 가지고 오지 못하기 때문에 우리는 이 둘 사이를 연결해주는 인터페이스 역할을 하는 DB 관리 시스템을 사용하게 된다. 즉, DBMS란 <strong>사용자와 데이터베이스 사이에서 사용자의 요구에 따라 DB생성, 관리해 주는 S/W</strong></p></li>
+<li><p>DBMS 장점</p>
+<ul>
+<li>데이터 중복이 없어짐</li>
+<li>일관성 유지</li>
+<li>최신 데이터 유지</li>
+<li>데이터 실시간 처리</li>
+</ul></li>
+<li><p>DBMS 단점</p>
+<ul>
+<li>전문가 부족</li>
+<li>전산화 비용 증가</li>
+<li>시스템 복잡
+<ul>
+<li>복구(회복)이 어려움, 자료처리 복잡</li>
+</ul></li>
+</ul></li>
+<li><p>DBMS의 기능</p>
+<ul>
+<li>정의 (Defnition)
+<ul>
+<li>데이터 형태, 구조, 데이터베이스의 저장에 관한 내용 정의 및 변경</li>
+</ul></li>
+<li>조작 (Manipulation)
+<ul>
+<li>사용자의 요구에 따라 검색, 갱신, 삽입, 삭제 등을 지원하는 기능</li>
+</ul></li>
+<li>제어 (Control)
+<ul>
+<li>정확성과 안정성을 유지하는 기능 (무결성 유지, 보안, 권한, 병행 수행 제어)</li>
+</ul></li>
+</ul></li>
+<li><p>DB 설계</p>
+<ul>
+<li>순서
+<ol style="list-style-type: decimal">
+<li>요구조건분석</li>
+<li>개념적 설계 - ER 모델 (개체 관계도)</li>
+<li>논리적 설계 - 관계형, 망형, 네트워크형</li>
+<li>물리적 설계</li>
+<li>구현</li>
+</ol></li>
+</ul></li>
+</ul>
+</div>
+<div id="강-관계형-데이터-베이스" class="section level2">
+<h2>2강 : 관계형 데이터 베이스</h2>
+<p><img src="D:/myblog/blog/content/note/2020-11-23-database-intro/capture1.jpg" style="width:100.0%" /></p>
+<ul>
+<li>관계형 데이터 베이스의 테이블 구조</li>
+<li>테이블 = 릴레이션 = 개체</li>
+<li>속성 = Column = 열 = 필드</li>
+<li>튜플 = Row = 행 = 레코드</li>
+<li>도메인: 현 속성에 나타날 수 있는 값들의 범위, 집합 (e.g. 성별 <span class="math inline">\(\in\{남,녀\}\)</span>)</li>
+<li>Cardinality: 튜플들의 수</li>
+<li>Null: 해당없음
+<ul>
+<li>단, 공백이나 0을 의미하는 것이 아님</li>
+</ul></li>
+<li>테이블의 특징
+<ul>
+<li>한 테이블에 정의된 튜플들은 모두 다르다.</li>
+<li>한 테이블에 정의된 튜플들은 순서에 무관하다.</li>
+<li>속성들도 순서에 무관하다</li>
+<li>속성의 명칭은 유일해야 하지만, 속성의 값들은 동일해도 된다.</li>
+<li>속성은 더이상 쪼갤 수 없는 원자값으로 구성된다. (분해 안됨)</li>
+</ul></li>
+<li>키(Key) : 각 obs를 구별할 수 있는</li>
+</ul>
+</div>
+<div id="reference" class="section level2">
+<h2>Reference</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=AkbLLHRvUA0&amp;list=PLWsYjGkqjvHcC2Ne9nJFrZtwnl18RmoZP&amp;index=1&amp;t=37s&amp;ab_channel=Gunsystem">기사퍼스트 유투브</a></li>
+</ul>
+</div>
+
+</main>
+
+
+<br></br>
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/blog/multiple-comparison-test/">multiple comparison test</a></span>
+  <span class="nav-next"><a href="/blog/book-review-predictive-data-mining-models/">(Book Review) Risk Management Books</a> &rarr;</span>
+</nav>
+<br></br>
+
+
+  <footer>
+
+  
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.name/js/center-img.js"></script>
+
+
+  
+
+
+
+
+<script>
+var divs = document.querySelectorAll('pre');
+var languages = {'r': true, 'python': true, 'html': true, 'bash': true}
+
+for (var i = 0; i < divs.length; i++) {
+  var classes = divs[i].className.split(/\s+/);
+
+  for (var j = 0; j < classes.length; j++) {
+    if (languages[classes[j]]) {
+      divs[i].classList.add("language-" + classes[j]);
+    }
+  }
+}
+</script>
+
+<script src="/js/prism.js"></script>
+
+<script>
+  Prism.languages.r = Prism.languages.extend('r', {
+    'keyword': /\b(?:if|else|repeat|while|function|for|in|next|break|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_|library)\b/
+  })
+</script>
+
+
+
+  
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://corr-roh.medium.com/">Medium</a>
+  
+  
+    
+    
+    
+    
+      
+    
+    
+  
+  </footer>
+  </body>
+</html>
+

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>multiple comparison test | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+
+    
+    
+      <link rel="stylesheet" href="/css/prism-vs.css" />
+
+    
+    
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="https://corr-roh.medium.com/">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">multiple comparison test</span></h1>
+<h2 class="author">roh</h2>
+<h2 class="date">2020/11/19</h2>
+</div>
+
+<main>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#t-test">T-test</a></li>
+</ul>
+</div>
+
+<pre><code>Multiple Comparison 정리
+
+- One sample
+- Two sample
+- Multiple sample</code></pre>
+<div id="t-test" class="section level2">
+<h2>T-test</h2>
+<ul>
+<li><p>continuous data 의 평균을 테스트</p>
+<ul>
+<li><span class="math inline">\(\text{One smaple} \quad H_0: \mu=\mu_0 \qquad H_A:\mu\neq\mu_0\)</span></li>
+<li><span class="math inline">\(\text{Two smaple} \quad H_0: \mu_1-\mu_2=0 \qquad H_A:\mu_1-mu_2\neq 0\)</span></li>
+</ul></li>
+<li><p>Outlier 로 Variance (<span class="math inline">\(s^2\)</span>) 가 커지는 경우 T-statistic 이 급격히 작아지는 문제가 발생</p>
+<p><span class="math display">\[t = \frac{\bar{x}_1-\bar{x}_2}{s\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}\]</span></p></li>
+<li></li>
+</ul>
+</div>
+
+</main>
+
+
+<br></br>
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/blog/simple-math-question-1/">간단한 수리능력 문제 (1)</a></span>
+  <span class="nav-next"><a href="/blog/database_intro/">데이터베이스 일반</a> &rarr;</span>
+</nav>
+<br></br>
+
+
+  <footer>
+
+  
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.name/js/center-img.js"></script>
+
+
+  
+
+
+
+
+<script>
+var divs = document.querySelectorAll('pre');
+var languages = {'r': true, 'python': true, 'html': true, 'bash': true}
+
+for (var i = 0; i < divs.length; i++) {
+  var classes = divs[i].className.split(/\s+/);
+
+  for (var j = 0; j < classes.length; j++) {
+    if (languages[classes[j]]) {
+      divs[i].classList.add("language-" + classes[j]);
+    }
+  }
+}
+</script>
+
+<script src="/js/prism.js"></script>
+
+<script>
+  Prism.languages.r = Prism.languages.extend('r', {
+    'keyword': /\b(?:if|else|repeat|while|function|for|in|next|break|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_|library)\b/
+  })
+</script>
+
+
+
+  
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://corr-roh.medium.com/">Medium</a>
+  
+  
+    
+    
+    
+    
+      
+    
+    
+  
+  </footer>
+  </body>
+</html>
+

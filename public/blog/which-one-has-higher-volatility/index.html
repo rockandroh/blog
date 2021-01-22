@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Which one has higher volatility? | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+
+    
+    
+      <link rel="stylesheet" href="/css/prism-vs.css" />
+
+    
+    
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="https://corr-roh.medium.com/">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Which one has higher volatility?</span></h1>
+<h2 class="author">Roh</h2>
+<h2 class="date">2021/01/15</h2>
+</div>
+
+<main>
+
+
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+
+</style>
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+<p><em><strong>Note</strong>: 이 페이지는 Volatility에 관한 내용입니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</em></p>
+<p><strong>데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</strong></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div class="rcode">
+<pre class="r"><code># &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># &quot;이것은 Python 코드 입니다.&quot;</code></pre>
+</div>
+<p>Think about $ XY $ where X represents evenly spaced time (e.g., every one second) and Y represents the price of certain financial product.</p>
+<p>We often hear about the shapes appearing in the prices chart of financial product.</p>
+<p>We are interested in the volatility of price series using the most commonly used measure that is variance.</p>
+<p>[5,10] 을 5분에서 10분 사이로 생각해보자. ㅈ</p>
+<pre class="r"><code>x = seq(5, 10, length.out = 100)
+x</code></pre>
+<pre><code>##   [1]  5.000000  5.050505  5.101010  5.151515  5.202020  5.252525  5.303030
+##   [8]  5.353535  5.404040  5.454545  5.505051  5.555556  5.606061  5.656566
+##  [15]  5.707071  5.757576  5.808081  5.858586  5.909091  5.959596  6.010101
+##  [22]  6.060606  6.111111  6.161616  6.212121  6.262626  6.313131  6.363636
+##  [29]  6.414141  6.464646  6.515152  6.565657  6.616162  6.666667  6.717172
+##  [36]  6.767677  6.818182  6.868687  6.919192  6.969697  7.020202  7.070707
+##  [43]  7.121212  7.171717  7.222222  7.272727  7.323232  7.373737  7.424242
+##  [50]  7.474747  7.525253  7.575758  7.626263  7.676768  7.727273  7.777778
+##  [57]  7.828283  7.878788  7.929293  7.979798  8.030303  8.080808  8.131313
+##  [64]  8.181818  8.232323  8.282828  8.333333  8.383838  8.434343  8.484848
+##  [71]  8.535354  8.585859  8.636364  8.686869  8.737374  8.787879  8.838384
+##  [78]  8.888889  8.939394  8.989899  9.040404  9.090909  9.141414  9.191919
+##  [85]  9.242424  9.292929  9.343434  9.393939  9.444444  9.494949  9.545455
+##  [92]  9.595960  9.646465  9.696970  9.747475  9.797980  9.848485  9.898990
+##  [99]  9.949495 10.000000</code></pre>
+
+</main>
+
+
+<br></br>
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/blog/api-tick-data-task1-day2/">키움 API Tick Data - Task1 - Day2</a></span>
+  <span class="nav-next"><a href="/blog/api-tick-data-task1-day3/">키움 API Tick Data - Task1 - Day3</a> &rarr;</span>
+</nav>
+<br></br>
+
+
+  <footer>
+
+  
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.name/js/center-img.js"></script>
+
+
+  
+
+
+
+
+<script>
+var divs = document.querySelectorAll('pre');
+var languages = {'r': true, 'python': true, 'html': true, 'bash': true}
+
+for (var i = 0; i < divs.length; i++) {
+  var classes = divs[i].className.split(/\s+/);
+
+  for (var j = 0; j < classes.length; j++) {
+    if (languages[classes[j]]) {
+      divs[i].classList.add("language-" + classes[j]);
+    }
+  }
+}
+</script>
+
+<script src="/js/prism.js"></script>
+
+<script>
+  Prism.languages.r = Prism.languages.extend('r', {
+    'keyword': /\b(?:if|else|repeat|while|function|for|in|next|break|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_|library)\b/
+  })
+</script>
+
+
+
+  
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://corr-roh.medium.com/">Medium</a>
+  
+  
+    
+    
+    
+    
+      
+    
+    
+  
+  </footer>
+  </body>
+</html>
+

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>키움 API Tick Data - Task1 - Day4 | Rock &#39;n&#39; Roh</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+
+    
+    
+      <link rel="stylesheet" href="/css/prism-vs.css" />
+
+    
+    
+
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/blog/">Blog</a></li>
+      
+      <li><a href="/projects/">Projects</a></li>
+      
+      <li><a href="/teaching/">Teaching &amp; 과외</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="https://corr-roh.medium.com/">Medium</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">키움 API Tick Data - Task1 - Day4</span></h1>
+<h2 class="author">hyunwooroh</h2>
+<h2 class="date">2021/01/19</h2>
+</div>
+
+<main>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#task1-레이턴시-체크-및-buysell-구분하기">Task1: 레이턴시 체크 및 Buy/Sell 구분하기</a><ul>
+<li><a href="#samsung-stock">Samsung Stock</a><ul>
+<li><a href="#use-time-object-in-python">1. Use time object in python</a></li>
+<li><a href="#calculate-latency-and-clean-it-레이턴시-계산-및-정리">2. Calculate latency and clean it [레이턴시 계산 및 정리]</a><ul>
+<li><a href="#오전-8시-9시-앞에-0을-붙여주기">오전 8시 9시 앞에 ’0’을 붙여주기</a></li>
+<li><a href="#latency---정보-가지고-오기">Latency +/- 정보 가지고 오기</a></li>
+<li><a href="#latency-value-가지고-오기">Latency Value 가지고 오기</a></li>
+<li><a href="#over-30-or-not">over 30 or not!</a></li>
+<li><a href="#correct-the-wrongly-calculated-latency">Correct the wrongly calculated latency</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#hyundai-car-stock">Hyundai Car Stock</a><ul>
+<li><a href="#use-time-object-in-python-1">1. Use time object in python</a></li>
+<li><a href="#calculate-latency-and-clean-it-레이턴시-계산-및-정리-1">2. Calculate latency and clean it [레이턴시 계산 및 정리]</a><ul>
+<li><a href="#오전-8시-9시-앞에-0을-붙여주기-1">오전 8시 9시 앞에 ’0’을 붙여주기</a></li>
+<li><a href="#latency---정보-가지고-오기-1">Latency +/- 정보 가지고 오기</a></li>
+<li><a href="#latency-value-가지고-오기-1">Latency Value 가지고 오기</a></li>
+<li><a href="#over-30-or-not-1">over 30 or not!</a></li>
+<li><a href="#correct-the-wrongly-calculated-latency-1">Correct the wrongly calculated latency</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#source">Source</a></li>
+</ul></li>
+</ul>
+</div>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+<p><em><strong>Note</strong>: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</em></p>
+<p><strong>데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</strong></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div class="rcode">
+<pre class="r"><code># &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># &quot;이것은 Python 코드 입니다.&quot;</code></pre>
+</div>
+<ul>
+<li>Package</li>
+</ul>
+<pre class="r"><code>library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+#py_install(packages = &#39;dfply&#39;)
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)</code></pre>
+<ul>
+<li><p>Import Data</p></li>
+<li><p>Check NA</p></li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>wd = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14&quot;
+wd2 = &quot;/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-19&quot;
+fn = list.files(path = wd2,
+                pattern = &#39;.*stocks_trade.*\\.csv&#39;) # 마지막 30분 틱데이터 가지고오기
+path = paste(wd2,fn[1:4],sep = &#39;/&#39;)
+
+# data = readr::read_csv(file = path, 
+#                        col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
+#                                      &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;))
+
+tbl =
+  list.files(path = wd2, pattern = &#39;.*stocks_trade.*\\.csv&#39;)[2:8] %&gt;%
+  map_df(~readr::read_csv(paste(wd2,.,sep = &#39;/&#39;),
+                          col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,&#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;rotation&#39;,&#39;bs_ration&#39;, &#39;mkt_type&#39;, &#39;mkt_cap&#39;),
+                          col_types = cols(.default=&quot;d&quot;, code = &quot;c&quot;)
+                   )
+         )
+
+sum(is.na(tbl))</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from datetime import datetime, timedelta
+#py_install(packages = &quot;matplotlib&quot;)
+#py_install(packages = &quot;pandas&quot;)
+pd.options.display.float_format = &#39;{:.4f}&#39;.format
+pd.set_option(&#39;display.max_rows&#39;, 100)
+df_py = r.tbl
+df_py.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp  ...  bs_ration  mkt_type    mkt_cap
+## 0  279540  90000.0000 20210119090000.1250  ...     0.0000    2.0000   149.0000
+## 1  530071  90001.0000 20210119090000.3945  ...     0.0000    2.0000   478.0000
+## 2  002380  90001.0000 20210119090000.4023  ...    16.6700    2.0000 17640.0000
+## 3  071950  90001.0000 20210119090000.4766  ...   500.0000    2.0000   394.0000
+## 4  004140  90001.0000 20210119090000.6758  ...   500.0000    2.0000  1744.0000
+## 
+## [5 rows x 15 columns]</code></pre>
+</div>
+<div id="task1-레이턴시-체크-및-buysell-구분하기" class="section level1">
+<h1>Task1: 레이턴시 체크 및 Buy/Sell 구분하기</h1>
+<div id="samsung-stock" class="section level2">
+<h2>Samsung Stock</h2>
+<ul>
+<li>KOSPI Code for Samsung Electronics is ‘005930’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = df_py[df_py.code == &#39;005930&#39;].reset_index(drop=True)
+ss.shape</code></pre>
+<pre><code>## (287902, 15)</code></pre>
+</div>
+<div id="use-time-object-in-python" class="section level3">
+<h3>1. Use time object in python</h3>
+<ul>
+<li><p>Delete rows where “second” does not lie between 0 and 59.</p></li>
+<li><p>Substring the timstamp to get each time component.</p></li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
+
+ss = ss.assign( microsecond = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[0:4]),
+                kw_time = ss[&#39;trade_date&#39;].apply(lambda x: str(int(x))))
+ss.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp      price  ...  day  month  year  kw_time
+## 0  005930  90009.0000 20210119090008.6914 84500.0000  ...   19     01  2021    90009
+## 1  005930  90009.0000 20210119090008.6914 84600.0000  ...   19     01  2021    90009
+## 2  005930  90009.0000 20210119090008.7734 84500.0000  ...   19     01  2021    90009
+## 3  005930  90009.0000 20210119090008.8398 84600.0000  ...   19     01  2021    90009
+## 4  005930  90009.0000 20210119090008.8594 84600.0000  ...   19     01  2021    90009
+## 
+## [5 rows x 23 columns]</code></pre>
+</div>
+<ul>
+<li>Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”</li>
+<li>We calculate the latency by subtracting ‘trade_date’ from the ‘timestamp’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;time&#39;] = ss.apply(lambda x: datetime(
+                  year = int(x[&#39;year&#39;]),
+                  month = int(x[&#39;month&#39;]),
+                  day = int(x[&#39;day&#39;]),
+                  hour = int(x[&#39;hour&#39;]),
+                  minute = int(x[&#39;minute&#39;]),
+                  second = int(x[&#39;second&#39;]),
+                  microsecond = int(x[&#39;microsecond&#39;])), #.strftime(&quot;%H:%M:%S.%f&quot;)[:-3], 
+                  axis=1)
+ss.head(10)</code></pre>
+<pre><code>##      code  trade_date  ...  kw_time                       time
+## 0  005930  90009.0000  ...    90009 2021-01-19 09:00:08.690688
+## 1  005930  90009.0000  ...    90009 2021-01-19 09:00:08.690688
+## 2  005930  90009.0000  ...    90009 2021-01-19 09:00:08.772608
+## 3  005930  90009.0000  ...    90009 2021-01-19 09:00:08.838144
+## 4  005930  90009.0000  ...    90009 2021-01-19 09:00:08.858624
+## 5  005930  90009.0000  ...    90009 2021-01-19 09:00:08.862720
+## 6  005930  90009.0000  ...    90009 2021-01-19 09:00:08.879104
+## 7  005930  90009.0000  ...    90009 2021-01-19 09:00:08.911872
+## 8  005930  90009.0000  ...    90009 2021-01-19 09:00:08.944640
+## 9  005930  90009.0000  ...    90009 2021-01-19 09:00:08.973312
+## 
+## [10 rows x 24 columns]</code></pre>
+</div>
+</div>
+<div id="calculate-latency-and-clean-it-레이턴시-계산-및-정리" class="section level3">
+<h3>2. Calculate latency and clean it [레이턴시 계산 및 정리]</h3>
+<ul>
+<li>Calculate the latency by subtracting the time provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</li>
+</ul>
+<div id="오전-8시-9시-앞에-0을-붙여주기" class="section level4">
+<h4>오전 8시 9시 앞에 ’0’을 붙여주기</h4>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kw_time&#39;].apply(lambda x: x[0:2]).value_counts()</code></pre>
+<pre><code>## 10    46168
+## 90    33512
+## 11    32071
+## 12    29434
+## 91    26868
+## 14    24797
+## 13    23095
+## 93    19864
+## 92    14581
+## 95    13809
+## 94    13527
+## 15    10169
+## Name: kw_time, dtype: int64</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kw_time&#39;] = ss.kw_time.apply(lambda x: &#39;0&#39; + x if ((x[0]==&#39;8&#39;) | (x[0]==&#39;9&#39;)) else x)
+ss[&#39;kw_time&#39;].apply(lambda x: x[0:2]).value_counts()</code></pre>
+<pre><code>## 09    122161
+## 10     46168
+## 11     32071
+## 12     29434
+## 14     24797
+## 13     23095
+## 15     10169
+## Name: kw_time, dtype: int64</code></pre>
+</div>
+<ul>
+<li>키움 타임 만들기</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kwtime&#39;] = ss.apply(lambda x: datetime(year = int(x[&#39;year&#39;]),
+                                           month = int(x[&#39;month&#39;]),
+                                           day = int(x[&#39;day&#39;]),
+                                           hour = int(x[&#39;kw_time&#39;][0:2]),
+                                           minute = int(x[&#39;kw_time&#39;][2:4]),
+                                           second = int(x[&#39;kw_time&#39;][4:6])),
+                                           axis = 1
+                                           )</code></pre>
+</div>
+</div>
+<div id="latency---정보-가지고-오기" class="section level4">
+<h4>Latency +/- 정보 가지고 오기</h4>
+<ul>
+<li><ul>
+<li>인 경우, 로컬 타임이 키움 타임보다 늦는 경우</li>
+</ul></li>
+<li><ul>
+<li>인 경우, 로컬 타임이 키움 타임보다 빠른 경우 (weird)</li>
+</ul></li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;latency_ind&#39;]=ss.apply(lambda x: 1 if (int(str(int(x[&#39;timestamp&#39;]*1000000))[8:14]) &gt; x[&#39;trade_date&#39;]) else
+                            0 if (int(str(int(x[&#39;timestamp&#39;]*1000000))[8:14]) == x[&#39;trade_date&#39;]) else -1, axis=1)</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>plt.scatter(ss[&#39;latency_ind&#39;].reset_index().index,ss[&#39;latency_ind&#39;])
+plt.title(&#39;latency +/-&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+</div>
+<div id="latency-value-가지고-오기" class="section level4">
+<h4>Latency Value 가지고 오기</h4>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;latency_val&#39;] = ss.apply(lambda x: abs(x[&#39;time&#39;].second - x[&#39;kwtime&#39;].second),
+                        axis =1
+                        )
+ss[&#39;latency&#39;] = ss[&#39;latency_val&#39;]*ss[&#39;latency_ind&#39;]
+ss1 = ss[[&#39;time&#39;, &#39;kwtime&#39;, &#39;kw_time&#39;, &#39;hour&#39;, &#39;minute&#39;, &#39;second&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;latency&#39;]]
+ss1.head(10)</code></pre>
+<pre><code>##                         time              kwtime  ...       bid1 latency
+## 0 2021-01-19 09:00:08.690688 2021-01-19 09:00:09  ... 84500.0000      -1
+## 1 2021-01-19 09:00:08.690688 2021-01-19 09:00:09  ... 84500.0000      -1
+## 2 2021-01-19 09:00:08.772608 2021-01-19 09:00:09  ... 84500.0000      -1
+## 3 2021-01-19 09:00:08.838144 2021-01-19 09:00:09  ... 84500.0000      -1
+## 4 2021-01-19 09:00:08.858624 2021-01-19 09:00:09  ... 84500.0000      -1
+## 5 2021-01-19 09:00:08.862720 2021-01-19 09:00:09  ... 84500.0000      -1
+## 6 2021-01-19 09:00:08.879104 2021-01-19 09:00:09  ... 84500.0000      -1
+## 7 2021-01-19 09:00:08.911872 2021-01-19 09:00:09  ... 84500.0000      -1
+## 8 2021-01-19 09:00:08.944640 2021-01-19 09:00:09  ... 84500.0000      -1
+## 9 2021-01-19 09:00:08.973312 2021-01-19 09:00:09  ... 84500.0000      -1
+## 
+## [10 rows x 11 columns]</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>plt.scatter(ss1.reset_index().index, ss1.latency)
+plt.title(&#39;Latency Over Time Before Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss1.latency.value_counts().head(10).iloc[::-1].plot.barh(stacked=True)
+plt.title(&#39;Latency Top 10 Bar Plot&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss1.latency.value_counts().index</code></pre>
+<pre><code>## Int64Index([ -1,   0,  11,  14,  20,  19, -59,  12,  10,   9,  13,  16,  18,
+##               7,  40,   8,  41,  15,   6,  48,   2,   5,  46,  52,   4,  43,
+##               1,   3,  49,  21,  47,  45,  42,  39,  50,  17,  44,  53,  57,
+##              58,  56,  55,  51],
+##            dtype=&#39;int64&#39;)</code></pre>
+</div>
+<ul>
+<li>Check the time where large discrepancy happened!</li>
+</ul>
+</div>
+<div id="over-30-or-not" class="section level4">
+<h4>over 30 or not!</h4>
+<ul>
+<li>We assume that when the latency is minus value, the maximum time difference is 1.</li>
+<li>음의 레이턴시가 나오는 경우는 최악의 경우 1초 빠르게 record 하는 경우!!</li>
+<li>When latency is a number x (e.g. 59) over 30, the actual latency is 60 - x</li>
+<li>When latency is a number x (e.g. 20) below 30 and over 0, the actual latency is x</li>
+<li>When latency is a number x (e.g. -59) below (let’s say) -5, the actual latency is -(60 + x)</li>
+<li>We can check it as in below.</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss1[ss1.latency == -59][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                     kwtime hour minute second  latency
+## 55333  2021-01-19 09:17:00   09     16     59      -59
+## 55334  2021-01-19 09:17:00   09     16     59      -59
+## 55335  2021-01-19 09:17:00   09     16     59      -59
+## 55336  2021-01-19 09:17:00   09     16     59      -59
+## 55337  2021-01-19 09:17:00   09     16     59      -59
+## ...                    ...  ...    ...    ...      ...
+## 287226 2021-01-19 15:19:00   15     18     59      -59
+## 287227 2021-01-19 15:19:00   15     18     59      -59
+## 287231 2021-01-19 15:19:00   15     18     59      -59
+## 287232 2021-01-19 15:19:00   15     18     59      -59
+## 287233 2021-01-19 15:19:00   15     18     59      -59
+## 
+## [2895 rows x 5 columns]</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 40][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                    kwtime hour minute second  latency
+## 18414 2021-01-19 09:04:40   09     05     00       40
+## 18428 2021-01-19 09:04:40   09     05     00       40
+## 18440 2021-01-19 09:04:40   09     05     00       40
+## 18441 2021-01-19 09:04:40   09     05     00       40
+## 18442 2021-01-19 09:04:40   09     05     00       40
+## ...                   ...  ...    ...    ...      ...
+## 25279 2021-01-19 09:06:59   09     07     19       40
+## 25280 2021-01-19 09:06:59   09     07     19       40
+## 25281 2021-01-19 09:06:59   09     07     19       40
+## 25282 2021-01-19 09:06:59   09     07     19       40
+## 25283 2021-01-19 09:06:59   09     07     19       40
+## 
+## [1670 rows x 5 columns]</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 39][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                    kwtime hour minute second  latency
+## 21418 2021-01-19 09:05:39   09     06     00       39
+## 21419 2021-01-19 09:05:39   09     06     00       39
+## 21425 2021-01-19 09:05:39   09     06     00       39
+## 21426 2021-01-19 09:05:39   09     06     00       39
+## 21427 2021-01-19 09:05:39   09     06     00       39
+## ...                   ...  ...    ...    ...      ...
+## 22400 2021-01-19 09:05:59   09     06     20       39
+## 22401 2021-01-19 09:05:59   09     06     20       39
+## 22408 2021-01-19 09:05:59   09     06     20       39
+## 22409 2021-01-19 09:05:59   09     06     20       39
+## 22410 2021-01-19 09:05:59   09     06     20       39
+## 
+## [489 rows x 5 columns]</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 21][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                    kwtime hour minute second  latency
+## 19651 2021-01-19 09:05:04   09     05     25       21
+## 19653 2021-01-19 09:05:03   09     05     24       21
+## 19661 2021-01-19 09:05:04   09     05     25       21
+## 19675 2021-01-19 09:05:04   09     05     25       21
+## 19676 2021-01-19 09:05:04   09     05     25       21
+## ...                   ...  ...    ...    ...      ...
+## 23855 2021-01-19 09:06:29   09     06     50       21
+## 23873 2021-01-19 09:06:30   09     06     51       21
+## 23888 2021-01-19 09:06:30   09     06     51       21
+## 23981 2021-01-19 09:06:32   09     06     53       21
+## 23982 2021-01-19 09:06:32   09     06     53       21
+## 
+## [689 rows x 5 columns]</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 20][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                    kwtime hour minute second  latency
+## 18335 2021-01-19 09:04:38   09     04     58       20
+## 18350 2021-01-19 09:04:38   09     04     58       20
+## 18371 2021-01-19 09:04:39   09     04     59       20
+## 18380 2021-01-19 09:04:39   09     04     59       20
+## 19485 2021-01-19 09:05:00   09     05     20       20
+## ...                   ...  ...    ...    ...      ...
+## 27060 2021-01-19 09:07:30   09     07     50       20
+## 27061 2021-01-19 09:07:30   09     07     50       20
+## 27062 2021-01-19 09:07:30   09     07     50       20
+## 27080 2021-01-19 09:07:31   09     07     51       20
+## 27087 2021-01-19 09:07:31   09     07     51       20
+## 
+## [3389 rows x 5 columns]</code></pre>
+</div>
+</div>
+<div id="correct-the-wrongly-calculated-latency" class="section level4">
+<h4>Correct the wrongly calculated latency</h4>
+<div class="pycode">
+<pre class="python"><code>ss2 = ss1.copy()
+ss2[&#39;latency&#39;]=ss1.apply(lambda x: 60-x[&#39;latency&#39;] if (x[&#39;latency&#39;] &gt; 30) else \
+                                    (-(60+x[&#39;latency&#39;]) if (x[&#39;latency&#39;]&lt;-5) else x[&#39;latency&#39;]),axis=1)</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># x coordinates for the lines
+
+xcoords = [ ss2.index[ss2[&#39;kw_time&#39;] == &#39;090500&#39;][0], 
+            ss2.index[ss2[&#39;kw_time&#39;] == &#39;091000&#39;][0],
+            ss2.index[ss2[&#39;kw_time&#39;] == &#39;092000&#39;][0] ]
+
+# colors for the lines
+colors = [&#39;darkgreen&#39;,&#39;green&#39;,&#39;limegreen&#39;]
+
+time = [&#39;09:05:00&#39;,&#39;09:10:00&#39;,&#39;09:20:00&#39;]
+
+plt.scatter(ss2.reset_index().index, ss2.latency)
+for xc,c,time in zip(xcoords,colors,time):
+    plt.axvline(x=xc, label=&#39;time = {}&#39;.format(time), c=c)
+plt.legend()
+plt.title(&#39;Latency Over Time After Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss2.latency.value_counts().iloc[::-1].plot.barh(stacked=True)
+plt.title(&#39;Latency Top 10 Bar Plot&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<hr />
+</div>
+</div>
+</div>
+<div id="hyundai-car-stock" class="section level2">
+<h2>Hyundai Car Stock</h2>
+<ul>
+<li>KOSPI Code for Samsung Electronics is ‘005380’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = df_py[df_py.code == &#39;005380&#39;].reset_index(drop=True)
+ss.shape</code></pre>
+<pre><code>## (91606, 15)</code></pre>
+</div>
+<div id="use-time-object-in-python-1" class="section level3">
+<h3>1. Use time object in python</h3>
+<ul>
+<li><p>Delete rows where “second” does not lie between 0 and 59.</p></li>
+<li><p>Substring the timstamp to get each time component.</p></li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
+
+ss = ss.assign( microsecond = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss[&#39;timestamp&#39;].apply(lambda x: str(int(x*1000000))[0:4]),
+                kw_time = ss[&#39;trade_date&#39;].apply(lambda x: str(int(x))))
+ss.head()</code></pre>
+<pre><code>##      code  trade_date           timestamp       price  ...  day  month  year  kw_time
+## 0  005380  90003.0000 20210119090002.7812 244000.0000  ...   19     01  2021    90003
+## 1  005380  90003.0000 20210119090002.8164 244500.0000  ...   19     01  2021    90003
+## 2  005380  90003.0000 20210119090002.8242 244000.0000  ...   19     01  2021    90003
+## 3  005380  90003.0000 20210119090002.8867 244000.0000  ...   19     01  2021    90003
+## 4  005380  90003.0000 20210119090002.9023 244000.0000  ...   19     01  2021    90003
+## 
+## [5 rows x 23 columns]</code></pre>
+</div>
+<ul>
+<li>Transform data type to str to use substring to make the format like “%Y-%m-%d %H:%M:%S.%f”</li>
+<li>We calculate the latency by subtracting ‘trade_date’ from the ‘timestamp’</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;time&#39;] = ss.apply(lambda x: datetime(
+                  year = int(x[&#39;year&#39;]),
+                  month = int(x[&#39;month&#39;]),
+                  day = int(x[&#39;day&#39;]),
+                  hour = int(x[&#39;hour&#39;]),
+                  minute = int(x[&#39;minute&#39;]),
+                  second = int(x[&#39;second&#39;]),
+                  microsecond = int(x[&#39;microsecond&#39;])), #.strftime(&quot;%H:%M:%S.%f&quot;)[:-3], 
+                  axis=1)
+ss.head(10)</code></pre>
+<pre><code>##      code  trade_date  ...  kw_time                       time
+## 0  005380  90003.0000  ...    90003 2021-01-19 09:00:02.780160
+## 1  005380  90003.0000  ...    90003 2021-01-19 09:00:02.817024
+## 2  005380  90003.0000  ...    90003 2021-01-19 09:00:02.825216
+## 3  005380  90003.0000  ...    90003 2021-01-19 09:00:02.886656
+## 4  005380  90003.0000  ...    90003 2021-01-19 09:00:02.903040
+## 5  005380  90003.0000  ...    90003 2021-01-19 09:00:02.829312
+## 6  005380  90003.0000  ...    90003 2021-01-19 09:00:02.882560
+## 7  005380  90003.0000  ...    90003 2021-01-19 09:00:03.017728
+## 8  005380  90003.0000  ...    90003 2021-01-19 09:00:03.099648
+## 9  005380  90003.0000  ...    90003 2021-01-19 09:00:02.796544
+## 
+## [10 rows x 24 columns]</code></pre>
+</div>
+</div>
+<div id="calculate-latency-and-clean-it-레이턴시-계산-및-정리-1" class="section level3">
+<h3>2. Calculate latency and clean it [레이턴시 계산 및 정리]</h3>
+<ul>
+<li>Calculate the latency by subtracting the time provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</li>
+</ul>
+<div id="오전-8시-9시-앞에-0을-붙여주기-1" class="section level4">
+<h4>오전 8시 9시 앞에 ’0’을 붙여주기</h4>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kw_time&#39;].apply(lambda x: x[0:2]).value_counts()</code></pre>
+<pre><code>## 10    17444
+## 11    11003
+## 14    10321
+## 91    10275
+## 12     8039
+## 90     7765
+## 13     7490
+## 92     4983
+## 15     4589
+## 94     4046
+## 93     3417
+## 95     2231
+## Name: kw_time, dtype: int64</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kw_time&#39;] = ss.kw_time.apply(lambda x: &#39;0&#39; + x if ((x[0]==&#39;8&#39;) | (x[0]==&#39;9&#39;)) else x)
+ss[&#39;kw_time&#39;].apply(lambda x: x[0:2]).value_counts()</code></pre>
+<pre><code>## 09    32717
+## 10    17444
+## 11    11003
+## 14    10321
+## 12     8039
+## 13     7490
+## 15     4589
+## Name: kw_time, dtype: int64</code></pre>
+</div>
+<ul>
+<li>키움 타임 만들기</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;kwtime&#39;] = ss.apply(lambda x: datetime(year = int(x[&#39;year&#39;]),
+                                           month = int(x[&#39;month&#39;]),
+                                           day = int(x[&#39;day&#39;]),
+                                           hour = int(x[&#39;kw_time&#39;][0:2]),
+                                           minute = int(x[&#39;kw_time&#39;][2:4]),
+                                           second = int(x[&#39;kw_time&#39;][4:6])),
+                                           axis = 1
+                                           )</code></pre>
+</div>
+</div>
+<div id="latency---정보-가지고-오기-1" class="section level4">
+<h4>Latency +/- 정보 가지고 오기</h4>
+<ul>
+<li><ul>
+<li>인 경우, 로컬 타임이 키움 타임보다 늦는 경우</li>
+</ul></li>
+<li><ul>
+<li>인 경우, 로컬 타임이 키움 타임보다 빠른 경우 (weird)</li>
+</ul></li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;latency_ind&#39;]=ss.apply(lambda x: 1 if (int(str(int(x[&#39;timestamp&#39;]*1000000))[8:14]) &gt; x[&#39;trade_date&#39;]) else -1,
+        axis=1)</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>plt.scatter(ss[&#39;latency_ind&#39;].reset_index().index,ss[&#39;latency_ind&#39;])
+plt.title(&#39;latency +/-&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+</div>
+</div>
+<div id="latency-value-가지고-오기-1" class="section level4">
+<h4>Latency Value 가지고 오기</h4>
+<div class="pycode">
+<pre class="python"><code>ss[&#39;latency_val&#39;] = ss.apply(lambda x: abs(x[&#39;time&#39;].second - x[&#39;kwtime&#39;].second),
+                        axis =1
+                        )
+ss[&#39;latency&#39;] = ss[&#39;latency_val&#39;]*ss[&#39;latency_ind&#39;]
+ss1 = ss[[&#39;time&#39;, &#39;kwtime&#39;, &#39;kw_time&#39;, &#39;hour&#39;, &#39;minute&#39;, &#39;second&#39;, &#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;latency&#39;]]
+ss1.head(10)</code></pre>
+<pre><code>##                         time              kwtime  ...        bid1 latency
+## 0 2021-01-19 09:00:02.780160 2021-01-19 09:00:03  ... 244000.0000      -1
+## 1 2021-01-19 09:00:02.817024 2021-01-19 09:00:03  ... 244000.0000      -1
+## 2 2021-01-19 09:00:02.825216 2021-01-19 09:00:03  ... 244000.0000      -1
+## 3 2021-01-19 09:00:02.886656 2021-01-19 09:00:03  ... 244000.0000      -1
+## 4 2021-01-19 09:00:02.903040 2021-01-19 09:00:03  ... 244000.0000      -1
+## 5 2021-01-19 09:00:02.829312 2021-01-19 09:00:03  ... 244000.0000      -1
+## 6 2021-01-19 09:00:02.882560 2021-01-19 09:00:03  ... 244000.0000      -1
+## 7 2021-01-19 09:00:03.017728 2021-01-19 09:00:03  ... 244000.0000       0
+## 8 2021-01-19 09:00:03.099648 2021-01-19 09:00:03  ... 244000.0000       0
+## 9 2021-01-19 09:00:02.796544 2021-01-19 09:00:03  ... 244000.0000      -1
+## 
+## [10 rows x 11 columns]</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code>plt.scatter(ss1.reset_index().index, ss1.latency)
+plt.title(&#39;Latency Over Time Before Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss1.latency.value_counts().head(10).iloc[::-1].plot.barh(stacked=True)
+plt.title(&#39;Latency Top 10 Bar Plot&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss1.latency.value_counts().index</code></pre>
+<pre><code>## Int64Index([ -1,   0,  14, -59,  20,  11,  12,  19,   7,  13,  10,   9,   5,
+##               4,  40,  46,   3,  16,   8,   6,   2,  41,  18,  15,   1,  52,
+##              48,  21,  49,  43,  39,  47,  45,  42,  50,  17,  53,  44,  56,
+##              58,  55,  57,  51],
+##            dtype=&#39;int64&#39;)</code></pre>
+</div>
+<ul>
+<li>Check the time where large discrepancy happened!</li>
+</ul>
+</div>
+<div id="over-30-or-not-1" class="section level4">
+<h4>over 30 or not!</h4>
+<ul>
+<li>We assume that when the latency is minus value, the maximum time difference is 1.</li>
+<li>음의 레이턴시가 나오는 경우는 최악의 경우 1초 빠르게 record 하는 경우!!</li>
+<li>When latency is a number x (e.g. 59) over 30, the actual latency is 60 - x</li>
+<li>When latency is a number x (e.g. 20) below 30 and over 0, the actual latency is x</li>
+<li>When latency is a number x (e.g. -59) below (let’s say) -5, the actual latency is -(60 + x)</li>
+<li>We can check it as in below.</li>
+</ul>
+<div class="pycode">
+<pre class="python"><code>ss1[ss1.latency == -59][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                    kwtime hour minute second  latency
+## 15120 2021-01-19 09:17:00   09     16     59      -59
+## 15121 2021-01-19 09:17:00   09     16     59      -59
+## 15122 2021-01-19 09:17:00   09     16     59      -59
+## 15128 2021-01-19 09:17:00   09     16     59      -59
+## 15129 2021-01-19 09:17:00   09     16     59      -59
+## ...                   ...  ...    ...    ...      ...
+## 91239 2021-01-19 15:19:00   15     18     59      -59
+## 91240 2021-01-19 15:19:00   15     18     59      -59
+## 91241 2021-01-19 15:19:00   15     18     59      -59
+## 91242 2021-01-19 15:19:00   15     18     59      -59
+## 91251 2021-01-19 15:19:00   15     18     59      -59
+## 
+## [1078 rows x 5 columns]</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 40][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                   kwtime hour minute second  latency
+## 4046 2021-01-19 09:04:42   09     05     02       40
+## 4047 2021-01-19 09:04:42   09     05     02       40
+## 4053 2021-01-19 09:04:42   09     05     02       40
+## 4054 2021-01-19 09:04:42   09     05     02       40
+## 4055 2021-01-19 09:04:42   09     05     02       40
+## ...                  ...  ...    ...    ...      ...
+## 6034 2021-01-19 09:06:59   09     07     19       40
+## 6038 2021-01-19 09:06:59   09     07     19       40
+## 6039 2021-01-19 09:06:59   09     07     19       40
+## 6040 2021-01-19 09:06:59   09     07     19       40
+## 6043 2021-01-19 09:06:59   09     07     19       40
+## 
+## [449 rows x 5 columns]</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 39][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                   kwtime hour minute second  latency
+## 5106 2021-01-19 09:05:39   09     06     00       39
+## 5107 2021-01-19 09:05:39   09     06     00       39
+## 5108 2021-01-19 09:05:39   09     06     00       39
+## 5111 2021-01-19 09:05:39   09     06     00       39
+## 5112 2021-01-19 09:05:39   09     06     00       39
+## ...                  ...  ...    ...    ...      ...
+## 5406 2021-01-19 09:05:58   09     06     19       39
+## 5408 2021-01-19 09:05:58   09     06     19       39
+## 5413 2021-01-19 09:05:59   09     06     20       39
+## 5414 2021-01-19 09:05:59   09     06     20       39
+## 5417 2021-01-19 09:05:59   09     06     20       39
+## 
+## [150 rows x 5 columns]</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 21][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                   kwtime hour minute second  latency
+## 4532 2021-01-19 09:05:06   09     05     27       21
+## 4535 2021-01-19 09:05:07   09     05     28       21
+## 4542 2021-01-19 09:05:07   09     05     28       21
+## 4543 2021-01-19 09:05:07   09     05     28       21
+## 4544 2021-01-19 09:05:07   09     05     28       21
+## ...                  ...  ...    ...    ...      ...
+## 5474 2021-01-19 09:06:04   09     06     25       21
+## 5486 2021-01-19 09:06:05   09     06     26       21
+## 5654 2021-01-19 09:06:21   09     06     42       21
+## 5731 2021-01-19 09:06:27   09     06     48       21
+## 5751 2021-01-19 09:06:29   09     06     50       21
+## 
+## [212 rows x 5 columns]</code></pre>
+<pre class="python"><code>ss1[ss1.latency == 20][[&#39;kwtime&#39;,&#39;hour&#39;,&#39;minute&#39;,&#39;second&#39;,&#39;latency&#39;]]</code></pre>
+<pre><code>##                   kwtime hour minute second  latency
+## 4006 2021-01-19 09:04:39   09     04     59       20
+## 4350 2021-01-19 09:05:00   09     05     20       20
+## 4351 2021-01-19 09:05:00   09     05     20       20
+## 4352 2021-01-19 09:05:00   09     05     20       20
+## 4355 2021-01-19 09:05:00   09     05     20       20
+## ...                  ...  ...    ...    ...      ...
+## 6274 2021-01-19 09:07:23   09     07     43       20
+## 6290 2021-01-19 09:07:25   09     07     45       20
+## 6323 2021-01-19 09:07:27   09     07     47       20
+## 6331 2021-01-19 09:07:28   09     07     48       20
+## 6356 2021-01-19 09:07:30   09     07     50       20
+## 
+## [1042 rows x 5 columns]</code></pre>
+</div>
+</div>
+<div id="correct-the-wrongly-calculated-latency-1" class="section level4">
+<h4>Correct the wrongly calculated latency</h4>
+<div class="pycode">
+<pre class="python"><code>ss2 = ss1.copy()
+ss2[&#39;latency&#39;]=ss1.apply(lambda x: 60-x[&#39;latency&#39;] if (x[&#39;latency&#39;] &gt; 30) else \
+                                    (-(60+x[&#39;latency&#39;]) if (x[&#39;latency&#39;]&lt;-5) else x[&#39;latency&#39;]),axis=1)</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># x coordinates for the lines
+
+xcoords = [ ss2.index[ss2[&#39;kw_time&#39;] == &#39;090500&#39;][0], 
+            ss2.index[ss2[&#39;kw_time&#39;] == &#39;091000&#39;][0],
+            ss2.index[ss2[&#39;kw_time&#39;] == &#39;092000&#39;][0] ]
+
+# colors for the lines
+colors = [&#39;darkgreen&#39;,&#39;green&#39;,&#39;limegreen&#39;]
+
+time = [&#39;09:05:00&#39;,&#39;09:10:00&#39;,&#39;09:20:00&#39;]
+
+plt.scatter(ss2.reset_index().index, ss2.latency)
+for xc,c,time in zip(xcoords,colors,time):
+    plt.axvline(x=xc, label=&#39;time = {}&#39;.format(time), c=c)
+plt.legend()
+plt.title(&#39;Latency Over Time After Cleaning&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+</div>
+<div class="pycode">
+<pre class="python"><code>ss2.latency.value_counts().iloc[::-1].plot.barh(stacked=True)
+plt.title(&#39;Latency Top 10 Bar Plot&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+</div>
+<hr />
+</div>
+</div>
+</div>
+<div id="source" class="section level2">
+<h2>Source</h2>
+<ul>
+<li><h2 id="데이터-provided-by-00-team">데이터 provided by 00 Team</h2></li>
+</ul>
+</div>
+</div>
+
+</main>
+
+
+<br></br>
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/blog/api-tick-data-task1-day3/">키움 API Tick Data - Task1 - Day3</a></span>
+  <span class="nav-next"><a href="/blog/api-tick-data-task1-day5/">키움 API Tick Data - Task1 - Complete</a> &rarr;</span>
+</nav>
+<br></br>
+
+
+  <footer>
+
+  
+    <script src="//yihui.name/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script async src="//yihui.name/js/center-img.js"></script>
+
+
+  
+
+
+
+
+<script>
+var divs = document.querySelectorAll('pre');
+var languages = {'r': true, 'python': true, 'html': true, 'bash': true}
+
+for (var i = 0; i < divs.length; i++) {
+  var classes = divs[i].className.split(/\s+/);
+
+  for (var j = 0; j < classes.length; j++) {
+    if (languages[classes[j]]) {
+      divs[i].classList.add("language-" + classes[j]);
+    }
+  }
+}
+</script>
+
+<script src="/js/prism.js"></script>
+
+<script>
+  Prism.languages.r = Prism.languages.extend('r', {
+    'keyword': /\b(?:if|else|repeat|while|function|for|in|next|break|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_|library)\b/
+  })
+</script>
+
+
+
+  
+
+  
+  <hr/>
+  © <a href="/">Roh</a> 2020 | <a href="https://github.com/rockandroh">Github</a> | <a href="https://corr-roh.medium.com/">Medium</a>
+  
+  
+    
+    
+    
+    
+      
+    
+    
+  
+  </footer>
+  </body>
+</html>
+

@@ -9,10 +9,10 @@
     <lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/tags/lecture-template/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Rmd Note Sample Using both R, Python, and C</title>
-      <link>https://rockandroh.netlify.app/note/2020/10/15/note-template/</link>
+      <link>https://rockandroh.netlify.app/blog/note-template/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/note/2020/10/15/note-template/</guid>
+      <guid>https://rockandroh.netlify.app/blog/note-template/</guid>
       <description>1 Head 1 2 Head 2 2.1 R example 2.2 Python Example  3 Latex Example 3.0.0.1 References (Example)    Note: This document is to provide a sample template for the lecture notes in .Rmd
 Memo: test
 horizontal line ***
