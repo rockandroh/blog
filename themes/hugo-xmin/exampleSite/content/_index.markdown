@@ -16,17 +16,25 @@ find . -not -path '*/exampleSite/*' \( -name '*.html' -o -name '*.css' \) | xarg
 ```
 
 ```
+      37 ./layouts/list.html
+      22 ./layouts/r-syntax-highlighting-gallery/list.html
        5 ./layouts/404.html
-      12 ./layouts/_default/single.html
-      20 ./layouts/_default/list.html
-      13 ./layouts/_default/terms.html
-       0 ./layouts/partials/foot_custom.html
-       0 ./layouts/partials/head_custom.html
-       9 ./layouts/partials/footer.html
-      20 ./layouts/partials/header.html
-      51 ./static/css/style.css
-       7 ./static/css/fonts.css
-     137 total
+      27 ./layouts/blog/list.html
+      21 ./layouts/_default/single.html
+      21 ./layouts/_default/list.html
+      12 ./layouts/partials/project-card.html
+       1 ./layouts/partials/head_hljs.html
+      35 ./layouts/partials/blog-card.html
+      27 ./layouts/partials/rgallery-card.html
+      31 ./layouts/partials/two-column.html
+      29 ./layouts/partials/footer.html
+      36 ./layouts/partials/foot_js.html
+      28 ./layouts/partials/header.html
+       8 ./static/css/bootstrap.css
+       2 ./static/css/prism-vs.css
+       2 ./static/css/style.css
+       2 ./static/css/fonts.css
+     346 total
 ```
 
 I can certainly further reduce the code, for example, by eliminating the CSS, but I believe a tiny bit of CSS can greatly improve readability. You cannot really find many CSS frameworks that only contain 50 lines of code.
