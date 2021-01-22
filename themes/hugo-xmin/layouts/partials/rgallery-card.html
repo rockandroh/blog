@@ -1,0 +1,27 @@
+{{/* parameter: .Page */}}
+{{/* ---------------- */}}
+
+<article class="card">
+<header>
+<h3><a href='{{ .RelPermalink }}'>{{ .Title }}</a></h3>
+</header>
+
+<div
+	style="
+	border: 0px none;
+	overflow: hidden;
+	margin: 15px auto;
+	max-width: 575px;"
+>
+<iframe
+	scrolling="no"
+	src='{{ .RelPermalink }}'
+	style="border: 0px none;
+	margin-left: 0px;
+	height: 560px;
+	margin-top: -185px;
+	width: 650px;">
+</iframe>
+</div>
+
+</article>

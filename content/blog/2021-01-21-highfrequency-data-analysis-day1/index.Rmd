@@ -1,0 +1,147 @@
+---
+title: Highfrequency Data Analysis - Day1
+author: Roh
+date: '2021-01-21'
+slug: highfrequency-data-analysis-day1
+categories:
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+
+*__Note__: 이 페이지는 시카고대학교 Per Mykland 교수님의 FINM 33170 and STAT 33910 수업 과제 7번의 1번 문제에 관한 내용입니다. 제가 작성하는 내용이 정답이 아님 (사실 정답을 모름) 을 미리 알려드립니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다*
+
+**R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
+
+<div class = "rcode">
+```{r}
+# "이것은 R 코드 입니다."
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# "이것은 Python 코드 입니다."
+```
+</div>
+
+```{r, include = FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+#py_install(packages = 'dfply')
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)
+```
+
+# HW7
+
+## Question 1
+
+**Retrieve the bid and offer prices for Apple (AAPL) and Google (GOOG) for Dec 3, 2012. The data are from the TAQ database in WRDS**
+
+<div class = "rcode">
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+wd = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/Misc"
+fn = list.files(path=wd, pattern = '.csv')
+trade = read.csv(paste(wd,fn[2],sep='/'))
+quotes = read.csv(paste(wd,fn[1],sep='/'))
+
+dim(trade)
+dim(quotes)
+```
+</div>
+
+<div class = "rcode">
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+df1 <- quotes[,c(1,5,6)]
+df2 <- trade[,c(1,6)]
+head(df1)
+head(df2)
+```
+</div>
+
+
+## Question 2
+
+**Use any program to construct signature plots for the realized volatility of the bid and the offer(i.e., ask), the midquote ((bid+offer)/2), as well as the transaction log prices**
+
+### Theoretical Concept
+
+We focus on a single asset traded in a liquid financial market.We assume that the sample-path of the corresponding (latent)price process,$\{S∗t,0≤t\}$, is continuous and determined by the stochastic differential equation(sde)
+
+$$r_t = d\log\left(S_t^*\right) =\sigma_t dW_t$$
+where $W_t$ denotes a standard Brownian motion, and the spot volatility process $\sigma_t$ is predictable and has a continuous sample path. We assume that $\sigma_t$ and $W_t$ processes are uncorrelated and, for convenience, we refer to the unit time interval as a day.
+
+#### Integrated Volatility
+
+Primary interest centers on forecasting the (latent) integrated volatility over daily and longer inter-daily horizons. Specifically, 
+
+#### Realized Volatility
+
+>Realized volatility is a nonparametric ex-post estimate of the returnvariation. The most obvious realized volatility measure is the sum of finely-sampledsquared return realizations over a fixed time interval.
+
+#### Signature Plot
+
+> A microstructure bias, if operative, will probably manifest itself as sampling frequency increases by distorting the average realised volatility. We construct a plot of average realised volatility against sampling frequency, which we call the “volatility signature plot”.
+This helps to reveal the severity of microstructure bias as sampling frequency increases, and can be useful in guiding the selection of sampling
+frequency. We can also use the volatility signature plots to characterise different market microstructures.
+Interestingly, it turns out that the volatility signature has the same form as the variance-time function, which has been extensively studied in finance. However, while there is no information in the volatility signature that is not also present in high-frequency return autocorrelations, the two are complements, not substitutes, as the information relevant for construction and interpretation of realised volatilities is more directly and transparently revealed in the volatility signature plot.
+
+<div class = "rcode">
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+bid_series = log(df1$BID)
+ask_series = log(df1$ASK)
+mid_seires = log((df1$BID + df1$ASK)/2)
+price_series = log(df2$PRICE)
+```
+</div>
+
+
+
+### Averaged Realized Volatility Function
+
+
+
+
+
+
+***
+
+**Source**
+
+- Signiture plot
+  - http://public.econ.duke.edu/~boller/Published_Papers/risk_00.pdf
+- Realized Volatility
+  - http://public.econ.duke.edu/~boller/Published_Papers/joe_11b.pdf
+

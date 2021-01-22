@@ -1,0 +1,31 @@
+{{/* parameter: .Pages (dict "pages" .Pages "partial" "p.html")  */}}
+{{/* ----------------------------------------------------------- */}}
+
+{{ $pages := index . "pages" }}
+{{ $partial := index . "partial" }}
+
+{{ $n_pages := len $pages }}
+{{ $n_rows := div $n_pages 2.0 }}
+
+{{ range $row, $sequence :=  (seq (math.Ceil $n_rows)) }}
+
+	<div class="row">
+
+	{{ range $col, $seqence := seq 2 }}
+
+		{{ $page_index := add $col (mul $row 2) }}
+
+		{{ with (index $pages $page_index) }}
+
+		  <div class="col-md-6">
+
+		  	{{ partial $partial . }}
+
+		  </div>
+		{{ end }}
+
+	{{ end }}
+
+	</div>
+
+{{ end }}

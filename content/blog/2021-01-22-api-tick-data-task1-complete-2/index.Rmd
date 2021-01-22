@@ -1,0 +1,282 @@
+---
+title: 키움 API Tick Data - Task1 - Complete (2)
+author: ~
+date: '2021-01-22'
+slug: api-tick-data-task1-complete-2
+description: This is description
+thumbnail: blog/2021-01-22-api-tick-data-task1-complete-2/tick_plot.png
+categories:
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+<img src="/Users/master/Documents/GitHub/blog/content/blog/2021-01-22-api-tick-data-task1-complete-2/tick_plot.png"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+
+
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
+***
+
+*__Note__: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다*
+
+**데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다**
+
+**R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
+
+<div class = "rcode">
+```{r}
+# "이것은 R 코드 입니다."
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# "이것은 Python 코드 입니다."
+```
+</div>
+
+* Package
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+#py_install(packages = 'dfply')
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)
+```
+
+* Import Data
+
+- Check NA
+
+<div class = "rcode">
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+#wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
+wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-21"
+fn = list.files(path = wd2,
+                pattern = '.*stocks_trade.*\\.csv') # 마지막 30분 틱데이터 가지고오기
+
+# data = readr::read_csv(file = path, 
+#                        col_names = c('code','trade_date','timestamp','price','open','high','low',
+#                                      'size','cum_size','ask1','bid1'))
+
+tbl =
+  list.files(path = wd2, pattern = '.*stocks_trade.*\\.csv')[2:4] %>%
+  map_df(~readr::read_csv(paste(wd2,.,sep = '/'),
+                          col_names = c('code','trade_date','timestamp','price','open','high','low','size','cum_size','ask1','bid1','rotation','bs_ration', 'mkt_type', 'mkt_cap'),
+                          col_types = cols(.default="d", code = "c")
+                   )
+         )
+
+sum(is.na(tbl))
+```
+</div>
+
+<div class = "pycode">
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from datetime import datetime, timedelta
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+pd.options.display.float_format = '{:.4f}'.format
+pd.set_option('display.max_rows', 100)
+df_py = r.tbl
+df_py.head()
+```
+</div>
+
+```{r, include=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+rm(list = "tbl")
+gc()
+```
+
+# Task1: 레이턴시 계산 
+
+## Samsung Stock
+
+- KOSPI Code for Samsung Electronics is '005930'
+
+<div class = "pycode">
+```{python}
+ss = df_py[df_py.code == '005930'].reset_index(drop=True)
+ss.shape
+```
+</div>
+
+### 1. Use time object in python
+
+* Delete rows where "second" does not lie between 0 and 59.
+
+* Substring the timstamp to get each time component.
+
+<div class = "pycode">
+```{python}
+ss = ss[ss['timestamp'].apply(lambda x: int(str(int(x*1000000))[12:14])) < 60 ]
+
+ss = ss.assign( microsecond = ss['timestamp'].apply(lambda x: str(int(x*1000000))[14:20]),
+                second = ss['timestamp'].apply(lambda x: str(int(x*1000000))[12:14]),
+                minute = ss['timestamp'].apply(lambda x: str(int(x*1000000))[10:12]),
+                hour = ss['timestamp'].apply(lambda x: str(int(x*1000000))[8:10]),
+                day = ss['timestamp'].apply(lambda x: str(int(x*1000000))[6:8]),
+                month = ss['timestamp'].apply(lambda x: str(int(x*1000000))[4:6]),
+                year = ss['timestamp'].apply(lambda x: str(int(x*1000000))[0:4]),
+                kw_time = ss['trade_date'].apply(lambda x: str(int(x))))
+ss.head()
+```
+</div>
+
+* Transform data type to str to use substring to make the format like "%Y-%m-%d %H:%M:%S.%f"
+* We calculate the latency by subtracting 'trade_date' from the 'timestamp'
+
+<div class = "pycode">
+```{python}
+ss['lc_time'] = ss.apply(lambda x: datetime(
+                  year = int(x['year']),
+                  month = int(x['month']),
+                  day = int(x['day']),
+                  hour = int(x['hour']),
+                  minute = int(x['minute']),
+                  second = int(x['second']),
+                  microsecond = int(x['microsecond'])), #.strftime("%H:%M:%S.%f")[:-3], 
+                  axis=1)
+
+```
+</div>
+
+<div class = "pycode">
+```{python}
+ss['lc_time_hms'] = ss.apply(lambda x: x['lc_time'].strftime("%H:%M:%S"),
+                             axis=1)
+ss.head(10)
+```
+</div>
+
+### 2. Calculate latency and clean it [레이턴시 계산 및 정리]
+
+* Calculate the latency by subtracting the time provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.
+
+#### 오전 8시 9시 앞에 '0'을 붙여주기
+
+<div class = "pycode">
+```{python}
+ss['kw_time'].apply(lambda x: x[0:2]).value_counts()
+```
+</div>
+
+
+<div class = "pycode">
+```{python}
+ss['kw_time'] = ss.kw_time.apply(lambda x: '0' + x if ((x[0]=='8') | (x[0]=='9')) else x)
+ss['kw_time'].apply(lambda x: x[0:2]).value_counts()
+```
+</div>
+
+* 키움 타임 만들기
+
+<div class = "pycode">
+```{python}
+ss['kw_time'] = ss.apply(lambda x: datetime(year = int(x['year']),
+                                           month = int(x['month']),
+                                           day = int(x['day']),
+                                           hour = int(x['kw_time'][0:2]),
+                                           minute = int(x['kw_time'][2:4]),
+                                           second = int(x['kw_time'][4:6])),
+                                           axis = 1
+                                           )
+                                           
+ss['kw_time_hms']= ss.apply(lambda x: x['kw_time'].strftime("%H:%M:%S"),
+                             axis=1)
+```
+</div>
+
+
+#### Latency +/- 정보 가지고 오기
+
+* Latency가 $+$ 인 경우 = 로컬 타임이 키움 타임보다 늦는 경우
+* Latency가 $-$ 인 경우 = 로컬 타임이 키움 타임보다 빠른 경우 (weird)  
+
+<div class = "pycode">
+```{python}
+ss['latency'] = (pd.to_datetime(ss['lc_time_hms']) - pd.to_datetime(ss['kw_time_hms'])).dt.total_seconds()
+```
+</div>
+
+<div class = "pycode">
+```{python}
+ss.latency
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# x coordinates for the lines
+
+xcoords = [ ss.index[ss['kw_time_hms'] == '09:05:00'][0], 
+            ss.index[ss['kw_time_hms'] == '09:10:00'][0],
+            ss.index[ss['kw_time_hms'] == '09:20:00'][0] ]
+
+# colors for the lines
+colors = ['darkgreen','green','limegreen']
+
+time = ['09:05:00','09:10:00','09:20:00']
+
+plt.scatter(ss.reset_index().index, ss.latency)
+for xc,c,time in zip(xcoords,colors,time):
+    plt.axvline(x=xc, label='{}'.format(time), c=c)
+plt.legend()
+plt.title('Latency Over Time After Cleaning')
+plt.ylabel('Seconds')
+```
+</div>
+
+<div class = "pycode">
+```{python}
+ss.latency.hist()
+plt.title('Latency Histogram')
+```
+</div>
+
+***
+
+## Source
+
+- 데이터 provided by 00 Team
+- Negative values
+  - [link1](https://stackoverflow.com/questions/8408397/python-timedelta-issue-with-negative-values)
+---

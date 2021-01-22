@@ -1,28 +1,46 @@
 # HUGO XMIN
 
-## _Keep it simple, but not simpler_
+## Fork
 
-**XMin** is a Hugo theme written by [Yihui Xie](https://yihui.org) in about four hours: half an hour was spent on the Hugo templates, and 3.5 hours were spent on styling. The main motivation for writing this theme was to provide a really minimal example to beginners of Hugo templates. This XMin theme contains about 130 lines of code in total, including the code in HTML templates and CSS (also counting empty lines).
+This fork primarily adds the Bootstrap
+[Grid system](https://getbootstrap.com/docs/4.0/layout/grid/)
+for organizing blog posts into columns.
 
+Following the directions from this Stackoverflow
+[answer](https://stackoverflow.com/a/38995154/6637133), you can easily
+add any number of columns within the body of the post:
 
-```bash
-find . -not -path '*/exampleSite/*' \( -name '*.html' -o -name '*.css' \) | xargs wc -l
+````
+<div class="row">
+<div class="col-md-6"><h2>Column 1</h2>
+`r ''````{r}
+#1234567890#1234567890#1234567890#1234567890#1234567890#1234567890#1234567890#12
+library(tidyverse)
+
+ggplot2::diamonds
 ```
-
+</div>
+<div class="col-md-6"><h2>Column 2</h2>
+```{r}
+mtcars
 ```
-       5 ./layouts/404.html
-      12 ./layouts/_default/single.html
-      20 ./layouts/_default/list.html
-      13 ./layouts/_default/terms.html
-       0 ./layouts/partials/foot_custom.html
-       0 ./layouts/partials/head_custom.html
-       9 ./layouts/partials/footer.html
-      20 ./layouts/partials/header.html
-      51 ./static/css/style.css
-       7 ./static/css/fonts.css
-     137 total
+</div>
+</div>
+````
+
+```r
+library(tidyverse)
+
+urchins <- read_csv("https://tidymodels.org/start/models/urchins.csv") %>%
+  setNames(c("food_regime", "initial_volume", "width")) %>%
+  mutate(food_regime = factor(food_regime, levels = c("Init", "Low", "High")))
+
+urchins %>%
+  group_by(food_regime) %>%
+  summarise(
+    across(everything(), mean), n = n()
+  )
+
+mean(urchins$width)
+ggplot2::cut_interval(urchins$initial_volume)
 ```
-
-I can certainly further reduce the code, for example, by eliminating the CSS, but I believe a tiny bit of CSS can greatly improve readability. You cannot really find many CSS frameworks that only contain 50 lines of code.
-
-[![Screenshot](https://github.com/yihui/hugo-xmin/raw/master/images/screenshot.png)](https://xmin.yihui.org)

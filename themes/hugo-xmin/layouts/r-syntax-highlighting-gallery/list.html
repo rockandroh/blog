@@ -1,0 +1,22 @@
+{{ partial "header.html" . }}
+
+{{if not .IsHome }}
+<h1>{{ .Title | markdownify }}</h1>
+{{ end }}
+
+{{ .Content }}
+
+
+{{ $pages := .Pages }}
+{{ $headers := (dict "editor" "Text Editor" "server" "Server-side" "client" "Client-side" ) }}
+
+{{ range (slice "editor" "server" "client") }}
+
+	<h2>{{ index $headers . }}</h2>
+	{{ $highlights := (where $pages "Params.tags" "intersect" (slice .)) }}
+	{{ $partial_dict := (dict "pages" $highlights "partial" "rgallery-card.html") }}
+	{{ partial "two-column.html" $partial_dict }}
+
+{{ end }}
+
+{{ partial "footer.html" . }}

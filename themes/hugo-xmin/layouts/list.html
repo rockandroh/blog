@@ -1,0 +1,37 @@
+{{/* Home Page List */}}
+
+
+{{ partial "header.html" . }}
+
+{{ .Content }}
+
+
+<div class='article-meta home-page'><a href="{{ (.Site.GetPage "section" "blog").RelPermalink }}"><h2>Recent Posts</h2></a></div>
+
+
+{{ $pages := (where .Site.RegularPages "Section" "=" "blog") }}
+
+{{ $pages := .Site.RegularPages }}
+{{ $paginator := .Paginate (where $pages "Section" "=" "blog") 4 }}
+
+{{ $partial_dict := (dict "pages" $paginator.Pages "partial" "blog-card.html") }}
+{{ partial "two-column.html" $partial_dict }}
+
+<br></br>
+
+{{ template "_internal/pagination.html" . }}
+
+<div class='article-meta home-page'><a href="{{ (.Site.GetPage "section" "projects").RelPermalink }}"><h2 class="home-header">Projects</h2></a></div>
+
+{{ range (where .Pages "Section" "=" "projects") }}
+
+	{{ $partial_dict := dict "pages" (first 4 .Pages) "partial" "project-card.html" }}
+	{{ partial "two-column.html" $partial_dict }}
+
+{{ end }}
+
+<br></br>
+
+
+
+{{ partial "footer.html" . }}

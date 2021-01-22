@@ -20,12 +20,12 @@ footnotereturnlinkcontents = "↩"
     url = "/about/"
     weight = 2
 [[menu.main]]
-    name = "Notes"
-    url = "/note/"
+    name = "Blog"
+    url = "/blog/"
     weight = 3
 [[menu.main]]
-    name = "Data"
-    url = "/data/"
+    name = "Projects"
+    url = "/projects/"
     weight = 4
 [[menu.main]]
     name = "Teaching & 과외"
@@ -35,10 +35,6 @@ footnotereturnlinkcontents = "↩"
     name = "Categories"
     url = "/categories/"
     weight = 6
-[[menu.main]]
-    name = "Tags"
-    url = "/tags/"
-    weight = 7
 [[menu.main]]
     name = "Medium"
     url = "https://corr-roh.medium.com/"
