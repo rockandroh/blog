@@ -6,14 +6,24 @@
     <description>Recent content in Home on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Useful Websites</title>
+      <link>https://rockandroh.netlify.app/projects/useful-websites/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/projects/useful-websites/</guid>
+      <description>Statistics Bootstrap    
+I collected the materials including lecture notes, videos, books, and solution manuals that were extremely helpful to me!! I would like to thank every one of them who made lots of efforts to create such an invaluable learning supplements. I hope these lists will become a friendly companion for your study as well. And please understand that I could not list up all useful materials that I have found due to my poor memory and lack of space :(</description>
+    </item>
+    
     <item>
       <title>키움 API Tick Data - Task1 - Complete (2)</title>
       <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-2/</link>
       <pubDate>Fri, 22 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-2/</guid>
-      <description>Task1: 레이턴시 계산 Samsung Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기   Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 14px; } code.</description>
+      <description>Task1: 레이턴시 계산 0. Filtering Samsung Stock 1. Use time object in python 2. Calculate latency and clean it 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기  Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 14px; } code.r{ font-size: 12px; } pre { font-size: 12px }  Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
     </item>
     
     <item>

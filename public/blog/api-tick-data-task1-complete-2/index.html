@@ -51,19 +51,18 @@
 <div id="TOC">
 <ul>
 <li><a href="#task1-레이턴시-계산">Task1: 레이턴시 계산</a><ul>
-<li><a href="#samsung-stock">Samsung Stock</a><ul>
+<li><a href="#filtering-samsung-stock">0. Filtering Samsung Stock</a></li>
 <li><a href="#use-time-object-in-python">1. Use time object in python</a></li>
-<li><a href="#calculate-latency-and-clean-it-레이턴시-계산-및-정리">2. Calculate latency and clean it [레이턴시 계산 및 정리]</a><ul>
+<li><a href="#calculate-latency-and-clean-it">2. Calculate latency and clean it</a><ul>
 <li><a href="#오전-8시-9시-앞에-0을-붙여주기">오전 8시 9시 앞에 ’0’을 붙여주기</a></li>
 <li><a href="#latency---정보-가지고-오기">Latency +/- 정보 가지고 오기</a></li>
-</ul></li>
 </ul></li>
 <li><a href="#source">Source</a></li>
 </ul></li>
 </ul>
 </div>
 
-<p><img src="tick_plot.png"
+<p><img src="/blog/pic/latency_jan_21.png"
   align="center"
   width="600"
   style="background-color: white; padding-right: 0px;"
@@ -119,15 +118,8 @@ options(digits=10)</code></pre>
 <div class="rcode">
 <pre class="r"><code>#wd = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14&quot;
 wd2 = &quot;/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-21&quot;
-fn = list.files(path = wd2,
-                pattern = &#39;.*stocks_trade.*\\.csv&#39;) # 마지막 30분 틱데이터 가지고오기
-
-# data = readr::read_csv(file = path, 
-#                        col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,
-#                                      &#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;))
-
 tbl =
-  list.files(path = wd2, pattern = &#39;.*stocks_trade.*\\.csv&#39;)[2:4] %&gt;%
+  list.files(path = wd2, pattern = &#39;.*stocks_trade.*\\.csv&#39;)[2:8] %&gt;%
   map_df(~readr::read_csv(paste(wd2,.,sep = &#39;/&#39;),
                           col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,&#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;rotation&#39;,&#39;bs_ration&#39;, &#39;mkt_type&#39;, &#39;mkt_cap&#39;),
                           col_types = cols(.default=&quot;d&quot;, code = &quot;c&quot;)
@@ -138,16 +130,6 @@ sum(is.na(tbl))</code></pre>
 <pre><code>## [1] 0</code></pre>
 </div>
 <div class="pycode">
-<pre class="python"><code>import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from datetime import datetime, timedelta
-#py_install(packages = &quot;matplotlib&quot;)
-#py_install(packages = &quot;pandas&quot;)
-pd.options.display.float_format = &#39;{:.4f}&#39;.format
-pd.set_option(&#39;display.max_rows&#39;, 100)
-df_py = r.tbl
-df_py.head()</code></pre>
 <pre><code>##      code  trade_date           timestamp  ...  bs_ration  mkt_type   mkt_cap
 ## 0  279540  90000.0000 20210121090000.2734  ...     0.0000    2.0000  153.0000
 ## 1  057540  90001.0000 20210121090000.3789  ...     0.0000    2.0000 1152.0000
@@ -159,21 +141,25 @@ df_py.head()</code></pre>
 </div>
 <div id="task1-레이턴시-계산" class="section level1">
 <h1>Task1: 레이턴시 계산</h1>
-<div id="samsung-stock" class="section level2">
-<h2>Samsung Stock</h2>
+<ul>
+<li>레이턴시 키움 API에서 제공하는 시간과 제공받은 시점에 기록한 로컬 시스템 시간과의 차이를 의미한다. 레이턴시를 없애야만 나중에 실시간 거래를 하는데 문제가 없다. 개장 이후 거래량이 가장 큰 첫 30분동안에 특히 레이턴시가 매우 심한 것을 확인 할 수 있다.</li>
+</ul>
+<div id="filtering-samsung-stock" class="section level2">
+<h2>0. Filtering Samsung Stock</h2>
 <ul>
 <li>KOSPI Code for Samsung Electronics is ‘005930’</li>
 </ul>
 <div class="pycode">
 <pre class="python"><code>ss = df_py[df_py.code == &#39;005930&#39;].reset_index(drop=True)
 ss.shape</code></pre>
-<pre><code>## (82062, 15)</code></pre>
+<pre><code>## (174552, 15)</code></pre>
 </div>
-<div id="use-time-object-in-python" class="section level3">
-<h3>1. Use time object in python</h3>
+</div>
+<div id="use-time-object-in-python" class="section level2">
+<h2>1. Use time object in python</h2>
 <ul>
-<li><p>Delete rows where “second” does not lie between 0 and 59.</p></li>
-<li><p>Substring the timstamp to get each time component.</p></li>
+<li>Delete rows where “second” does not lie between 0 and 59.</li>
+<li>Substring the time stamp to get each time component (e.g., hour, minute, second, etc)</li>
 </ul>
 <div class="pycode">
 <pre class="python"><code>ss = ss[ss[&#39;timestamp&#39;].apply(lambda x: int(str(int(x*1000000))[12:14])) &lt; 60 ]
@@ -230,8 +216,8 @@ ss.head(10)</code></pre>
 ## [10 rows x 25 columns]</code></pre>
 </div>
 </div>
-<div id="calculate-latency-and-clean-it-레이턴시-계산-및-정리" class="section level3">
-<h3>2. Calculate latency and clean it [레이턴시 계산 및 정리]</h3>
+<div id="calculate-latency-and-clean-it" class="section level2">
+<h2>2. Calculate latency and clean it</h2>
 <ul>
 <li>Calculate the latency by subtracting the time provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.</li>
 </ul>
@@ -239,24 +225,30 @@ ss.head(10)</code></pre>
 <h4>오전 8시 9시 앞에 ’0’을 붙여주기</h4>
 <div class="pycode">
 <pre class="python"><code>ss[&#39;kw_time&#39;].apply(lambda x: x[0:2]).value_counts()</code></pre>
-<pre><code>## 10    25315
+<pre><code>## 14    30276
+## 10    25315
+## 15    23267
+## 13    21295
 ## 11    21247
+## 12    17659
 ## 90     9494
 ## 91     6416
 ## 95     5585
 ## 94     4978
 ## 92     4731
 ## 93     4283
-## 12       10
 ## Name: kw_time, dtype: int64</code></pre>
 </div>
 <div class="pycode">
 <pre class="python"><code>ss[&#39;kw_time&#39;] = ss.kw_time.apply(lambda x: &#39;0&#39; + x if ((x[0]==&#39;8&#39;) | (x[0]==&#39;9&#39;)) else x)
 ss[&#39;kw_time&#39;].apply(lambda x: x[0:2]).value_counts()</code></pre>
 <pre><code>## 09    35487
+## 14    30276
 ## 10    25315
+## 15    23267
+## 13    21295
 ## 11    21247
-## 12       10
+## 12    17659
 ## Name: kw_time, dtype: int64</code></pre>
 </div>
 <ul>
@@ -287,18 +279,18 @@ ss[&#39;kw_time_hms&#39;]= ss.apply(lambda x: x[&#39;kw_time&#39;].strftime(&quo
 </div>
 <div class="pycode">
 <pre class="python"><code>ss.latency</code></pre>
-<pre><code>## 0       -1.0000
-## 1        0.0000
-## 2        0.0000
-## 3        0.0000
-## 4       -1.0000
-##           ...  
-## 82057   -1.0000
-## 82058   -1.0000
-## 82059   -1.0000
-## 82060   -1.0000
-## 82061   -1.0000
-## Name: latency, Length: 82059, dtype: float64</code></pre>
+<pre><code>## 0        -1.0000
+## 1         0.0000
+## 2         0.0000
+## 3         0.0000
+## 4        -1.0000
+##            ...  
+## 174547   -1.0000
+## 174548   -1.0000
+## 174549   -1.0000
+## 174550   -1.0000
+## 174551   -1.0000
+## Name: latency, Length: 174546, dtype: float64</code></pre>
 </div>
 <div class="pycode">
 <pre class="python"><code># x coordinates for the lines
@@ -316,27 +308,23 @@ plt.scatter(ss.reset_index().index, ss.latency)
 for xc,c,time in zip(xcoords,colors,time):
     plt.axvline(x=xc, label=&#39;{}&#39;.format(time), c=c)
 plt.legend()
-plt.title(&#39;Latency Over Time After Cleaning&#39;)
+plt.title(&#39;Latency Over Time on Jan 21&#39;)
 plt.ylabel(&#39;Seconds&#39;)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
 <div class="pycode">
 <pre class="python"><code>ss.latency.hist()
-plt.title(&#39;Latency Histogram&#39;)</code></pre>
+plt.title(&#39;Histogram of latency on Jan 21&#39;)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 <hr />
-</div>
 </div>
 </div>
 <div id="source" class="section level2">
 <h2>Source</h2>
 <ul>
 <li>데이터 provided by 00 Team</li>
-<li>Negative values
-<ul>
-<li><h2 id="link1"><a href="https://stackoverflow.com/questions/8408397/python-timedelta-issue-with-negative-values">link1</a></h2></li>
-</ul></li>
+<li>"https://stackoverflow.com/questions/8408397/python-timedelta-issue-with-negative-values"</li>
 </ul>
 </div>
 </div>

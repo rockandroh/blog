@@ -3,6 +3,7 @@ title: Highfrequency Data Analysis - Day1
 author: Roh
 date: '2021-01-21'
 slug: highfrequency-data-analysis-day1
+thumbnail: /blog/pic/signature_plot_appl.png
 categories:
   - highfrequency
 tags: []
@@ -11,6 +12,13 @@ output:
     toc: true
     toc_depth: 4
 ---
+
+<img src="/blog/pic/signature_plot_appl.png"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/>
+
 <style>
 div.rcode pre { background-color:#fffff0; }
 div.rcode pre.r { background-color:#EDF6FA; }
@@ -58,6 +66,10 @@ library(reticulate) # Python
 #py_install(packages = "matplotlib")
 #py_install(packages = "pandas")
 #py_install(packages = 'dfply')
+library(reshape2) # melt function
+library(ggplot2)
+library(pals)
+library(arules)
 
 options(scipen=999)
 options(max.print = 99999999)
@@ -74,27 +86,37 @@ options(digits=10)
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 wd = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/Misc"
 fn = list.files(path=wd, pattern = '.csv')
-trade = read.csv(paste(wd,fn[2],sep='/'))
+trades = read.csv(paste(wd,fn[2],sep='/'))
 quotes = read.csv(paste(wd,fn[1],sep='/'))
 
-dim(trade)
+dim(trades)
 dim(quotes)
+head(trades)
+head(quotes)
 ```
 </div>
+
 
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
-df1 <- quotes[,c(1,5,6)]
-df2 <- trade[,c(1,6)]
-head(df1)
-head(df2)
+trades2 = 
+  trades[,c(2,6)] %>% 
+  filter(PRICE != 0) %>%
+  drop_na()
+
+quotes2 = 
+  quotes[,c(2,5,6)] %>%
+  mutate(spread = ASK - BID) %>%
+  filter(BID !=0 & ASK !=0) %>%
+  filter(spread < 100) %>%
+  drop_na()
+
 ```
 </div>
 
-
 ## Question 2
 
-**Use any program to construct signature plots for the realized volatility of the bid and the offer(i.e., ask), the midquote ((bid+offer)/2), as well as the transaction log prices**
+**Use any program to construct signature plots for the realized volatility of the bid and the offer(i.e., ask), the midquote ((bid+offer)/2), as well as the transaction log prices. Also provide a plot for the realized co-volatility between bid and ask log prices. **
 
 ### Theoretical Concept
 
@@ -103,38 +125,183 @@ We focus on a single asset traded in a liquid financial market.We assume that th
 $$r_t = d\log\left(S_t^*\right) =\sigma_t dW_t$$
 where $W_t$ denotes a standard Brownian motion, and the spot volatility process $\sigma_t$ is predictable and has a continuous sample path. We assume that $\sigma_t$ and $W_t$ processes are uncorrelated and, for convenience, we refer to the unit time interval as a day.
 
-#### Integrated Volatility
+#### Integrated Volatility [IV]
 
-Primary interest centers on forecasting the (latent) integrated volatility over daily and longer inter-daily horizons. Specifically, 
+Primary interest centers on forecasting the (latent) integrated volatility over daily and longer inter-daily horizons. Specifically, we define the one-period integrated volatility,
 
-#### Realized Volatility
+$$IV_{t+1} = \int_{t}^{t+1} \sigma_\tau^2 d\tau$$
 
->Realized volatility is a nonparametric ex-post estimate of the returnvariation. The most obvious realized volatility measure is the sum of finely-sampledsquared return realizations over a fixed time interval.
+and, for $m$ a positive integer, the corresponding multi-period measure,
+
+$$IV_{t+1:t+m} = \sum_{j=1}^m IV_{t+j}$$
+
+In this context, $IV_t$ equals the quadratic return variation which, in turn, provides a natural measure of ex-post return variability.
+
+Integrated volatility is not directly observable but, as highlighted by many papers, the corresponding RVs provide consistent estimate of $IV_t$. The standard RV measure is simply introduced as below. 
+
+#### Realized Volatility [RV]
+
+Realized volatility [RV] is a non-parametric ex-post estimate of the return variation. The most obvious realized volatility measure is the sum of finely-sampledsquared return realizations over a fixed time interval.
+
+$$RV_t^*(h) = \sum_{i=1}^{1/h} r_{t-1+ih}^{*(h)2}$$, where $1/h$ is assumed to be a positive integer and $r_{t}^{*(h)} = \log(S_t^*)-log(S_{t-s}^*)$. Formally, $RV_{t}^{*}(h)$ is uniformly consistent for $IV_t$ as $h \rightarrow 0$, i.e., the intraday sampling frequency goes to infinity. 
 
 #### Signature Plot
 
-> A microstructure bias, if operative, will probably manifest itself as sampling frequency increases by distorting the average realised volatility. We construct a plot of average realised volatility against sampling frequency, which we call the “volatility signature plot”.
+A microstructure bias, if operative, will probably manifest itself as sampling frequency increases by distorting the average realised volatility. We construct a plot of average realised volatility against sampling frequency, which we call the “volatility signature plot”
 This helps to reveal the severity of microstructure bias as sampling frequency increases, and can be useful in guiding the selection of sampling
 frequency. We can also use the volatility signature plots to characterise different market microstructures.
+
 Interestingly, it turns out that the volatility signature has the same form as the variance-time function, which has been extensively studied in finance. However, while there is no information in the volatility signature that is not also present in high-frequency return autocorrelations, the two are complements, not substitutes, as the information relevant for construction and interpretation of realised volatilities is more directly and transparently revealed in the volatility signature plot.
+
+#### Take log
 
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
-bid_series = log(df1$BID)
-ask_series = log(df1$ASK)
-mid_seires = log((df1$BID + df1$ASK)/2)
-price_series = log(df2$PRICE)
+bid_series = log(quotes2$BID)
+ask_series = log(quotes2$ASK)
+mid_series = log((quotes2$BID + quotes2$ASK)/2)
+price_series = log(trades2$PRICE)
+```
+</div>
+
+#### Calculate Averaged Realized Volatility
+
+<div class = "rcode">
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+ARV = function(x, y=x, k){
+  #overlap delta(x_i)
+  diff_x = diff(x, lag=k)
+  diff_y = diff(y, lag=k)
+  ARV = sum(diff_x * diff_y) / k
+  if (ARV > 0){
+    result = sqrt(ARV*250)
+  }
+  else {
+    result = -sqrt(-ARV*250) 
+  }
+  return(result)
+}
+```
+</div>
+
+#### Get ARVs for bid,ask,mid, and trade
+
+<div class = "rcode">
+```{r, warning=FALSE, message=FALSE, error=FALSE}
+num_k = 100
+step = 2
+max_k = num_k * step
+ARVs = data.frame(bid = c(1:num_k)*0,
+                  ask = c(1:num_k)*0,
+                  mid = c(1:num_k)*0,
+                  trade = c(1:num_k)*0,
+                  covol = c(1:num_k)*0
+                  )
+
+for (i in 1:num_k){
+  ARVs[i,1] = ARV(bid_series, bid_series, step*i)
+  ARVs[i,2] = ARV(ask_series, ask_series, step*i)
+  ARVs[i,3] = ARV(mid_series, mid_series, step*i)
+  ARVs[i,4] = ARV(price_series, price_series, step*i)
+  # Realized Covariation of Bid and Ask
+  ARVs[i,5] = ARV(bid_series, ask_series, step*i)
+}
+
+ARVs =
+  ARVs %>%
+  rowwise() %>%
+  mutate(corr= covol/(bid*ask))
+ARVs['k'] = seq(step,max_k,step)
+#ARVs$ID = seq.int(nrow(ARVs))
+head(ARVs)
+```
+</div>
+
+#### Plot
+
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+graph = melt(ARVs, measure.vars = c('bid', 'ask', 'mid', 'trade', 'corr', 'covol'))
+graph %>%
+  ggplot(aes(x=k, y=value, col=variable)) +
+  geom_line(linetype='twodash',
+            aes(col = variable), 
+            size=1.4) +
+  scale_color_manual(values=c('red','blue','darkgreen',
+                              'orange','gray',"#D16103")) +
+  labs(y='RVs',title='Signature Plot', col = 'Type')+
+  theme_light() +
+  ggsave('/Users/master/Documents/GitHub/blog/static/blog/pic/Signature plot.png')
+```
+</div>
+
+- k가 작을때 = sampling frequency가 매우 큼= highly frequent
+- bid/ask RV가 가장 크다
+- trasaction price RV 보다 mid quote RV가 더 크다
+- sampling frequency가 클때 covariance도 매우 크다 
+
+#### Mystery
+
+- BID와 ASK return series는 같은 방향으로 가야하는거 아닌가?
+- MID보다 Transaction Price의 RV가 더 커야하는거 아닌가?
+
+#### Clue
+
+* Spread Plot
+
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+quotes2$ID = seq.int(nrow(quotes2))
+quotes2 %>%
+  ggplot(., aes(x=ID,  y=spread)) +
+  geom_point(stat = 'identity',
+             size = 1.5) +
+  theme_light() +
+  labs(y='Spread', x='', title='Plot of Spread', col = 'Type')
+```
+</div>
+
+* Bid Plot
+
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+xs = quantile(quotes2$spread, c(0,0.5,seq(0.90,0.95,0.01),0.97, 0.98, 0.985, 0.9875, 0.99, 0.998, 0.999))
+quotes3 =
+  quotes2 %>%
+  mutate(Group = cut(spread, breaks=xs))
+graph = melt(quotes3[,c('BID','ASK','ID','spread','Group')], 
+             measure.vars = c('BID','ASK'))
+graph %>%
+  filter(variable=='BID') %>%
+  ggplot(., aes(x=ID, y=value, color=Group)) +
+  geom_point(aes(color=Group), size=1.5) +
+  theme_bw() +
+  scale_color_manual(values=glasbey()) +
+  ylim(554,595) +
+  labs(y='APPL BID PRICE', x='', title='BID Scatter Plot', col = 'Type') +
+  ggsave('/Users/master/Documents/GitHub/blog/static/blog/pic/bid_points.png')
 ```
 </div>
 
 
+## Question 3
 
-### Averaged Realized Volatility Function
+For the same data, compute the statistic $L_T^{(n,d)}$ from the previous problem set, as well as $\widehat{QV}$. Recall that $ L_T^{(n,d)}/\sqrt{\widehat{QV}}$ is asymptotically $N(0,1)$ if the $X$ process is an Ito process. On this basis, test the null hypothesis $H_0$ that the $X$ process is an Ito process. 
+
+$$L_{t}^{(n,d)}=\sum_{t_{i+1}\le t}\Delta X_{t_{i-1}}\Delta X_{t_{i}}$$
+where $\Delta X_{t_{i-1}}=X_{t_{i}}-X_{t_{i-1}}\quad\Delta X_{t_{i}}=X_{t_{i+1}}-X_{t_{i}}$
 
 
 
-
-
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+len = length(trades2$PRICE)
+diff = c(1:len-1)*0
+for (k in 2:length(trades2$PRICE)){
+  
+}
+```
+</div>
 
 ***
 

@@ -3,8 +3,8 @@ title: 키움 API Tick Data - Task1 - Complete (2)
 author: ~
 date: '2021-01-22'
 slug: api-tick-data-task1-complete-2
-description: This is description
-thumbnail: blog/tick_plot.png
+description: "This is description"
+thumbnail: /blog/pic/latency_jan_21.png
 categories:
   - highfrequency
 tags: []
@@ -14,7 +14,7 @@ output:
     toc_depth: 4
 ---
 
-<img src="/blog/tick_plot.png"
+<img src="/blog/pic/latency_jan_21.png"
   align="center"
   width="600"
   style="background-color: white; padding-right: 0px;"
@@ -87,15 +87,8 @@ options(digits=10)
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 #wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
 wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-21"
-fn = list.files(path = wd2,
-                pattern = '.*stocks_trade.*\\.csv') # 마지막 30분 틱데이터 가지고오기
-
-# data = readr::read_csv(file = path, 
-#                        col_names = c('code','trade_date','timestamp','price','open','high','low',
-#                                      'size','cum_size','ask1','bid1'))
-
 tbl =
-  list.files(path = wd2, pattern = '.*stocks_trade.*\\.csv')[2:4] %>%
+  list.files(path = wd2, pattern = '.*stocks_trade.*\\.csv')[2:8] %>%
   map_df(~readr::read_csv(paste(wd2,.,sep = '/'),
                           col_names = c('code','trade_date','timestamp','price','open','high','low','size','cum_size','ask1','bid1','rotation','bs_ration', 'mkt_type', 'mkt_cap'),
                           col_types = cols(.default="d", code = "c")
@@ -107,7 +100,7 @@ sum(is.na(tbl))
 </div>
 
 <div class = "pycode">
-```{python}
+```{python, echo = FALSE}
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -126,9 +119,11 @@ rm(list = "tbl")
 gc()
 ```
 
-# Task1: 레이턴시 계산 
+# Task1: 레이턴시 계산
 
-## Samsung Stock
+* 레이턴시 키움 API에서 제공하는 시간과 제공받은 시점에 기록한 로컬 시스템 시간과의 차이를 의미한다. 레이턴시를 없애야만 나중에 실시간 거래를 하는데 문제가 없다. 개장 이후 거래량이 가장 큰 첫 30분동안에 특히 레이턴시가 매우 심한 것을 확인 할 수 있다. 
+
+## 0. Filtering Samsung Stock
 
 - KOSPI Code for Samsung Electronics is '005930'
 
@@ -139,11 +134,10 @@ ss.shape
 ```
 </div>
 
-### 1. Use time object in python
+## 1. Use time object in python
 
 * Delete rows where "second" does not lie between 0 and 59.
-
-* Substring the timstamp to get each time component.
+* Substring the time stamp to get each time component (e.g., hour, minute, second, etc)
 
 <div class = "pycode">
 ```{python}
@@ -187,7 +181,7 @@ ss.head(10)
 ```
 </div>
 
-### 2. Calculate latency and clean it [레이턴시 계산 및 정리]
+## 2. Calculate latency and clean it
 
 * Calculate the latency by subtracting the time provided by Kiwoom dataset and self-recorded time at the moment of processing the data delivered through the Kiwoom API.
 
@@ -260,7 +254,7 @@ plt.scatter(ss.reset_index().index, ss.latency)
 for xc,c,time in zip(xcoords,colors,time):
     plt.axvline(x=xc, label='{}'.format(time), c=c)
 plt.legend()
-plt.title('Latency Over Time After Cleaning')
+plt.title('Latency Over Time on Jan 21')
 plt.ylabel('Seconds')
 ```
 </div>
@@ -268,7 +262,7 @@ plt.ylabel('Seconds')
 <div class = "pycode">
 ```{python}
 ss.latency.hist()
-plt.title('Latency Histogram')
+plt.title('Histogram of latency on Jan 21')
 ```
 </div>
 
@@ -277,6 +271,6 @@ plt.title('Latency Histogram')
 ## Source
 
 - 데이터 provided by 00 Team
-- Negative values
-  - [link1](https://stackoverflow.com/questions/8408397/python-timedelta-issue-with-negative-values)
+- "https://stackoverflow.com/questions/8408397/python-timedelta-issue-with-negative-values"
+
 ---
