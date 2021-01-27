@@ -80,7 +80,7 @@ options(digits=10)
 
 ## Question 1
 
-**Retrieve the bid and offer prices for Apple (AAPL) and Google (GOOG) for Dec 3, 2012. The data are from the TAQ database in WRDS**
+Retrieve the bid and offer prices for Apple (AAPL) and Google (GOOG) for Dec 3, 2012. The data are from the TAQ database in WRDS
 
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
@@ -116,7 +116,7 @@ quotes2 =
 
 ## Question 2
 
-**Use any program to construct signature plots for the realized volatility of the bid and the offer(i.e., ask), the midquote ((bid+offer)/2), as well as the transaction log prices. Also provide a plot for the realized co-volatility between bid and ask log prices. **
+Use any program to construct signature plots for the realized volatility of the bid and the offer(i.e., ask), the midquote ((bid+offer)/2), as well as the transaction log prices. Also provide a plot for the realized co-volatility between bid and ask log prices.
 
 ### Theoretical Concept
 
@@ -235,6 +235,8 @@ graph %>%
 ```
 </div>
 
+Although high-frequency microstructural effects will also be small for sampling intervals larger k, realised volatility estimates constructed from larger return intervals will begin to suffer from a higher sampling error. There is a trade-off between minimising microstructural bias and minimising sampling error
+
 - k가 작을때 = sampling frequency가 매우 큼= highly frequent
 - bid/ask RV가 가장 크다
 - trasaction price RV 보다 mid quote RV가 더 크다
@@ -288,20 +290,63 @@ graph %>%
 
 For the same data, compute the statistic $L_T^{(n,d)}$ from the previous problem set, as well as $\widehat{QV}$. Recall that $ L_T^{(n,d)}/\sqrt{\widehat{QV}}$ is asymptotically $N(0,1)$ if the $X$ process is an Ito process. On this basis, test the null hypothesis $H_0$ that the $X$ process is an Ito process. 
 
+#### $L_T^{(n,d)}$
 $$L_{t}^{(n,d)}=\sum_{t_{i+1}\le t}\Delta X_{t_{i-1}}\Delta X_{t_{i}}$$
 where $\Delta X_{t_{i-1}}=X_{t_{i}}-X_{t_{i-1}}\quad\Delta X_{t_{i}}=X_{t_{i+1}}-X_{t_{i}}$
-
-
 
 <div class = "rcode">
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 len = length(trades2$PRICE)
 diff = c(1:len-1)*0
 for (k in 2:length(trades2$PRICE)){
-  
+  diff[k] = trades2$PRICE[k] - trades2$PRICE[k-1]
+}
+diff2 = c(1:len-1)*0
+for (k in 3:length(trades2$PRICE)){
+  diff2[k] = trades2$PRICE[k-1] - trades2$PRICE[k-2]
+}
+ltnd = diff*diff2
+summary(ltnd)
+```
+</div>
+
+#### $\widehat{QV}$
+
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+qv = c(1:len-1)*0
+for (k in 2:len){
+  qv[k] = (trades2$PRICE[k] - trades2$PRICE[k-1])**2 
 }
 ```
 </div>
+
+#### Test
+
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+test = (diff*diff2)/(sqrt(qv)+0.00000000000000001)
+summary(test)
+test_z = (test-mean(test))/sd(test)
+summary(test_z)
+hist(test_z,breaks = 200, probability = TRUE, xlim = c(-3,3))
+```
+</div>
+
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(ggpubr)
+ggqqplot(test_z)
+```
+</div>
+
+* This shows that we can reject the null hypothesis that the X process is an Ito process
+
+## Question 4
+
+Determine a reasonable choice of J and K for using TSRV based on transaction log prices.
+
+
 
 ***
 

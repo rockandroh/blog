@@ -3,22 +3,13 @@ title: Useful Websites
 author: Roh
 date: '2021-01-27'
 slug: useful-websites
-
+thumbnail: /projects/pic/brain.svg
 ---
-
-
-
-
-<a><img src="/projects/pic/brain.png"   align="center"
-  width="600" style="background-color: white; padding-right: 40px;"/></a>
-
-
-[`sagemaker`](https://github.com/tmastny/sagemaker) R Interface
-
-[`sagemaker-tidymodels`](https://github.com/tmastny/sagemaker-tidymodels):
-framework for [tidymodels](https://www.tidymodels.org/)
-
-***
+<img src="/projects/pic/brain.svg"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/>
 
 I collected the materials including lecture notes, videos, books, and solution manuals that were extremely helpful to me!! I would like to thank every one of them who made lots of efforts to create such an invaluable learning supplements. I hope these lists will become a friendly companion for your study as well. And please understand that  I could not list up all useful materials that I have found due to my poor memory and lack of space :( 
 
@@ -28,4 +19,24 @@ I collected the materials including lecture notes, videos, books, and solution m
 - http://pages.stat.wisc.edu/~larget/stat302/chap3.pdf
 - http://www.stat.umn.edu/geyer/3701/notes/bootstrap.html
 - http://www.stat.umn.edu/geyer/3701/notes/bootstrap.Rmd
+- http://www.stats.ox.ac.uk/~caron/teaching/sb1b/lecturebootstrap.pdf
+- http://faculty.washington.edu/yenchic/17Sp_403/Lec5-bootstrap.pdf
+
+## Bayes Factor
+- https://ajwills72.github.io/rminr/more-on-bf.html
+
+# Finance
+
+## Realized Volatility
+- https://www.sas.upenn.edu/~fdiebold/papers/paper29/temp.pdf (Signature Plot)
+- 
+
+# Economics
+
+## Mankiw Sepcial
+- https://scholar.harvard.edu/mankiw/content/columns-and-talks
+
+# (Text) Book Review
+
+- https://timmastny.rbind.io/projects/book-club/
 - 
