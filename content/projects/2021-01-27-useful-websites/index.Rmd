@@ -3,17 +3,22 @@ title: Useful Websites
 author: Roh
 date: '2021-01-27'
 slug: useful-websites
-categories:
-  - highfrequency
-tags: []
-output:
-  blogdown::html_page:
-    toc: true
-    toc_depth: 4
+
 ---
 
 
-<a><img src="/blog/pic/brain.png" align="left" height=85 style="background-color: white; padding-right: 40px;"/></a>
+
+
+<a><img src="/projects/pic/brain.png"   align="center"
+  width="600" style="background-color: white; padding-right: 40px;"/></a>
+
+
+[`sagemaker`](https://github.com/tmastny/sagemaker) R Interface
+
+[`sagemaker-tidymodels`](https://github.com/tmastny/sagemaker-tidymodels):
+framework for [tidymodels](https://www.tidymodels.org/)
+
+***
 
 I collected the materials including lecture notes, videos, books, and solution manuals that were extremely helpful to me!! I would like to thank every one of them who made lots of efforts to create such an invaluable learning supplements. I hope these lists will become a friendly companion for your study as well. And please understand that  I could not list up all useful materials that I have found due to my poor memory and lack of space :( 
 
