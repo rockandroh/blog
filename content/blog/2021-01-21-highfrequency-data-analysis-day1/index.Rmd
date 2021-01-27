@@ -3,7 +3,7 @@ title: Highfrequency Data Analysis - Day1
 author: Roh
 date: '2021-01-21'
 slug: highfrequency-data-analysis-day1
-thumbnail: /blog/pic/signature_plot_appl.png
+thumbnail: /blog/pic/bid_points.png
 categories:
   - highfrequency
 tags: []
@@ -84,10 +84,11 @@ Retrieve the bid and offer prices for Apple (AAPL) and Google (GOOG) for Dec 3, 
 
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
-wd = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/Misc"
-fn = list.files(path=wd, pattern = '.csv')
-trades = read.csv(paste(wd,fn[2],sep='/'))
-quotes = read.csv(paste(wd,fn[1],sep='/'))
+wd_win = "G:/공유 드라이브/Project_TBD/Stock_Data/Misc"
+wd_mac = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/Misc"
+fn = list.files(path=wd_win, pattern = '.csv')
+trades = read.csv(paste(wd_win,fn[2],sep='/'))
+quotes = read.csv(paste(wd_win,fn[1],sep='/'))
 
 dim(trades)
 dim(quotes)
@@ -230,8 +231,8 @@ graph %>%
   scale_color_manual(values=c('red','blue','darkgreen',
                               'orange','gray',"#D16103")) +
   labs(y='RVs',title='Signature Plot', col = 'Type')+
-  theme_light() +
-  ggsave('/Users/master/Documents/GitHub/blog/static/blog/pic/Signature plot.png')
+  theme_light()
+  #ggsave('/Users/master/Documents/GitHub/blog/static/blog/pic/Signature plot.png')
 ```
 </div>
 
@@ -280,8 +281,8 @@ graph %>%
   theme_bw() +
   scale_color_manual(values=glasbey()) +
   ylim(554,595) +
-  labs(y='APPL BID PRICE', x='', title='BID Scatter Plot', col = 'Type') +
-  ggsave('/Users/master/Documents/GitHub/blog/static/blog/pic/bid_points.png')
+  labs(y='APPL BID PRICE', x='', title='BID Scatter Plot', col = 'Type')
+  #ggsave('/Users/master/Documents/GitHub/blog/static/blog/pic/bid_points.png')
 ```
 </div>
 
@@ -333,12 +334,6 @@ hist(test_z,breaks = 200, probability = TRUE, xlim = c(-3,3))
 ```
 </div>
 
-<div class = "rcode">
-```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-library(ggpubr)
-ggqqplot(test_z)
-```
-</div>
 
 * This shows that we can reject the null hypothesis that the X process is an Ito process
 

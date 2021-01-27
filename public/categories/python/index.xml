@@ -6,52 +6,16 @@
     <description>Recent content in Python on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/python/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>키움 API Tick Data - Task1 - Complete</title>
-      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-day5/</link>
-      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-day5/</guid>
-      <description>Task1: 레이턴시 체크 및 Buy/Sell 구분하기 Samsung Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기 Latency Value 가지고 오기 over 30 or not! Correct the wrongly calculated latency   Hyundai Car Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기 Latency Value 가지고 오기 over 30 or not!</description>
-    </item>
-    
-    <item>
-      <title>키움 API Tick Data - Task1 - Day4</title>
-      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-day4/</link>
-      <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-day4/</guid>
-      <description>Task1: 레이턴시 체크 및 Buy/Sell 구분하기 Samsung Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기 Latency Value 가지고 오기 over 30 or not! Correct the wrongly calculated latency   Hyundai Car Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기 Latency Value 가지고 오기 over 30 or not!</description>
-    </item>
-    
-    <item>
-      <title>키움 API Tick Data - Task1 - Day3</title>
-      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-day3/</link>
-      <pubDate>Mon, 18 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-day3/</guid>
-      <description>Package Import Data Contents Samsung Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 59초는 -1초로 변경  Hyundai Car Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 59초는 -1초로 변경  Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.</description>
-    </item>
-    
-    <item>
-      <title>키움 API Tick Data - Task1 - Day2</title>
-      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-day2/</link>
-      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-day2/</guid>
-      <description>Contents 1. Filter for a certain Stocks [특정주식으로 필터링 하기] 2. Use time object in python 3. Calculate latency and clean it [레이턴시 계산 및 정리] 4. Get Trade Direction Indicator Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 20px; } code.r{ font-size: 12px; } pre { font-size: 18px }  Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
-    </item>
-    
+    <lastBuildDate>Wed, 16 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>R/Python (2) - 계산작업</title>
       <link>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</link>
       <pubDate>Wed, 16 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
-      <description>유형2 - 계산작업 R Python    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
+      <description>유형2 - 계산작업RPythondiv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
 이 시리즈는 유형2로 유형1을 놓치신 분들은 아래의 링크를 이용하시면 됩니다.
-R/Python (1) - 기본작업 # R 코드입니다.</description>
+R/Python (1) - 기본작업# R 코드입니다.</description>
     </item>
     
     <item>
@@ -60,9 +24,9 @@ R/Python (1) - 기본작업 # R 코드입니다.</description>
       <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
-      <description>유형1 R Python    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
+      <description>유형1RPythondiv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
 R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.
-필요한 패키지 준비 library(readxl) # read excel library(dplyr) library(DT) library(formattable) library(reticulate) # Python #py_install(packages = &amp;quot;matplotlib&amp;quot;) #py_install(packages = &amp;quot;pandas&amp;quot;) # &amp;quot;이것은 R 코드 입니다.</description>
+필요한 패키지 준비library(readxl) # read excellibrary(dplyr)library(DT)library(formattable)library(reticulate) # Python#py_install(packages = &amp;quot;matplotlib&amp;quot;)#py_install(packages = &amp;quot;pandas&amp;quot;)# &amp;quot;이것은 R 코드 입니다.</description>
     </item>
     
   </channel>

@@ -1,0 +1,284 @@
+---
+title: 키움 API Tick Data - Task2
+author: ~
+date: '2021-01-27'
+slug: api-tick-data-task1-complete-3
+description: "This is description"
+thumbnail: /blog/pic/folder-icon-set-vector.jpg
+categories:
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+<img src="/blog/pic/folder-icon-set-vector.jpg"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+
+
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
+***
+
+*__Note__: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다*
+
+**데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다**
+
+**R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.**
+
+<div class = "rcode">
+```{r}
+# "이것은 R 코드 입니다."
+```
+</div>
+
+<div class = "pycode">
+```{python}
+# "이것은 Python 코드 입니다."
+```
+</div>
+
+# TASK2: Cleaning 준비
+
+**Rendering 시간이 많이 걸려서 코드는 웹사이트를 만드는데, 아래의 코드들은 실행되지 않았습니다. **
+
+* Package
+```{r, include=FALSE,warning=FALSE, message=FALSE, error=FALSE}
+library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+#py_install(packages = 'dfply')
+library(highfrequency)
+
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)
+```
+
+* Import Data
+
+- Check NA
+
+<div class = "rcode">
+```{r, eval=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+wd_win = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-26"
+wd_mac = "/Volumes/GoogleDrive/공유드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-26"
+tbl =
+  list.files(path = wd_win, pattern = '.*stocks_trade.*\\.csv') %>%
+  map_df(~readr::read_csv(paste(wd_win,.,sep = '/'),
+                          col_names = c('code','trade_date','timestamp','price','open','high','low','size','cum_size','ask1','bid1','rotation','bs_ratio', 'mkt_type', 'mkt_cap'),
+                          col_types = cols(.default="d", code = "c")
+                   )
+         )
+
+sum(is.na(tbl))
+gc()
+dim(tbl)
+head(tbl)
+```
+</div>
+
+
+## 1.타임 스탬프 Sort 하기
+
+키움 API를 통해서 데이터를 받자마자 Timestamp를 찍고 DB에 저장하는데 저장되는 순서는 데이터 들어오는 순서와 다르므로 Timestamp를 다시한번 Sort 해주어야 한다.
+
+## 2. 장중 데이터만 가지고 오기
+
+Exchangehours Only!
+
+키움 API 290 장구분
+
+- 장전시간외: 1
+- 장중: 2
+- 장후시간외: 3
+
+## 3. DATE는 날짜 TIME은 시간
+
+<div class = "rcode">
+```{r, eval=FALSE}
+df = 
+  tbl %>%
+  filter(mkt_type==2) %>%
+  select('code','timestamp','price','size','ask1','bid1','mkt_type','bs_ratio') %>%
+  mutate_at(vars(timestamp), function(x) x*1000) %>%
+  mutate_at(vars(code), function(x) paste0('KR',x)) %>%
+  arrange(.,timestamp) %>%
+  mutate(DATE = paste(substr(as.character(timestamp),1,4),
+                      substr(as.character(timestamp),5,6),
+                      substr(as.character(timestamp),7,8),
+                      sep ="-" 
+                      )) %>%
+  mutate(TIME = paste(substr(as.character(timestamp),9,10),
+                      substr(as.character(timestamp),11,12),
+                      paste(substr(as.character(timestamp),13,14),
+                            substr(as.character(timestamp),15,18),
+                            sep='.'),
+                      sep =":" 
+                      )) %>%
+  rename(SYMBOL = code) %>%
+  rename(BID = bid1) %>%
+  rename(OFR = ask1) %>%
+  rename(SIZE = size) %>%
+  rename(PRICE = price) %>%
+  rename(VP = bs_ratio) %>%
+  select(!c('timestamp', 'mkt_type')) %>%
+  relocate(DATE, TIME, SYMBOL, PRICE, SIZE, BID, OFR, VP)
+  
+head(df)
+rm(list = "tbl")
+gc()
+```
+</div>
+
+## 4. 네이버 금융에서 주식티커 크롤링 
+
+출처: https://hyunyulhenry.github.io/quant_cookbook/%ED%81%AC%EB%A1%A4%EB%A7%81-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0.html
+
+
+```{r, eval=FALSE, include=FALSE}
+library(rvest)
+library(httr)
+data = list()
+
+# i = 0 은 코스피, i = 1 은 코스닥 종목
+for (i in 0:1) {
+
+  ticker = list()
+  url =
+    paste0('https://finance.naver.com/sise/',
+             'sise_market_sum.nhn?sosok=',i,'&page=1')
+  
+  down_table = GET(url)
+  
+  # 최종 페이지 번호 찾아주기
+  navi.final = read_html(down_table, encoding = "EUC-KR") %>%
+      html_nodes(., ".pgRR") %>%
+      html_nodes(., "a") %>%
+      html_attr(.,"href") %>%
+      strsplit(., "=") %>%
+      unlist() %>%
+      tail(., 1) %>%
+      as.numeric()
+  
+  # 첫번째 부터 마지막 페이지까지 for loop를 이용하여 테이블 추출하기
+  for (j in 1:navi.final) {
+    
+    # 각 페이지에 해당하는 url 생성
+    url = paste0(
+      'https://finance.naver.com/sise/',
+      'sise_market_sum.nhn?sosok=',i,"&page=",j)
+    down_table = GET(url)
+ 
+    Sys.setlocale("LC_ALL", "English")
+    # 한글 오류 방지를 위해 영어로 로케일 언어 변경
+ 
+    table = read_html(down_table, encoding = "EUC-KR") %>%
+      html_table(fill = TRUE)
+    table = table[[2]] # 원하는 테이블 추출
+ 
+    Sys.setlocale("LC_ALL", "Korean")
+    # 한글을 읽기위해 로케일 언어 재변경
+ 
+    table[, ncol(table)] = NULL # 토론식 부분 삭제
+    table = na.omit(table) # 빈 행 삭제
+    
+    # 6자리 티커만 추출
+    symbol = read_html(down_table, encoding = "EUC-KR") %>%
+      html_nodes(., "tbody") %>%
+      html_nodes(., "td") %>%
+      html_nodes(., "a") %>%
+      html_attr(., "href")
+ 
+    symbol = sapply(symbol, function(x) {
+        str_sub(x, -6, -1) 
+      })
+    
+    symbol = unique(symbol)
+    
+    # 테이블에 티커 넣어준 후, 테이블 정리
+    table$N = paste0('KR',symbol)
+    colnames(table)[1] = "종목코드"
+
+    rownames(table) = NULL
+    ticker[[j]] = table
+ 
+    Sys.sleep(0.5) # 페이지 당 0.5초의 슬립 적용
+  }
+  
+  # do.call을 통해 리스트를 데이터 프레임으로 묶기
+  ticker = do.call(rbind, ticker)
+  data[[i + 1]] = ticker
+}
+
+# 코스피와 코스닥 테이블 묶기
+data = do.call(rbind, data)
+head(data)
+```
+
+
+## 5. Symbol 별로 분리해서 폴더에 집어넣기
+
+Seperate by Ticker
+
+<div class = "rcode">
+```{r, eval=FALSE}
+dfs = split(df, df$SYMBOL)
+datas = split(data, data$종목코드)
+
+dest = "G:/공유 드라이브/Project_TBD/Stock_Data/Symbol"
+for (dn in names(dfs)){
+    output_loc = paste(dest,dn,'tick',sep = "/")
+    info_loc = paste(dest,dn,'info',sep='/')
+    dir.create(paste(dest,dn,sep = "/"))
+    dir.create(paste(dest,dn,'tick',sep = "/"))
+    dir.create(paste(dest,dn,'info',sep='/'))
+    sub_dfs <- split(dfs[[dn]], dfs[[dn]]$DATE)
+    for (fn in names(sub_dfs)){
+        write.csv(sub_dfs[[fn]], 
+                  file.path(output_loc, paste0(fn, ".csv")), 
+                  row.names = FALSE)
+        write.csv(datas[[dn]], 
+                  file.path(info_loc, paste0(fn, ".csv")),
+                  row.names = FALSE)
+    }
+}
+```
+</div>
+
+***
+
+## Source
+
+- 데이터 provided by 00 Team
+
+---

@@ -1,15 +1,14 @@
 ---
 title: Useful Websites
 author: Roh
-date: '2021-01-27'
+date: '2020-01-01'
 slug: useful-websites
-thumbnail: /projects/pic/brain.svg
 ---
-<img src="/projects/pic/brain.svg"
-  align="center"
-  width="600"
-  style="background-color: white; padding-right: 0px;"
-/>
+<a><img src="/blog/pic/brain.png" align="left" height=85 style="background-color: white; padding-right: 20px;"/></a>
+
+유용한 웹사이트 모음
+  
+<!--more-->
 
 I collected the materials including lecture notes, videos, books, and solution manuals that were extremely helpful to me!! I would like to thank every one of them who made lots of efforts to create such an invaluable learning supplements. I hope these lists will become a friendly companion for your study as well. And please understand that  I could not list up all useful materials that I have found due to my poor memory and lack of space :( 
 

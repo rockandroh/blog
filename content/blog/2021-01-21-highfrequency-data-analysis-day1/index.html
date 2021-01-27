@@ -1,0 +1,306 @@
+---
+title: Highfrequency Data Analysis - Day1
+author: Roh
+date: '2021-01-21'
+slug: highfrequency-data-analysis-day1
+thumbnail: /blog/pic/bid_points.png
+categories:
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#hw7">HW7</a><ul>
+<li><a href="#question-1">Question 1</a></li>
+<li><a href="#question-2">Question 2</a><ul>
+<li><a href="#theoretical-concept">Theoretical Concept</a><ul>
+<li><a href="#integrated-volatility-iv">Integrated Volatility [IV]</a></li>
+<li><a href="#realized-volatility-rv">Realized Volatility [RV]</a></li>
+<li><a href="#signature-plot">Signature Plot</a></li>
+<li><a href="#take-log">Take log</a></li>
+<li><a href="#calculate-averaged-realized-volatility">Calculate Averaged Realized Volatility</a></li>
+<li><a href="#get-arvs-for-bidaskmid-and-trade">Get ARVs for bid,ask,mid, and trade</a></li>
+<li><a href="#plot">Plot</a></li>
+<li><a href="#mystery">Mystery</a></li>
+<li><a href="#clue">Clue</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#question-3">Question 3</a><ul>
+<li><a href="#l_tnd"><span class="math inline">\(L_T^{(n,d)}\)</span></a></li>
+<li><a href="#widehatqv"><span class="math inline">\(\widehat{QV}\)</span></a></li>
+<li><a href="#test">Test</a></li>
+</ul></li>
+<li><a href="#question-4">Question 4</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p><img src="/blog/pic/signature_plot_appl.png"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/></p>
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+<p><em><strong>Note</strong>: 이 페이지는 시카고대학교 Per Mykland 교수님의 FINM 33170 and STAT 33910 수업 과제 7번의 1번 문제에 관한 내용입니다. 제가 작성하는 내용이 정답이 아님 (사실 정답을 모름) 을 미리 알려드립니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</em></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div class="rcode">
+<pre class="r"><code># &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># &quot;이것은 Python 코드 입니다.&quot;</code></pre>
+</div>
+<div id="hw7" class="section level1">
+<h1>HW7</h1>
+<div id="question-1" class="section level2">
+<h2>Question 1</h2>
+<p>Retrieve the bid and offer prices for Apple (AAPL) and Google (GOOG) for Dec 3, 2012. The data are from the TAQ database in WRDS</p>
+<div class="rcode">
+<pre class="r"><code>wd_win = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/Misc&quot;
+wd_mac = &quot;/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/Misc&quot;
+fn = list.files(path=wd_win, pattern = &#39;.csv&#39;)
+trades = read.csv(paste(wd_win,fn[2],sep=&#39;/&#39;))
+quotes = read.csv(paste(wd_win,fn[1],sep=&#39;/&#39;))
+
+dim(trades)</code></pre>
+<pre><code>## [1] 70182     7</code></pre>
+<pre class="r"><code>dim(quotes)</code></pre>
+<pre><code>## [1] 495848      6</code></pre>
+<pre class="r"><code>head(trades)</code></pre>
+<pre><code>##       DATE      TIME_M SYM_ROOT SYM_SUFFIX SIZE  PRICE TR_CORR
+## 1 20121203 4:00:01.360     AAPL         NA  100 589.50       0
+## 2 20121203 4:04:09.043     AAPL         NA  145 589.50       0
+## 3 20121203 4:04:31.208     AAPL         NA  300 589.32       0
+## 4 20121203 4:12:19.971     AAPL         NA  100 590.21       0
+## 5 20121203 4:31:10.157     AAPL         NA  100 589.90       0
+## 6 20121203 4:53:04.991     AAPL         NA  100 589.34       0</code></pre>
+<pre class="r"><code>head(quotes)</code></pre>
+<pre><code>##       DATE      TIME_M SYM_ROOT SYM_SUFFIX    BID    ASK
+## 1 20121203 4:00:01.084     AAPL         NA 589.50 589.60
+## 2 20121203 4:02:11.715     AAPL         NA 589.50 589.95
+## 3 20121203 4:04:03.310     AAPL         NA 589.50 589.73
+## 4 20121203 4:04:09.043     AAPL         NA 588.25 589.95
+## 5 20121203 4:04:09.048     AAPL         NA 588.25 589.50
+## 6 20121203 4:04:21.689     AAPL         NA 588.25 589.38</code></pre>
+</div>
+<div class="rcode">
+<pre class="r"><code>trades2 = 
+  trades[,c(2,6)] %&gt;% 
+  filter(PRICE != 0) %&gt;%
+  drop_na()
+
+quotes2 = 
+  quotes[,c(2,5,6)] %&gt;%
+  mutate(spread = ASK - BID) %&gt;%
+  filter(BID !=0 &amp; ASK !=0) %&gt;%
+  filter(spread &lt; 100) %&gt;%
+  drop_na()</code></pre>
+</div>
+</div>
+<div id="question-2" class="section level2">
+<h2>Question 2</h2>
+<p>Use any program to construct signature plots for the realized volatility of the bid and the offer(i.e., ask), the midquote ((bid+offer)/2), as well as the transaction log prices. Also provide a plot for the realized co-volatility between bid and ask log prices.</p>
+<div id="theoretical-concept" class="section level3">
+<h3>Theoretical Concept</h3>
+<p>We focus on a single asset traded in a liquid financial market.We assume that the sample-path of the corresponding (latent)price process,<span class="math inline">\(\{S∗t,0≤t\}\)</span>, is continuous and determined by the stochastic differential equation(sde)</p>
+<p><span class="math display">\[r_t = d\log\left(S_t^*\right) =\sigma_t dW_t\]</span>
+where <span class="math inline">\(W_t\)</span> denotes a standard Brownian motion, and the spot volatility process <span class="math inline">\(\sigma_t\)</span> is predictable and has a continuous sample path. We assume that <span class="math inline">\(\sigma_t\)</span> and <span class="math inline">\(W_t\)</span> processes are uncorrelated and, for convenience, we refer to the unit time interval as a day.</p>
+<div id="integrated-volatility-iv" class="section level4">
+<h4>Integrated Volatility [IV]</h4>
+<p>Primary interest centers on forecasting the (latent) integrated volatility over daily and longer inter-daily horizons. Specifically, we define the one-period integrated volatility,</p>
+<p><span class="math display">\[IV_{t+1} = \int_{t}^{t+1} \sigma_\tau^2 d\tau\]</span></p>
+<p>and, for <span class="math inline">\(m\)</span> a positive integer, the corresponding multi-period measure,</p>
+<p><span class="math display">\[IV_{t+1:t+m} = \sum_{j=1}^m IV_{t+j}\]</span></p>
+<p>In this context, <span class="math inline">\(IV_t\)</span> equals the quadratic return variation which, in turn, provides a natural measure of ex-post return variability.</p>
+<p>Integrated volatility is not directly observable but, as highlighted by many papers, the corresponding RVs provide consistent estimate of <span class="math inline">\(IV_t\)</span>. The standard RV measure is simply introduced as below.</p>
+</div>
+<div id="realized-volatility-rv" class="section level4">
+<h4>Realized Volatility [RV]</h4>
+<p>Realized volatility [RV] is a non-parametric ex-post estimate of the return variation. The most obvious realized volatility measure is the sum of finely-sampledsquared return realizations over a fixed time interval.</p>
+<p><span class="math display">\[RV_t^*(h) = \sum_{i=1}^{1/h} r_{t-1+ih}^{*(h)2}\]</span>, where <span class="math inline">\(1/h\)</span> is assumed to be a positive integer and <span class="math inline">\(r_{t}^{*(h)} = \log(S_t^*)-log(S_{t-s}^*)\)</span>. Formally, <span class="math inline">\(RV_{t}^{*}(h)\)</span> is uniformly consistent for <span class="math inline">\(IV_t\)</span> as <span class="math inline">\(h \rightarrow 0\)</span>, i.e., the intraday sampling frequency goes to infinity.</p>
+</div>
+<div id="signature-plot" class="section level4">
+<h4>Signature Plot</h4>
+<p>A microstructure bias, if operative, will probably manifest itself as sampling frequency increases by distorting the average realised volatility. We construct a plot of average realised volatility against sampling frequency, which we call the “volatility signature plot”
+This helps to reveal the severity of microstructure bias as sampling frequency increases, and can be useful in guiding the selection of sampling
+frequency. We can also use the volatility signature plots to characterise different market microstructures.</p>
+<p>Interestingly, it turns out that the volatility signature has the same form as the variance-time function, which has been extensively studied in finance. However, while there is no information in the volatility signature that is not also present in high-frequency return autocorrelations, the two are complements, not substitutes, as the information relevant for construction and interpretation of realised volatilities is more directly and transparently revealed in the volatility signature plot.</p>
+</div>
+<div id="take-log" class="section level4">
+<h4>Take log</h4>
+<div class="rcode">
+<pre class="r"><code>bid_series = log(quotes2$BID)
+ask_series = log(quotes2$ASK)
+mid_series = log((quotes2$BID + quotes2$ASK)/2)
+price_series = log(trades2$PRICE)</code></pre>
+</div>
+</div>
+<div id="calculate-averaged-realized-volatility" class="section level4">
+<h4>Calculate Averaged Realized Volatility</h4>
+<div class="rcode">
+<pre class="r"><code>ARV = function(x, y=x, k){
+  #overlap delta(x_i)
+  diff_x = diff(x, lag=k)
+  diff_y = diff(y, lag=k)
+  ARV = sum(diff_x * diff_y) / k
+  if (ARV &gt; 0){
+    result = sqrt(ARV*250)
+  }
+  else {
+    result = -sqrt(-ARV*250) 
+  }
+  return(result)
+}</code></pre>
+</div>
+</div>
+<div id="get-arvs-for-bidaskmid-and-trade" class="section level4">
+<h4>Get ARVs for bid,ask,mid, and trade</h4>
+<div class="rcode">
+<pre class="r"><code>num_k = 100
+step = 2
+max_k = num_k * step
+ARVs = data.frame(bid = c(1:num_k)*0,
+                  ask = c(1:num_k)*0,
+                  mid = c(1:num_k)*0,
+                  trade = c(1:num_k)*0,
+                  covol = c(1:num_k)*0
+                  )
+
+for (i in 1:num_k){
+  ARVs[i,1] = ARV(bid_series, bid_series, step*i)
+  ARVs[i,2] = ARV(ask_series, ask_series, step*i)
+  ARVs[i,3] = ARV(mid_series, mid_series, step*i)
+  ARVs[i,4] = ARV(price_series, price_series, step*i)
+  # Realized Covariation of Bid and Ask
+  ARVs[i,5] = ARV(bid_series, ask_series, step*i)
+}
+
+ARVs =
+  ARVs %&gt;%
+  rowwise() %&gt;%
+  mutate(corr= covol/(bid*ask))
+ARVs[&#39;k&#39;] = seq(step,max_k,step)
+#ARVs$ID = seq.int(nrow(ARVs))
+head(ARVs)</code></pre>
+<pre><code>## # A tibble: 6 x 7
+## # Rowwise: 
+##     bid   ask   mid trade  covol    corr     k
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+## 1  40.3  42.2  26.0 0.472 -18.9  -0.0111     2
+## 2  28.8  30.0  18.4 0.364 -13.7  -0.0158     4
+## 3  23.7  24.7  15.1 0.316 -11.4  -0.0194     6
+## 4  20.5  21.5  13.1 0.290  -9.77 -0.0222     8
+## 5  18.4  19.3  11.8 0.273  -8.91 -0.0250    10
+## 6  16.9  17.7  10.8 0.260  -8.11 -0.0272    12</code></pre>
+</div>
+</div>
+<div id="plot" class="section level4">
+<h4>Plot</h4>
+<div class="rcode">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<p>Although high-frequency microstructural effects will also be small for sampling intervals larger k, realised volatility estimates constructed from larger return intervals will begin to suffer from a higher sampling error. There is a trade-off between minimising microstructural bias and minimising sampling error</p>
+<ul>
+<li>k가 작을때 = sampling frequency가 매우 큼= highly frequent</li>
+<li>bid/ask RV가 가장 크다</li>
+<li>trasaction price RV 보다 mid quote RV가 더 크다</li>
+<li>sampling frequency가 클때 covariance도 매우 크다</li>
+</ul>
+</div>
+<div id="mystery" class="section level4">
+<h4>Mystery</h4>
+<ul>
+<li>BID와 ASK return series는 같은 방향으로 가야하는거 아닌가?</li>
+<li>MID보다 Transaction Price의 RV가 더 커야하는거 아닌가?</li>
+</ul>
+</div>
+<div id="clue" class="section level4">
+<h4>Clue</h4>
+<ul>
+<li>Spread Plot</li>
+</ul>
+<div class="rcode">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<ul>
+<li>Bid Plot</li>
+</ul>
+<div class="rcode">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="question-3" class="section level2">
+<h2>Question 3</h2>
+<p>For the same data, compute the statistic <span class="math inline">\(L_T^{(n,d)}\)</span> from the previous problem set, as well as <span class="math inline">\(\widehat{QV}\)</span>. Recall that $ L_T^{(n,d)}/$ is asymptotically <span class="math inline">\(N(0,1)\)</span> if the <span class="math inline">\(X\)</span> process is an Ito process. On this basis, test the null hypothesis <span class="math inline">\(H_0\)</span> that the <span class="math inline">\(X\)</span> process is an Ito process.</p>
+<div id="l_tnd" class="section level4">
+<h4><span class="math inline">\(L_T^{(n,d)}\)</span></h4>
+<p><span class="math display">\[L_{t}^{(n,d)}=\sum_{t_{i+1}\le t}\Delta X_{t_{i-1}}\Delta X_{t_{i}}\]</span>
+where <span class="math inline">\(\Delta X_{t_{i-1}}=X_{t_{i}}-X_{t_{i-1}}\quad\Delta X_{t_{i}}=X_{t_{i+1}}-X_{t_{i}}\)</span></p>
+<div class="rcode">
+<pre><code>##         Min.      1st Qu.       Median         Mean      3rd Qu.         Max. 
+## -36.96480000  -0.00023600   0.00000000  -0.00296394   0.00000000   1.15793800</code></pre>
+</div>
+</div>
+<div id="widehatqv" class="section level4">
+<h4><span class="math inline">\(\widehat{QV}\)</span></h4>
+<div class="rcode">
+
+</div>
+</div>
+<div id="test" class="section level4">
+<h4>Test</h4>
+<div class="rcode">
+<pre><code>##        Min.     1st Qu.      Median        Mean     3rd Qu.        Max. 
+## -6.12000000 -0.01000000  0.00000000 -0.00981701  0.00000000  3.97270000</code></pre>
+<pre><code>##         Min.      1st Qu.       Median         Mean      3rd Qu.         Max. 
+## -78.65013227  -0.00235544   0.12636432   0.00000000   0.12636432  51.26286564</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<ul>
+<li>This shows that we can reject the null hypothesis that the X process is an Ito process</li>
+</ul>
+</div>
+</div>
+<div id="question-4" class="section level2">
+<h2>Question 4</h2>
+<p>Determine a reasonable choice of J and K for using TSRV based on transaction log prices.</p>
+<hr />
+<p><strong>Source</strong></p>
+<ul>
+<li>Signiture plot
+<ul>
+<li><a href="http://public.econ.duke.edu/~boller/Published_Papers/risk_00.pdf" class="uri">http://public.econ.duke.edu/~boller/Published_Papers/risk_00.pdf</a></li>
+</ul></li>
+<li>Realized Volatility
+<ul>
+<li><a href="http://public.econ.duke.edu/~boller/Published_Papers/joe_11b.pdf" class="uri">http://public.econ.duke.edu/~boller/Published_Papers/joe_11b.pdf</a></li>
+</ul></li>
+</ul>
+</div>
+</div>

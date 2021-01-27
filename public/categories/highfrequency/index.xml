@@ -6,59 +6,32 @@
     <description>Recent content in highfrequency on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/highfrequency/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/highfrequency/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>키움 API Tick Data - Task1 - Complete (2)</title>
+      <title>키움 API Tick Data - Task2</title>
+      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-3/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-3/</guid>
+      <description>TASK2: Cleaning 준비1.타임 스탬프 Sort 하기2. 장중 데이터만 가지고 오기3. DATE는 날짜 TIME은 시간4. 네이버 금융에서 주식티커 크롤링5. Symbol 별로 분리해서 폴더에 집어넣기Sourcediv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }body, td {font-size: 14px;}code.r{font-size: 12px;}pre {font-size: 12px}Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
+    </item>
+    
+    <item>
+      <title>키움 API Tick Data - Task1</title>
       <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-2/</link>
       <pubDate>Fri, 22 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-2/</guid>
-      <description>Task1: 레이턴시 계산 0. Filtering Samsung Stock 1. Use time object in python 2. Calculate latency and clean it 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기  Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 14px; } code.r{ font-size: 12px; } pre { font-size: 12px }  Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
+      <description>Task1: 레이턴시 계산0. Filtering Samsung Stock1. Use time object in python2. Calculate latency and clean it오전 8시 9시 앞에 ’0’을 붙여주기Latency +/- 정보 가지고 오기Sourcediv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }body, td {font-size: 14px;}code.r{font-size: 12px;}pre {font-size: 12px}Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
     </item>
     
     <item>
-      <title>키움 API Tick Data - Task1 - Complete</title>
-      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-day5/</link>
-      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
+      <title>Highfrequency Data Analysis - Day1</title>
+      <link>https://rockandroh.netlify.app/blog/highfrequency-data-analysis-day1/</link>
+      <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-day5/</guid>
-      <description>Task1: 레이턴시 체크 및 Buy/Sell 구분하기 Samsung Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기 Latency Value 가지고 오기 over 30 or not! Correct the wrongly calculated latency   Hyundai Car Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기 Latency Value 가지고 오기 over 30 or not!</description>
-    </item>
-    
-    <item>
-      <title>키움 API Tick Data - Task1 - Day4</title>
-      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-day4/</link>
-      <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-day4/</guid>
-      <description>Task1: 레이턴시 체크 및 Buy/Sell 구분하기 Samsung Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기 Latency Value 가지고 오기 over 30 or not! Correct the wrongly calculated latency   Hyundai Car Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기 Latency Value 가지고 오기 over 30 or not!</description>
-    </item>
-    
-    <item>
-      <title>키움 API Tick Data - Task1 - Day3</title>
-      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-day3/</link>
-      <pubDate>Mon, 18 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-day3/</guid>
-      <description>Package Import Data Contents Samsung Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 59초는 -1초로 변경  Hyundai Car Stock 1. Use time object in python 2. Calculate latency and clean it [레이턴시 계산 및 정리] 59초는 -1초로 변경  Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.</description>
-    </item>
-    
-    <item>
-      <title>키움 API Tick Data - Task1 - Day2</title>
-      <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-day2/</link>
-      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-day2/</guid>
-      <description>Contents 1. Filter for a certain Stocks [특정주식으로 필터링 하기] 2. Use time object in python 3. Calculate latency and clean it [레이턴시 계산 및 정리] 4. Get Trade Direction Indicator Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 20px; } code.r{ font-size: 12px; } pre { font-size: 18px }  Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
-    </item>
-    
-    <item>
-      <title>키움 API Tick Data - Day1</title>
-      <link>https://rockandroh.netlify.app/blog/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</link>
-      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/%ED%82%A4%EC%9B%80-api-tick-data-cleaning/</guid>
-      <description>Contents 0. Necessity of making precise time index 1. Filter for a certain Stocks [특정주식으로 필터링 하기] 2. Use time object in python 3. Calculate latency and clean it [레이턴시 계산 및 정리] 4. Get Trade Direction Indicator Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 20px; } code.</description>
+      <guid>https://rockandroh.netlify.app/blog/highfrequency-data-analysis-day1/</guid>
+      <description>HW7Question 1Question 2Theoretical ConceptIntegrated Volatility [IV]Realized Volatility [RV]Signature PlotTake logCalculate Averaged Realized VolatilityGet ARVs for bid,ask,mid, and tradePlotMysteryClueQuestion 3\(L_T^{(n,d)}\)\(\widehat{QV}\)TestQuestion 4div.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }body, td {font-size: 20px;}code.</description>
     </item>
     
   </channel>

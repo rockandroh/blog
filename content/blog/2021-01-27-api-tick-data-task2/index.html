@@ -1,0 +1,178 @@
+---
+title: 키움 API Tick Data - Task2
+author: ~
+date: '2021-01-27'
+slug: api-tick-data-task1-complete-3
+description: "This is description"
+thumbnail: /blog/pic/folder-icon-set-vector.jpg
+categories:
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#task2-cleaning-준비">TASK2: Cleaning 준비</a><ul>
+<li><a href="#타임-스탬프-sort-하기">1.타임 스탬프 Sort 하기</a></li>
+<li><a href="#장중-데이터만-가지고-오기">2. 장중 데이터만 가지고 오기</a></li>
+<li><a href="#date는-날짜-time은-시간">3. DATE는 날짜 TIME은 시간</a></li>
+<li><a href="#네이버-금융에서-주식티커-크롤링">4. 네이버 금융에서 주식티커 크롤링</a></li>
+<li><a href="#symbol-별로-분리해서-폴더에-집어넣기">5. Symbol 별로 분리해서 폴더에 집어넣기</a></li>
+<li><a href="#source">Source</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p><img src="/blog/pic/folder-icon-set-vector.jpg"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/></p>
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+<hr />
+<p><em><strong>Note</strong>: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다. 오류 및 문의사항은 <a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a> 으로 메일주시면 감사하겠습니다</em></p>
+<p><strong>데이터 자체에 대한 질문과 데이터 제공에 관한 문의는 000 으로 메일 주시면 감사하겠습니다</strong></p>
+<p><strong>R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.</strong></p>
+<div class="rcode">
+<pre class="r"><code># &quot;이것은 R 코드 입니다.&quot;</code></pre>
+</div>
+<div class="pycode">
+<pre class="python"><code># &quot;이것은 Python 코드 입니다.&quot;</code></pre>
+</div>
+<div id="task2-cleaning-준비" class="section level1">
+<h1>TASK2: Cleaning 준비</h1>
+<p><strong>Rendering 시간이 많이 걸려서 코드는 웹사이트를 만드는데, 아래의 코드들은 실행되지 않았습니다. </strong></p>
+<ul>
+<li><p>Package</p></li>
+<li><p>Import Data</p></li>
+<li><p>Check NA</p></li>
+</ul>
+<div class="rcode">
+<pre class="r"><code>wd_win = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-26&quot;
+wd_mac = &quot;/Volumes/GoogleDrive/공유드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-26&quot;
+tbl =
+  list.files(path = wd_win, pattern = &#39;.*stocks_trade.*\\.csv&#39;) %&gt;%
+  map_df(~readr::read_csv(paste(wd_win,.,sep = &#39;/&#39;),
+                          col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,&#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;rotation&#39;,&#39;bs_ratio&#39;, &#39;mkt_type&#39;, &#39;mkt_cap&#39;),
+                          col_types = cols(.default=&quot;d&quot;, code = &quot;c&quot;)
+                   )
+         )
+
+sum(is.na(tbl))
+gc()
+dim(tbl)
+head(tbl)</code></pre>
+</div>
+<div id="타임-스탬프-sort-하기" class="section level2">
+<h2>1.타임 스탬프 Sort 하기</h2>
+<p>키움 API를 통해서 데이터를 받자마자 Timestamp를 찍고 DB에 저장하는데 저장되는 순서는 데이터 들어오는 순서와 다르므로 Timestamp를 다시한번 Sort 해주어야 한다.</p>
+</div>
+<div id="장중-데이터만-가지고-오기" class="section level2">
+<h2>2. 장중 데이터만 가지고 오기</h2>
+<p>Exchangehours Only!</p>
+<p>키움 API 290 장구분</p>
+<ul>
+<li>장전시간외: 1</li>
+<li>장중: 2</li>
+<li>장후시간외: 3</li>
+</ul>
+</div>
+<div id="date는-날짜-time은-시간" class="section level2">
+<h2>3. DATE는 날짜 TIME은 시간</h2>
+<div class="rcode">
+<pre class="r"><code>df = 
+  tbl %&gt;%
+  filter(mkt_type==2) %&gt;%
+  select(&#39;code&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;mkt_type&#39;,&#39;bs_ratio&#39;) %&gt;%
+  mutate_at(vars(timestamp), function(x) x*1000) %&gt;%
+  mutate_at(vars(code), function(x) paste0(&#39;KR&#39;,x)) %&gt;%
+  arrange(.,timestamp) %&gt;%
+  mutate(DATE = paste(substr(as.character(timestamp),1,4),
+                      substr(as.character(timestamp),5,6),
+                      substr(as.character(timestamp),7,8),
+                      sep =&quot;-&quot; 
+                      )) %&gt;%
+  mutate(TIME = paste(substr(as.character(timestamp),9,10),
+                      substr(as.character(timestamp),11,12),
+                      paste(substr(as.character(timestamp),13,14),
+                            substr(as.character(timestamp),15,18),
+                            sep=&#39;.&#39;),
+                      sep =&quot;:&quot; 
+                      )) %&gt;%
+  rename(SYMBOL = code) %&gt;%
+  rename(BID = bid1) %&gt;%
+  rename(OFR = ask1) %&gt;%
+  rename(SIZE = size) %&gt;%
+  rename(PRICE = price) %&gt;%
+  rename(VP = bs_ratio) %&gt;%
+  select(!c(&#39;timestamp&#39;, &#39;mkt_type&#39;)) %&gt;%
+  relocate(DATE, TIME, SYMBOL, PRICE, SIZE, BID, OFR, VP)
+  
+head(df)
+rm(list = &quot;tbl&quot;)
+gc()</code></pre>
+</div>
+</div>
+<div id="네이버-금융에서-주식티커-크롤링" class="section level2">
+<h2>4. 네이버 금융에서 주식티커 크롤링</h2>
+<p>출처: <a href="https://hyunyulhenry.github.io/quant_cookbook/%ED%81%AC%EB%A1%A4%EB%A7%81-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0.html" class="uri">https://hyunyulhenry.github.io/quant_cookbook/%ED%81%AC%EB%A1%A4%EB%A7%81-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0.html</a></p>
+</div>
+<div id="symbol-별로-분리해서-폴더에-집어넣기" class="section level2">
+<h2>5. Symbol 별로 분리해서 폴더에 집어넣기</h2>
+<p>Seperate by Ticker</p>
+<div class="rcode">
+<pre class="r"><code>dfs = split(df, df$SYMBOL)
+datas = split(data, data$종목코드)
+
+dest = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/Symbol&quot;
+for (dn in names(dfs)){
+    output_loc = paste(dest,dn,&#39;tick&#39;,sep = &quot;/&quot;)
+    info_loc = paste(dest,dn,&#39;info&#39;,sep=&#39;/&#39;)
+    dir.create(paste(dest,dn,sep = &quot;/&quot;))
+    dir.create(paste(dest,dn,&#39;tick&#39;,sep = &quot;/&quot;))
+    dir.create(paste(dest,dn,&#39;info&#39;,sep=&#39;/&#39;))
+    sub_dfs &lt;- split(dfs[[dn]], dfs[[dn]]$DATE)
+    for (fn in names(sub_dfs)){
+        write.csv(sub_dfs[[fn]], 
+                  file.path(output_loc, paste0(fn, &quot;.csv&quot;)), 
+                  row.names = FALSE)
+        write.csv(datas[[dn]], 
+                  file.path(info_loc, paste0(fn, &quot;.csv&quot;)),
+                  row.names = FALSE)
+    }
+}</code></pre>
+</div>
+<hr />
+</div>
+<div id="source" class="section level2">
+<h2>Source</h2>
+<ul>
+<li>데이터 provided by 00 Team</li>
+</ul>
+<hr />
+</div>
+</div>

@@ -13,9 +13,9 @@
       <pubDate>Wed, 21 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/sampling-method-in-detail/</guid>
-      <description>Basic Inverse Transform Sampling Rejection Sampling Importance Sampling    This page talks about how to sample from the distribution. We will go over well known sampling techniques and try to implement with various examples.
-Basic What it means to calcaulte the variance with mean 0?
-\[ Var[X]= \int_{-\infty}^{\infty} x^2 f(x)dx \] when \(f(x)\) is \(N(1,2)\). Then \(f(x)\) is \[\frac{1}{\sqrt{2\pi\sigma^2}}\cdot\exp\left(-(x-\mu)^2/2\sigma^2\right)\] where \(\mu\) is 0 and \(\sigma\) is 2.</description>
+      <description>BasicInverse Transform SamplingRejection SamplingImportance SamplingThis page talks about how to sample from the distribution. We will go over well known sampling techniques and try to implement with various examples.
+BasicWhat it means to calcaulte the variance with mean 0?
+\[ Var[X]= \int_{-\infty}^{\infty} x^2 f(x)dx \]when \(f(x)\) is \(N(1,2)\). Then \(f(x)\) is \[\frac{1}{\sqrt{2\pi\sigma^2}}\cdot\exp\left(-(x-\mu)^2/2\sigma^2\right)\] where \(\mu\) is 0 and \(\sigma\) is 2.</description>
     </item>
     
   </channel>

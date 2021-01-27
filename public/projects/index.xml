@@ -6,27 +6,34 @@
     <description>Recent content in Projects on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/projects/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Useful Websites</title>
-      <link>https://rockandroh.netlify.app/projects/useful-websites/</link>
-      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/projects/useful-websites/</guid>
-      <description>sagemaker R Interface
-sagemaker-tidymodels: framework for tidymodels
-I collected the materials including lecture notes, videos, books, and solution manuals that were extremely helpful to me!! I would like to thank every one of them who made lots of efforts to create such an invaluable learning supplements. I hope these lists will become a friendly companion for your study as well. And please understand that I could not list up all useful materials that I have found due to my poor memory and lack of space :(</description>
-    </item>
-    
+    <lastBuildDate>Tue, 10 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/projects/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>경상도 골프장 정리</title>
       <link>https://rockandroh.netlify.app/projects/golf-club-summary/</link>
       <pubDate>Tue, 10 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/projects/golf-club-summary/</guid>
-      <description>Roh’s 경상도 골프장 리스트 비회원제 골프장 청도 그레이스 군위 군위오펠 군위 구니 창녕 동훈힐마루 칠곡 세븐밸리 고령 마스터피스  회원 중심제 골프장    Roh’s 경상도 골프장 리스트 Note: 아래의 예약관련 정보는 2020년 11월 11일 기준으로 작성되었으므로 추후에 각 골프장 별로 변경사항이 있을 수도 있음을 알려드립니다. 아래의 골프장 링크 혹은 전화번호를 통해 Double Check 하시길 바랍니다.
-비회원제 골프장 청도 그레이스  웹사이트 \(\quad\)전화걸기
- 주말/주중/공휴일: 2주전 오전 09:00</description>
+      <description>
+
+
+&lt;p&gt;&lt;a&gt;&lt;img src=&#34;https://rockandroh.netlify.app/blog/pic/golf_club.jpg&#34; align=&#34;left&#34; height=85 style=&#34;background-color: white; padding-right: 20px;&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://rockandroh.shinyapps.io/golf_daegu/&#34;&gt;&lt;code&gt;공치자&lt;/code&gt;&lt;/a&gt; Golf Reservation&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://rockandroh.shinyapps.io/golf_daegu/&#34;&gt;‘클릭 후 예약날짜 확인’&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Useful Websites</title>
+      <link>https://rockandroh.netlify.app/projects/useful-websites/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/projects/useful-websites/</guid>
+      <description>
+
+
+&lt;p&gt;&lt;a&gt;&lt;img src=&#34;https://rockandroh.netlify.app/blog/pic/brain.png&#34; align=&#34;left&#34; height=85 style=&#34;background-color: white; padding-right: 20px;&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;유용한 웹사이트 모음&lt;/p&gt;
+</description>
     </item>
     
   </channel>
