@@ -86,7 +86,7 @@ options(digits=10)
 <div class = "rcode">
 ```{r, warning=FALSE, message=FALSE, error=FALSE}
 #wd = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-14"
-wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-21"
+wd2 = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-25"
 tbl =
   list.files(path = wd2, pattern = '.*stocks_trade.*\\.csv')[2:8] %>%
   map_df(~readr::read_csv(paste(wd2,.,sep = '/'),

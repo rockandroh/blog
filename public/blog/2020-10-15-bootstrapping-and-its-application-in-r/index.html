@@ -1,0 +1,192 @@
+
+<div id="TOC">
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#empirical-bootstrap-a.k.a-nonparametric-bootstrap">Empirical Bootstrap (a.k.a Nonparametric Bootstrap)</a><ul>
+<li><a href="#what-is-bootstrapping-sample-and-how-to-generate-it">What is bootstrapping sample and how to generate it?</a></li>
+<li><a href="#lets-take-median-as-a-parameter-of-distribution-of-our-interest">Let’s take median as a parameter of distribution of our interest</a></li>
+<li><a href="#what-is-it-for">What is it for?</a></li>
+<li><a href="#difference-between-real-world-and-bootstrap-world">Difference between real world and bootstrap world</a></li>
+<li><a href="#empirical-cdf">Empirical CDF</a></li>
+<li><a href="#why-does-it-work">Why does it work?</a></li>
+</ul></li>
+<li><a href="#parametric-bootstrap">Parametric Bootstrap</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<p><img src="/Users/master/Documents/GitHub//blog/content/note/2020-10-15-bootstrapping-and-its-application-in-r/index_files/bootstrap.jpg" style="width:100.0%" /></p>
+<div id="about" class="section level2">
+<h2>About</h2>
+<p>This page is to provide a gentle introduction of <code>Bootstrapping</code> and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end. Hope you enjoy and find it helpful to solidate your understanding. If you find error or have something you want to add more, feel free to email me (<a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a>).</p>
+</div>
+<div id="empirical-bootstrap-a.k.a-nonparametric-bootstrap" class="section level2">
+<h2>Empirical Bootstrap (a.k.a Nonparametric Bootstrap)</h2>
+<p>We observe an <span class="math inline">\(iid\)</span> sample of size <span class="math inline">\(n\)</span>, <span class="math inline">\({[X_i]}_{i=1}^{n}\stackrel{iid}{\sim}F\)</span>. Each observation is real-values. We wish to estimate some parameter of the distribution <span class="math inline">\(F\)</span> that can be written as a functional of <span class="math inline">\(F, T(F)\)</span>. Examples of <span class="math inline">\(T(F)\)</span> are the following.</p>
+<ul>
+<li><span class="math inline">\(\mu = \int{xdF(x)}\)</span></li>
+<li><span class="math inline">\(median = \inf \{x:F(x)\ge0.5\}\)</span></li>
+<li><span class="math inline">\(Var=\int{\left(x-\mu\right)^2dF}\)</span></li>
+</ul>
+<div id="what-is-bootstrapping-sample-and-how-to-generate-it" class="section level4">
+<h4>What is bootstrapping sample and how to generate it?</h4>
+<p>Assume that we are given the data points <span class="math inline">\(X_1, \cdots, X_n\)</span>. Let’s take <code>mtcars</code> data set as an example.</p>
+<ol style="list-style-type: decimal">
+<li><p>We <em>sample with replacement</em> from these <span class="math inline">\(n\)</span> points, leading to a set of new observations denoted as
+<span class="math display">\[B_1 = X_{1}^{*(1)}, \cdots, X_{n}^{*(1)}\]</span> Let’s set this as <span class="math inline">\(B_1\)</span> which refers to the first set of bootstrapping.</p></li>
+<li><p>Again, we repeat the sample procedure again, generating a new sample from the original data set <span class="math inline">\(X_1, \cdots, X_n\)</span> by sampling with replacement, leading to another new set of observations denoted as <span class="math display">\[B_2 = X_{1}^{*(2)}, \cdots, X_{n}^{*(2)}\]</span></p></li>
+<li><p>Now we keep repeating the same process of generating new sets of observations, after <span class="math inline">\(B\)</span> rounds, we have <em>m</em> number of sets of data points. The last <em>B</em>’th set of data points are <span class="math display">\[B_m = X_{1}^{*(m)}, \cdots, X_{n}^{*(m)}\]</span></p></li>
+</ol>
+<p>Each set of data points is called a bootstrap sample** This sampling approach - sample with replacement from the original dataset - is called <em>Empirical bootstrap</em>, invented by Bradley Efron (sometimes this approach is also called <em>Efron’s bootstrap or Nonparametric bootstrap</em>). These are samples with replacement because that is what IID requires.</p>
+<p><strong>R example making a bootstrap sample for m rounds</strong></p>
+<pre class="r"><code>mpg = mtcars$mpg # miles per gallon data
+n = length(mpg)
+print(n)
+## [1] 32
+
+num_bs = 100 # number of bootstrap rounds (= m)
+bs_sample_mat = matrix(NA, nrow=num_bs, ncol=n)
+for (i in 1:num_bs){
+  bs_sample_mat[i,] = mpg[sample(n,n,replace = TRUE)]
+}
+dim(bs_sample_mat)
+## [1] 100  32</code></pre>
+</div>
+<div id="lets-take-median-as-a-parameter-of-distribution-of-our-interest" class="section level4">
+<h4>Let’s take median as a parameter of distribution of our interest</h4>
+<p>Using these <em>m</em> sets of bootstrap sample, we can generate the <em>m</em> number of parameter (e.g., mean and median) of the distribution as follows:</p>
+<p><span class="math display">\[M_{n}^{*(1)} = median\{X_{1}^{*(1)}, \cdots, X_{n}^{*(1)}\}\]</span>
+<span class="math display">\[M_{n}^{*(2)} = median\{X_{1}^{*(2)}, \cdots, X_{n}^{*(2)}\}\]</span>
+<span class="math display">\[\vdots\]</span>
+<span class="math display">\[M_{n}^{*(m)} = median\{X_{1}^{*(m)}, \cdots, X_{n}^{*(m)}\}\]</span></p>
+<pre class="r"><code>printf = function(...) cat(sprintf(...))
+bs_sample_median_vec = apply(bs_sample_mat, 2, median)
+printf(&quot;Median vector of Bootstrap sample: \n&quot;)</code></pre>
+<pre><code>## Median vector of Bootstrap sample:</code></pre>
+<pre class="r"><code>print(bs_sample_median_vec)</code></pre>
+<pre><code>##  [1] 17.95 19.70 18.70 18.70 19.20 19.20 18.95 17.80 18.40 18.95 19.20 17.80
+## [13] 19.20 18.95 19.45 18.70 18.70 19.20 19.20 18.40 20.10 18.95 18.95 21.00
+## [25] 19.20 19.20 18.40 19.70 19.20 19.20 19.20 18.40</code></pre>
+<pre class="r"><code>sample_median_vec = median(mpg)
+printf(&quot;Sample median of orignal data: \n&quot;)</code></pre>
+<pre><code>## Sample median of orignal data:</code></pre>
+<pre class="r"><code>print(sample_median_vec)</code></pre>
+<pre><code>## [1] 19.2</code></pre>
+</div>
+<div id="what-is-it-for" class="section level4">
+<h4>What is it for?</h4>
+<p>We use it to answer the following questions:</p>
+<ul>
+<li>Estimating a sample median: how certain are we?</li>
+<li>Error of Sample Median?</li>
+<li>Confidence interval of sample median?</li>
+</ul>
+<p>We would like to answer what is the error of sample median? Like sample mean is an estimate of the mean of population, the sample median is an estimated of the median of population. We use bootrap sample and the series of median calculated from those set of observations. How about confidence interval? is it same for the confidence interval of population mean at <span class="math inline">\(\alpha\)</span> confidence level that is <span class="math display">\[\bar{X}_n \pm z_{1-\alpha/2}\cdot\frac{\hat{\sigma}_n}{\sqrt{n}}\]</span></p>
+<ul>
+<li><strong>Bootstrap estimate of the variance</strong> We use the sample variance of <span class="math inline">\(M_{n}^{*(1)},M_{n}^{*(2)},\cdots,M_{n}^{*(m)}\)</span> as an estimate of the variance of sample median <span class="math inline">\(M_n\)</span>. Namely, we will use <span class="math display">\[\widehat{Var}_m(M_n)=\frac{1}{m-1}\sum_{l}\left(M_{n}^{*(l)}-\bar{M}_{m}^{*}\right)^2\]</span> as an estimate of <span class="math inline">\(Var(M_n)\)</span>
+where <span class="math inline">\(\bar{M}_{m}^{*}\)</span> is a mean of the series of median from the bootstrap sample.</li>
+</ul>
+<pre class="r"><code>sample_variance = function(x){(1/(length(x)-1))*sum((x-mean(x))^2)}
+bs_est_var = sample_variance(bs_sample_median_vec)
+printf(&quot;Bootstrap estimate of the variance is: %.2f&quot;, bs_est_var)</code></pre>
+<pre><code>## Bootstrap estimate of the variance is: 0.41</code></pre>
+<ul>
+<li><strong>Bootstrap estimate of the MSE</strong> Moreover, we can estimate the MSE by <span class="math display">\[\frac{1}{m}\sum\left(M_{n}^{*(l)}-M_{n}\right)^2\]</span></li>
+</ul>
+<pre class="r"><code>bs_MSE = (1/length(bs_sample_median_vec))*sum((bs_sample_median_vec - median(mpg))^2)
+printf(&quot;Bootstrap estimate of MSE is: %.2f&quot;, bs_MSE)</code></pre>
+<pre><code>## Bootstrap estimate of MSE is: 0.44</code></pre>
+<ul>
+<li><strong>Bootstrap confidence interval</strong> We can construct a <span class="math inline">\(1-\alpha\)</span> condifence interval of the population median via <span class="math display">\[M_n \pm z_{1-\alpha/2}\cdot \sqrt{\widehat{Var}_m\left(M_n\right)}\]</span></li>
+</ul>
+<pre class="r"><code>alpha = 0.05
+left = median(mpg) - qnorm(1-alpha/2)*sqrt(bs_est_var)
+right = median(mpg) + qnorm(1-alpha/2)*sqrt(bs_est_var)
+printf(&quot;CI Interval: [%.3f, %.3f]&quot;, left, right)</code></pre>
+<pre><code>## CI Interval: [17.949, 20.451]</code></pre>
+</div>
+<div id="difference-between-real-world-and-bootstrap-world" class="section level4">
+<h4>Difference between real world and bootstrap world</h4>
+<p><strong>Note</strong>: We generate new data points by smapling from the existing data points. In the real world, the story starts by assuming that there is a true unknown population distribution with CDF <span class="math inline">\(F\)</span>. However, in the world of bootstrapping, we have the “true” pretend unknonw distribution with CDF <span class="math inline">\(\widehat{F}\)</span>. Actually the CDF <span class="math inline">\(\widehat{F}\)</span> is known, and that is a good thing, because it allows us to simulate from it. But we pretend it is unknown when we are reasoning in the bootstrap world. It is the analog in the bootstrap world of the true unknown distribution with CDF F in the real world.</p>
+<p>The bootstrap makes an analogy between the real world and a mythical bootstrap world. The below table is taken from the <a href="http://www.stat.umn.edu/geyer/3701/notes/">lecture notes</a>.</p>
+<table>
+<colgroup>
+<col width="25%" />
+<col width="34%" />
+<col width="40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="center">real world</th>
+<th align="center">bootstrap world</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">true unknown CDF</td>
+<td align="center"><span class="math inline">\(F\)</span></td>
+<td align="center"><span class="math inline">\(\widehat{F}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">true unknown parameter</td>
+<td align="center"><span class="math inline">\(\theta = T(F)\)</span></td>
+<td align="center"><span class="math inline">\(\hat{\theta}_n = T(\widehat{F}_n)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left">data</td>
+<td align="center"><span class="math inline">\(X_1,\ldots,X_n\stackrel{iid}{\sim} F\)</span></td>
+<td align="center"><span class="math inline">\(X_1^*,\ldots,X_n^*\stackrel{iid}{\sim}\widehat{F}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">estimator</td>
+<td align="center"><span class="math inline">\(\hat{\theta}_n = T(x_1, \ldots, x_n)\)</span></td>
+<td align="center"><span class="math inline">\(\theta^*_n = T(x_1^*, \ldots, x_n^*)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left">estimated standard error</td>
+<td align="center"><span class="math inline">\(\hat{s}_n = S(x_1, \ldots, x_n)\)</span></td>
+<td align="center"><span class="math inline">\(s^*_n = S(x_1^*, \ldots, x_n^*)\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">approximate pivotal quantity</td>
+<td align="center"><span class="math inline">\((\hat{\theta}_n - \theta) / \hat{s}_n\)</span></td>
+<td align="center"><span class="math inline">\((\theta^*_n - \hat{\theta}_n) / s^*_n\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>For detailed explanation, click the original <a href="http://www.stat.umn.edu/geyer/3701/notes/bootstrap.html">lecture note</a></p>
+</div>
+<div id="empirical-cdf" class="section level4">
+<h4>Empirical CDF</h4>
+<p>Let <span class="math inline">\(X_1,\cdots,X_n\)</span> be independent and identically distributed from <span class="math inline">\(F\)</span>. the empirical cdf is defined as <span class="math display">\[\widehat{F}(x)=\frac{1}{n}\sum_i I(X_i\le x)\]</span> where <span class="math inline">\(I\)</span> is an indicator function. <span class="math inline">\(\widehat{F}\)</span> is a natural estimator for the cdf <span class="math inline">\(F\)</span>. Accordingly, the natural estimate of <span class="math inline">\(\theta\)</span> is <span class="math inline">\(\hat{\theta}=\psi(\widehat{F})\)</span>, the same functional of the empirical cdf.</p>
+<pre class="r"><code>ecdf_mpg = ecdf(mpg)
+plot(ecdf_mpg, xlab = &#39;x&#39;, ylab = &#39;Fn(x)&#39;, main = &#39;Empirical cdf&#39;, col=&#39;blue&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
+<strong>Proposition of the Empirical CDF Estimator</strong></p>
+<ol style="list-style-type: decimal">
+<li>Unbiased <span class="math display">\[E\left[\widehat{F}(x)\right]=F(x)\]</span></li>
+<li>Consistent <span class="math display">\[\widehat{F} \longrightarrow F(x)\]</span>
+This is from the Glivenko–Cantelli theorem.</li>
+<li>Asymptotically normal <span class="math display">\[ \sqrt{n}\left(\widehat{F}-F(x)\right) \stackrel{d}{\longrightarrow} \mathcal{N} \left(0, F(x)(1-F(x))\right)\]</span></li>
+</ol>
+</div>
+<div id="why-does-it-work" class="section level4">
+<h4>Why does it work?</h4>
+<p>We can write the distribution of median <span class="math inline">\(M_n\)</span> as <span class="math inline">\(F_{M_n}\)</span> and we know that this is determined by the CDF <span class="math inline">\(F\)</span> and sample size <span class="math inline">\(n\)</span>. Namely, we may write the CDF of median as <span class="math display">\[F_{M_n} = \Psi(x;F,n)\]</span> where <span class="math inline">\(\Psi\)</span> is some complicated function that depends on CDF of each observation <span class="math inline">\(F\)</span> and the sample size <span class="math inline">\(n\)</span>.</p>
+<p>** Empirical D</p>
+<p>It works because we know that <span class="math inline">\(\widehat{F}_n\)</span> is very similar to <span class="math inline">\(F\)</span> when the sample size is large. Thus, as long as</p>
+</div>
+</div>
+<div id="parametric-bootstrap" class="section level2">
+<h2>Parametric Bootstrap</h2>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ol style="list-style-type: decimal">
+<li><a href="http://faculty.washington.edu/yenchic/17Sp_403/Lec5-bootstrap.pdf" class="uri">http://faculty.washington.edu/yenchic/17Sp_403/Lec5-bootstrap.pdf</a></li>
+<li><a href="http://www.stat.umn.edu/geyer/3701/notes/" class="uri">http://www.stat.umn.edu/geyer/3701/notes/</a></li>
+<li><a href="http://www.stats.ox.ac.uk/~caron/teaching/sb1b/lecturebootstrap.pdf" class="uri">http://www.stats.ox.ac.uk/~caron/teaching/sb1b/lecturebootstrap.pdf</a></li>
+<li></li>
+</ol>
+</div>

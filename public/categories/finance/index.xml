@@ -13,7 +13,7 @@
       <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/reproducible-finance-with-r-1/</guid>
-      <description>데이터 불러오기 및 관련 function 연습패키지 준비하기데이터 불러오기csv파일 불러오기엑셀 파일 불러오기Daily 가격 데이터를 Monthly 데이터로 변환하기월말 가격월초 가격월평균 가격수익률 데이터 만들기xts 와 data frame 의 차이Spread()gather()Come back to price dataReference데이터 불러오기 및 관련 function 연습Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
+      <description>데이터 불러오기 및 관련 function 연습 패키지 준비하기 데이터 불러오기 csv파일 불러오기 엑셀 파일 불러오기  Daily 가격 데이터를 Monthly 데이터로 변환하기 월말 가격 월초 가격 월평균 가격 수익률 데이터 만들기 xts 와 data frame 의 차이 Spread() gather()  Come back to price data Reference    데이터 불러오기 및 관련 function 연습 Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
     </item>
     
   </channel>

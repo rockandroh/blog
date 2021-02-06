@@ -1,0 +1,570 @@
+---
+title: GAMESTOP 사건재구성: 1월 28일
+author: Roboticks
+date: '2021-01-28'
+slug: roboticks
+categories:
+  - finance
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+<img src="/blog/pic/folder-icon-set-vector.jpg"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/>
+
+<style>
+div.rcode pre { background-color:#fffff0; }
+div.rcode pre.r { background-color:#EDF6FA; }
+</style>
+
+<style>
+div.pycode pre { background-color:#fffff0; }
+div.pycode pre.python { background-color:#FFE9E9; }
+</style>
+
+
+<style type="text/css">
+
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
+***
+
+*__Note__: 사건재구성 1편: 게임스탁 편 입니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다*
+
+```{r, include=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(dplyr)
+library(tidyverse)
+library(DT)
+library(reticulate) # Python
+#py_install(packages = "matplotlib")
+#py_install(packages = "pandas")
+#py_install(packages = 'dfply')
+library(highfrequency)
+library(xts)
+library(tidyquant)
+
+options(digits.secs=6)
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)
+```
+
+안녕하세요! Roboticks입니다. 첫주제는 최근에 핫한 GAMESTOP $GME에 관한 이야기입니다. 게임스탑에 관련한 숏스퀴즈, Reddit, 시타델, 로빈후드 등에 관한 정보와 설명은 유투브에 이미 많은 분들이 커버하였습니다. 저희 또한 이사태를 흥미롭게 지켜봤는데, 지금은 사태가 일단락 되는 것 같습니다. 이 시점에서 논란인 많은 '날' 중의 하나였던 1월 28일의 데이터를 보면서 어떤 일들이 있었는지 조금더 구체적으로 살펴보도록 하겠습니다.
+
+## 개미들의 패배 이유?
+
+월가 아재 유투브에서 게임스탑사태에서 개인의 패배원인을 5가지 정도 뽑았는데 그중에 하나가 데이터입니다. 개인 투자자 (Retail Investor) 들이 투자할때 사용하는 정보는 
+
+- 주식가격
+- 차트모양
+- 거래량
+- 뉴스
+
+기관들이 사용하는 데이터 중에서, 개인도 사용할 수 있는 데이터 예시 3가지
+
+- CBOE 옵션 데이터 (유료)
+  - Open-close 데이터 셋: GME에 대한 모든 옵션 거래를 거래 주체별 (개미,브로커,기관)로 나누고 또 거래 사이즈로 나눠져있음
+  - 각종 어떤 선에서 지지 등 시나리오 생성 가능
+- 구글트렌드
+- Reddit 센티먼트
+- 주식/옵션에 어떤 주체가 어떤 경로로 주문을 넣었는지! (매우 소수 기관만 소유)
+
+이외에도 정말 많은 데이터가 있지만 우리가 살펴볼 데이터는 주식 체결 및 호가 데이터 입니다. 주식 가격데이터의 일부분으로 봐도 되는데, 실시간 체결 데이터를 가지고 분석해서 수익을 낼 수 있는 투자자들은 많지 않고 그 데이터를 가지고 있는 투자자도 많지 않습니다. 이 페이지에서는 정말 단순하게 틱데이터로 가지고 어느 시점에 어떤 사건들이 있었는지 재구성해보는데만 초점을 맞추었습니다.
+
+## GME 1월 28일 사건들
+
+From the CNBC
+
+> GameStop dropped 44% on Thursday, falling for the first time in six days as Robinhood and Interactive Brokers limited trading in several of the heavily shorted names to closing positions only, meaning that traders could not buy up shares as the prices fell. Robinhood and Interactive Brokers also hiked their margin requirements on trades, making it harder for traders to use leverage to load up on stocks and options. Other brokers too hiked margin requirements. Other speculative names with high levels of short interest, including AMC Entertainment, Blackberry and Bed Bath & Beyond also dropped sharply.
+
+From 나무위키 
+
+> 로빈후드가 시타델의 압박을 받았을지도 모른다고 의심되는 행위인 주식 매수를 강제로 불가능하게 만들어 주가를 미친 듯이 폭락시키려 하는 공개적 주가 조작에 나섰으나, 당연히 똘똘 뭉친 WSB 투자자들은 헤지펀드들이 나갈 구멍을 주지 않으려고 주가가 떨어져도 HOLD THE LINE("대열을 지켜라!/주식 잡고 있어!"), WE LIKE THE STOCK[4]을 외치며 진짜 한번 계급장 떼고 붙어보자는 마인드로 계속 팔지 않았다. 
+
+## 데이터로 살펴보자!
+
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+wd_win = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/wrds_stocks"
+wd_mac = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/wrds_stocks/trades"
+
+tbl =
+  list.files(path = wd_mac, pattern = '.*GME_20210128.*\\.csv') %>%
+  map_df(~readr::read_csv(paste(wd_mac,.,sep = '/'),
+                          col_types = cols(.default='c', 
+                                           price = 'd',
+                                           size = 'd')
+                   )
+         )
+sum(is.na(tbl))
+gc()
+dim(tbl)
+head(tbl,10)
+```
+</div>
+
+## 해당일 거래가 된 'Hour:Minute' 확인
+
+<div class = "rcode">
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+options("digits.secs"=3)
+tbl = 
+  tbl %>%
+  mutate(DT = paste(date, substr(time_m, 1, 12), " ")) %>%
+  mutate(HM = substr(time_m,1,5)) %>%
+  data.table::as.data.table(.) %>%
+  relocate(DT) %>% # data.table must have a time based column in first position
+  rename(SIZE = size) %>%
+  rename(PRICE = price) %>%
+  rename(SYMBOL = sym_root)
+  
+ts = tbl %>%
+  mutate_at(vars(DT), function(x) as.POSIXct(x, format = "%Y-%m-%d %H:%M:%OS")) %>%
+  as.xts(tbl[,list(DT,PRICE,SIZE)])
+
+HM_traded = unique(tbl$HM)
+HM_traded
+```
+</div>
+
+
+## 거래가 중단(Suspended)된 혹은 거래가 없었던 'Hour:Minute' 확인
+
+#### Subsampling 1분으로 해서 확인!
+
+유동성이 폭발했던 28일 1분 Subsampling 했을때 데이터가 없었다면 Suspended 되었을 경우가 높다. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+df_min1 =
+  ts %>%
+  aggregateTS(., FUN = 'mean', alignBy = 'minutes', alignPeriod = 1) %>%
+  data.table::as.data.table(.) %>%
+  mutate_at(vars(PRICE,SIZE), function(x) round(x,3))
+df_min1 %>%
+  filter(., is.na(PRICE)) %>%
+  as.tibble()
+```
+
+## 큰 거래사이즈 확인
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+tbl %>%
+  arrange(desc(SIZE)) %>%
+  head(20)
+```
+
+## Size 분포
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+unique_size = unique(tbl$SIZE)
+quantile(unique_size, c(.10, .25, .50, .75, .90, .95, .99))
+top1_size = size[size>=120]
+summary(top1_size)
+```
+
+
+## Sampling Frequency 1분
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+accumulate_by <- function(dat, var) {
+    var <- lazyeval::f_eval(var, dat)
+    lvls <- plotly:::getLevels(var)
+    dats <- lapply(seq_along(lvls), function(x) {
+        cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
+    })
+    dplyr::bind_rows(dats)
+}
+
+ts_min1 =
+  df_min1 %>%
+  mutate_at(vars(index), function(x) as.POSIXct(x, format = "%Y-%m-%d %H:%M:%OS")) %>%
+  as.xts(tbl[,list(index,PRICE,SIZE)])
+
+n = dim(df_min1)[1]
+cum_min = c(0,cumsum(as.numeric(difftime(df_min1$index[2:n], df_min1$index[1:n-1])))) 
+```
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+fig <-
+  data.frame(Date=time(cum_min),coredata(ts_min1)) %>% 
+  accumulate_by(~Date) %>%
+  plot_ly(
+      x = ~Date, 
+      y = ~PRICE,
+      #split = ~city,
+      frame = ~frame, 
+      #type = 'scatter',
+      mode = 'lines'
+
+  ) %>%
+  layout(
+    xaxis = list(
+        title = "Time(Minute)",
+        zeroline = F
+    ),
+    yaxis = list(
+        title = "Price",
+        zeroline = F),
+    title = "Gamestock Intraday 1분 데이터"
+    ) %>%
+  animation_opts(
+    frame = 100, 
+    easing = "linear",
+    redraw = FALSE,
+    mode = "immediate"
+  ) %>%
+  animation_slider(
+    hide = T
+  ) %>% 
+  animation_button(
+    x = 1, xanchor = "right", y = 0, yanchor = "bottom")
+fig
+rm(fig)
+gc()
+```
+
+## Sampling Frequency 15초
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+df_sec15 =
+  ts %>%
+  aggregateTS(.,FUN = 'previoustick', 
+              alignBy = 'seconds', 
+              alignPeriod = 15,
+              dropna = TRUE) %>%
+  data.table::as.data.table(.) %>%
+  mutate_at(vars(PRICE,SIZE), function(x) round(x,3))
+ts_sec15=
+  df_sec15 %>%
+  mutate_at(vars(index), function(x) as.POSIXct(x, format = "%Y-%m-%d %H:%M:%OS")) %>%
+  as.xts(tbl[,list(index,PRICE,SIZE)])
+
+n = dim(df_sec15)[1]
+cum_sec = c(0,cumsum(as.numeric(difftime(df_sec15$index[2:n], df_sec15$index[1:n-1])))) 
+
+ani_df = 
+  data.frame(Date=time(cum_sec),coredata(ts_sec15)) %>% 
+  accumulate_by(~Date)
+fig <-
+  ani_df %>%
+  plot_ly(
+      x = ~Date, 
+      y = ~PRICE,
+      #split = ~city,
+      frame = ~frame, 
+      type = 'scatter',
+      mode = 'lines',
+      line = list(simplify = FALSE)
+  ) %>%
+  layout(
+    xaxis = list(
+        title = "Time(Second)",
+        zeroline = F
+    ),
+    yaxis = list(
+        title = "GameStop Intraday 15sec Sampling",
+        zeroline = F
+    )) %>%
+  animation_opts(
+    frame = 100, 
+    transition = 0, 
+    redraw = FALSE
+  ) %>%
+  animation_slider(
+    hide = T
+  ) %>% 
+  animation_button(
+    x = 1, xanchor = "right", y = 0, yanchor = "bottom")
+fig
+rm(fig)
+gc()
+```
+
+## Sampling Frequency 5초
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+df_sec15 =
+  ts %>%
+  aggregateTS(.,FUN = 'previoustick', 
+              alignBy = 'seconds', 
+              alignPeriod = 15,
+              dropna = TRUE) %>%
+  data.table::as.data.table(.) %>%
+  mutate_at(vars(PRICE,SIZE), function(x) round(x,3))
+ts_sec15=
+  df_sec15 %>%
+  mutate_at(vars(index), function(x) as.POSIXct(x, format = "%Y-%m-%d %H:%M:%OS")) %>%
+  as.xts(tbl[,list(index,PRICE,SIZE)])
+
+n = dim(df_sec15)[1]
+cum_sec = c(0,cumsum(as.numeric(difftime(df_sec15$index[2:n], df_sec15$index[1:n-1])))) 
+
+ani_df = 
+  data.frame(Date=time(cum_sec),coredata(ts_sec15)) %>% 
+  accumulate_by(~Date)
+fig <-
+  ani_df %>%
+  plot_ly(
+      x = ~Date, 
+      y = ~PRICE,
+      #split = ~city,
+      frame = ~frame, 
+      type = 'scatter',
+      mode = 'lines',
+      line = list(simplify = FALSE)
+  ) %>%
+  layout(
+    xaxis = list(
+        title = "Time(Second)",
+        zeroline = F
+    ),
+    yaxis = list(
+        title = "GameStop Intraday 15sec Sampling",
+        zeroline = F
+    )) %>%
+  animation_opts(
+    frame = 100, 
+    transition = 0, 
+    redraw = FALSE
+  ) %>%
+  animation_slider(
+    hide = T
+  ) %>% 
+  animation_button(
+    x = 1, xanchor = "right", y = 0, yanchor = "bottom")
+fig
+rm(fig)
+gc()
+```
+
+## 1분 캔들 차트
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(plotly)
+library(quantmod)
+library(dygraphs)
+
+df_min1 = 
+  tbl %>%
+  mutate_at(vars(DT), function(x) as.POSIXct(x, format = "%Y-%m-%d %H:%M:%OS")) %>%
+  makeOHLCV(tbl[,list(DT, SYMBOL,PRICE, SIZE)], 
+                      alignBy = "minutes", 
+                      alignPeriod = 1)
+ts_min1 = 
+  df_min1 %>%
+  mutate_at(vars(DT), function(x) as.POSIXct(x, format = "%Y-%m-%d %H:%M:%OS")) %>%
+  .[,list(DT, OPEN, HIGH, LOW, CLOSE)] %>%
+  as.xts(.[,list(DT,OPEN,HIGH,LOW,CLOSE)])
+
+
+colnames(ts_min1)=c("Open","High","Low","Close")
+ts_min1 = cbind(ts_min1, apply(ts_min1[,1:3], 1, mean))
+colnames(ts_min1)[5] = 'Mean'
+
+dygraph(ts_min1, main = '$GME 1 Min Candlestick @roboticks') %>%
+  dyCandlestick() %>%
+  dyRangeSelector() %>%
+  dyOptions(axisLineWidth = 1.5,
+            useDataTimezone = TRUE)  %>%
+  dyAxis('y', label = 'PRICE') %>%
+  dyAxis('x', drawGrid = FALSE)
+```
+
+## Dyplot Plugins
+
+```{r}
+dyCrosshair <- function(dygraph, 
+                        direction = c("both", "horizontal", "vertical")) {
+  dyPlugin(
+    dygraph = dygraph,
+    name = "Crosshair",
+    path = system.file("plugins/crosshair.js", 
+                       package = "dygraphs"),
+    options = list(direction = match.arg(direction))
+  )
+}
+
+dyUnzoom <-function(dygraph) {
+  dyPlugin(
+    dygraph = dygraph,
+    name = "Unzoom",
+    path = system.file("plugins/unzoom.js", package = "dygraphs")
+  )
+}
+```
+
+
+## 차트 with MACD
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(plotly)
+library(quantmod)
+library(htmltools)
+library(dygraphs)
+
+df_min1 = 
+  tbl %>%
+  mutate_at(vars(DT), function(x) as.POSIXct(x, format = "%Y-%m-%d %H:%M:%OS")) %>%
+  makeOHLCV(tbl[,list(DT, SYMBOL,PRICE, SIZE)], 
+                      alignBy = "minutes", 
+                      alignPeriod = 1)
+close = df_min1$CLOSE
+macd = 
+  round(MACD(close), 2) %>%
+  replace_na(0) %>%
+  as.data.frame() %>%
+  mutate(histogram = macd - signal) %>%
+  as.matrix()
+roc = round(ROC(close,1,type = 'discrete')*100,2)
+volume = df_min1$VOLUME
+ma0 = apply(df_min1[,c('OPEN', 'HIGH', 'LOW')], 1, mean)
+ma5 = apply(df_min1[,'CLOSE'], 2, rollmean, k=5, 
+            fill = NA, align = 'right') %>%
+      "colnames<-"(c('ma5'))
+ma10 = apply(df_min1[,'CLOSE'], 2, rollmean, k=10, 
+            fill = NA, align = 'right') %>%
+      "colnames<-"(c('ma5'))
+# ma52 = rollmean(df_min1[,'CLOSE'], k =6, 
+#                fill = NA, align = 'right') %>%
+#       "colnames<-"(c('ma5'))
+
+ts_min1 = 
+  df_min1 %>%
+  mutate_at(vars(DT), function(x) as.POSIXct(x, format = "%Y-%m-%d %H:%M:%OS")) %>%
+  cbind(macd) %>%
+  as.xts(.[,!c(SYMBOL)])
+
+ts_min1[,c('OPEN', 'HIGH', 'LOW', 'CLOSE')] -> candle_min1
+candle_min1 = cbind(candle_min1, macd, roc, volume, ma0, ma5, ma10)
+colnames(candle_min1) = c("Open","High","Low","Close",
+                          'macd','signal', 'hist','return','volume',
+                          'OHLmean','ma5', 'ma10')
+
+
+
+dy_graph = list(
+  dygraphs::dygraph(candle_min1[,c("Open","High","Low","Close",
+                       'OHLmean','ma5','ma10')], 
+        main = '$GME 1 Min Candlestick @roboticks',
+        group='chart',
+        width = 1400,
+        height = 600) %>%
+  dyCandlestick() %>%
+  dyLegend(width = 1000) %>%
+  dyOptions(axisLineWidth = 1.5,
+            useDataTimezone = TRUE)  %>%
+  dyAxis('y', label = 'PRICE') %>%
+  dyAxis(name='x', drawGrid = FALSE) %>%
+  dyUnzoom() %>%
+  dyCrosshair(direction = "vertical")
+  ,
+  dygraphs::dygraph(candle_min1[,c('volume')], 
+                    group = 'chart',
+                    width = 1400,
+                    height = 130) %>%
+    dyBarSeries('volume') %>%
+    dyCrosshair(direction = "vertical") %>%
+    dyOptions(axisLineWidth = 1.5,
+          useDataTimezone = TRUE)
+  ,
+  dygraphs::dygraph(candle_min1[,c('macd','signal','hist')],
+                    group = 'chart',
+                    width = 1400,
+                    height = 130) %>%
+    dyBarSeries('hist', color='brown') %>%
+    dyAxis('y2', label = '', independentTicks = TRUE) %>%
+    dyLegend(width = 1000) %>%
+    dyRangeSelector(fillColor = 'yellow') %>%
+    dyCrosshair(direction = "vertical") %>%
+    dyOptions(axisLineWidth = 1.5,
+              useDataTimezone = TRUE) 
+)
+  
+
+# render the dygraphs objects using htmltools
+htmltools::browsable(htmltools::tagList(dy_graph))
+```
+
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+
+#dev.new(width=10, height=6)
+dev.new(width=10,height=6,noRStudioGD = TRUE)
+## add extra space to right margin of plot within frame
+#par(mar=c(3.5, 4, 4, 3.5)) bottom left top right
+
+layout.matrix <- matrix(c(1, 2, 0, 3), nrow = 2, ncol = 2)
+
+layout(mat = layout.matrix,
+       heights = c(2, 1), # Heights of the two rows
+       widths = c(1, 0)) # Widths of the two columns
+
+par(mar=c(0,5,1,5))
+## Plot first set of data and draw its axis
+plot(time1, betagal.abs1, pch=20, cex = 1,axes=FALSE, xlab="", ylab="", 
+     type="b",col="blue", main="")
+axis(2,col="darkred", col.axis='darkred',las=1)  ## las=1 makes horizontal labels
+mtext("Price",col='darkred',side=2,line=3)
+box()
+
+## Add Legend
+legend("topleft",legend=c("Price","SELL", 'BUY'),
+       text.col=c("black","red", 'blue'),pch=c(20),col=c("black","red", 'blue'))
+
+
+## Allow a second plot on the same graph
+par(new=TRUE)
+plot(time2, betagal.abs2, pch=20, cex = 1,axes=FALSE, xlab="", ylab="", 
+     type="b",col="red", main="")
+
+## Allow a second plot on the same graph
+par(new=TRUE)
+
+## Plot the second plot and put axis scale on right
+barplot(size, time, space=10,  xlab="", ylab="", ylim = c(0,5000),
+     axes=FALSE, col='green')
+## a little farther out (line=4) to make room for labels
+mtext("Size",side=4,col="darkred",line=3) 
+axis(4, col="darkred",col.axis="darkred",las=1)
+
+## Plot 2
+par(mar=c(4,5,0,5))
+barplot(diff,time, xlab="", ylab="", main="", axes=FALSE)
+axis(2, col="darkred",col.axis="darkred",las=1)
+## Plot the second plot and put axis scale on right
+par(new=TRUE)
+plot(time, cell.density, pch=15,  xlab="", ylab="", 
+     axes=FALSE, type="l", col="red")
+
+## a little farther out (line=4) to make room for labels
+mtext("MACD",side=2,col="darkred",line=3) 
+
+par(new=TRUE)
+plot(time, signal, pch=10,  xlab="", ylab="", 
+     axes=FALSE, type="l", col="blue")
+
+## Draw the time axis
+axis(1,pretty(range(time),10))
+mtext("Time (Second)",side=1,col="black",line=2.5)  
+box()
+
+```
+

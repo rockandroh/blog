@@ -13,16 +13,7 @@
       <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/reproducible-finance-with-r-1/</guid>
-      <description>데이터 불러오기 및 관련 function 연습패키지 준비하기데이터 불러오기csv파일 불러오기엑셀 파일 불러오기Daily 가격 데이터를 Monthly 데이터로 변환하기월말 가격월초 가격월평균 가격수익률 데이터 만들기xts 와 data frame 의 차이Spread()gather()Come back to price dataReference데이터 불러오기 및 관련 function 연습Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
-    </item>
-    
-    <item>
-      <title>Bootstrapping and its Implementation in R</title>
-      <link>https://rockandroh.netlify.app/blog/bootstrapping-and-its-application-in-r/</link>
-      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/bootstrapping-and-its-application-in-r/</guid>
-      <description>AboutEmpirical Bootstrap (a.k.a Nonparametric Bootstrap)What is bootstrapping sample and how to generate it?Let’s take median as a parameter of distribution of our interestWhat is it for?Difference between real world and bootstrap worldEmpirical CDFWhy does it work?Parametric BootstrapReferencesAboutThis page is to provide a gentle introduction of Bootstrapping and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end.</description>
+      <description>데이터 불러오기 및 관련 function 연습 패키지 준비하기 데이터 불러오기 csv파일 불러오기 엑셀 파일 불러오기  Daily 가격 데이터를 Monthly 데이터로 변환하기 월말 가격 월초 가격 월평균 가격 수익률 데이터 만들기 xts 와 data frame 의 차이 Spread() gather()  Come back to price data Reference    데이터 불러오기 및 관련 function 연습 Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
     </item>
     
   </channel>

@@ -1,22 +1,3 @@
----
-title: Rmd Note Sample Using both R, Python, and C
-author: Roh
-date: '2020-10-15'
-slug: note-template
-categories:
-  - template
-tags:
-  - rmd template
-  - lecture template
-urlcolor: blue
-meta_img: /Users/master/Documents/GitHub//blog/content/note/2020-10-15-note-template/lec_note.jpg
-output:
-  blogdown::html_page:
-    toc: true
-    toc_depth: 5
-    number_sections: TRUE
----
-
 
 <div id="TOC">
 <ul>
@@ -31,7 +12,19 @@ output:
 </ul>
 </div>
 
-<p><img src="lec_note.jpg" style="width:100.0%" /></p>
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+<p><img src="/Users/master/Documents/GitHub//blog/content/note/2020-10-15-note-template/lec_note.jpg" style="width:100.0%" /></p>
 <p><em><strong>Note</strong>: This document is to provide a sample template for the lecture notes in .Rmd</em></p>
 <p><em><strong>Memo</strong>: test</em></p>
 <p>horizontal line
@@ -50,6 +43,11 @@ Footnote example2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a
 <div id="head-2" class="section level1">
 <h1><span class="header-section-number">2</span> Head 2</h1>
 <p>Refer to the <a href="https://www.rockandroh.com/note/2017/06/13/a-quick-note/">other lecture note in this blog</a></p>
+<p><span class="math display">\[\begin{aligned}
+  MR(Q) &amp;= P(Q)\cdot Q-P(Q-1)\cdot(Q-1) \\
+    &amp;&lt; P(Q)\cdot Q-P(Q)\cdot(Q-1)\qquad\because P(Q-1)&gt;P(Q) \\
+    &amp;= P(Q)
+\end{aligned}\]</span></p>
 <div id="r-example" class="section level2">
 <h2><span class="header-section-number">2.1</span> R example</h2>
 <p>Description</p>
@@ -90,8 +88,7 @@ library(reticulate)
 import matplotlib.pyplot as plt
 x = np.arange(0,3,0.1)
 y = 1 + np.sin(2*np.pi*x)
-plt.plot(x,y)
-plt.title(&#39;python example&#39;)</code></pre>
+plt.plot(x,y)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 </div>

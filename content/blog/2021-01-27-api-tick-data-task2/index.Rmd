@@ -69,7 +69,7 @@ pre {
 **Rendering 시간이 많이 걸려서 코드는 웹사이트를 만드는데, 아래의 코드들은 실행되지 않았습니다. **
 
 * Package
-```{r, include=FALSE,warning=FALSE, message=FALSE, error=FALSE}
+```{r,warning=FALSE, message=FALSE, error=FALSE}
 library(dplyr)
 library(tidyverse)
 library(DT)
@@ -78,10 +78,14 @@ library(reticulate) # Python
 #py_install(packages = "pandas")
 #py_install(packages = 'dfply')
 library(highfrequency)
+library(xts)
+library(tidyquant)
 
+options(digits.secs=6)
 options(scipen=999)
 options(max.print = 99999999)
 options(digits=10)
+options(tz="Asia/Seoul")
 ```
 
 * Import Data
@@ -91,15 +95,15 @@ options(digits=10)
 <div class = "rcode">
 ```{r, eval=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 wd_win = "G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-26"
-wd_mac = "/Volumes/GoogleDrive/공유드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-26"
+wd_mac = "/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-25"
+
 tbl =
-  list.files(path = wd_win, pattern = '.*stocks_trade.*\\.csv') %>%
-  map_df(~readr::read_csv(paste(wd_win,.,sep = '/'),
+  list.files(path = wd_mac, pattern = '.*stocks_trade.*\\.csv') %>%
+  map_df(~readr::read_csv(paste(wd_mac,.,sep = '/'),
                           col_names = c('code','trade_date','timestamp','price','open','high','low','size','cum_size','ask1','bid1','rotation','bs_ratio', 'mkt_type', 'mkt_cap'),
                           col_types = cols(.default="d", code = "c")
                    )
          )
-
 sum(is.na(tbl))
 gc()
 dim(tbl)
@@ -129,8 +133,9 @@ Exchangehours Only!
 df = 
   tbl %>%
   filter(mkt_type==2) %>%
-  select('code','timestamp','price','size','ask1','bid1','mkt_type','bs_ratio') %>%
-  mutate_at(vars(timestamp), function(x) x*1000) %>%
+  select('code','timestamp','price','size','ask1','bid1',
+         'mkt_type','bs_ratio','mkt_cap','cum_size') %>%
+  mutate_at(vars(timestamp), function(x) x*10000) %>%
   mutate_at(vars(code), function(x) paste0('KR',x)) %>%
   arrange(.,timestamp) %>%
   mutate(DATE = paste(substr(as.character(timestamp),1,4),
@@ -145,6 +150,10 @@ df =
                             sep='.'),
                       sep =":" 
                       )) %>%
+  mutate(DT = as.POSIXct(paste0(DATE,' ',TIME))) %>%
+  mutate(SPREAD = ask1 - bid1) %>%
+  mutate(MKT_RANK = )
+  mutate(MONEY = price * size) %>%
   rename(SYMBOL = code) %>%
   rename(BID = bid1) %>%
   rename(OFR = ask1) %>%
@@ -152,7 +161,7 @@ df =
   rename(PRICE = price) %>%
   rename(VP = bs_ratio) %>%
   select(!c('timestamp', 'mkt_type')) %>%
-  relocate(DATE, TIME, SYMBOL, PRICE, SIZE, BID, OFR, VP)
+  relocate(DT, DATE, TIME, SYMBOL, PRICE, SIZE, BID, OFR, VP)
   
 head(df)
 rm(list = "tbl")
@@ -160,10 +169,146 @@ gc()
 ```
 </div>
 
+## Main Dish
+
+<div class = "rcode">
+```{r, eval=FALSE}
+dfs = split(df, df$SYMBOL)
+for (dn in names(dfs)){
+    dfs[[dn]] = 
+      data.table::as.data.table(dfs[[dn]]) %>%
+      mutate(IND = getTradeDirection(.)) %>%
+      mutate(BUY = ifelse(IND>0, SIZE, 0)) %>%
+      mutate(SELL = ifelse(IND<0, SIZE, 0)) %>%
+      mutate(VP = VP/100) %>%
+      # Use second element of VP to get buy and sell within size at first row
+      # 노가다 왜냐면 코딩 스킬 부족
+      mutate(BUY = 
+              replace(BUY, row_number() == 1, 
+                ifelse(head(.$VP)[1]>0, round(head(.$VP)[1]*(.$SIZE[1])/(head(.$VP)[1]+1)),
+                ifelse(head(.$VP)[2]>0, round(head(.$VP)[2]*(.$SIZE[1])/(head(.$VP)[2]+1)),
+                ifelse(head(.$VP)[3]>0, round(head(.$VP)[3]*(.$SIZE[1])/(head(.$VP)[3]+1)),
+                ifelse(head(.$VP)[4]>0, round(head(.$VP)[4]*(.$SIZE[1])/(head(.$VP)[4]+1)),
+                ifelse(head(.$VP)[5]>0, round(head(.$VP)[5]*(.$SIZE[1])/(head(.$VP)[5]+1)),
+                ifelse(head(.$VP,10)[6]>0, round(head(.$VP,10)[6]*(.$SIZE[1])/(head(.$VP,10)[6]+1)),
+                ifelse(head(.$VP,10)[7]>0, round(head(.$VP,10)[7]*(.$SIZE[1])/(head(.$VP,10)[7]+1)),
+                ifelse(head(.$VP,10)[8]>0, round(head(.$VP,10)[8]*(.$SIZE[1])/(head(.$VP,10)[8]+1)),
+                ifelse(head(.$VP,10)[9]>0, round(head(.$VP,10)[9]*(.$SIZE[1])/(head(.$VP,10)[9]+1)),
+                  round(head(.$VP,10)[10]*(.$SIZE[1])/(head(.$VP,10)[10]+1))
+                      )
+                      )
+                      )
+                      )
+                      )
+                      )
+                      )
+                      )
+                      )
+              )
+             ) %>%
+      mutate(SELL = replace(SELL, row_number() == 1, head(.$SIZE)[1]-head(.$BUY)[1])) %>%
+      mutate(SignedMoney = BUY*PRICE - SELL*PRICE) %>%
+      mutate(SignedSize = BUY - SELL) %>%
+      mutate(BUYcumsum = cumsum(BUY)) %>%
+      mutate(SELLcumsum = cumsum(SELL)) %>%
+      mutate(BSratio = round(BUYcumsum/SELLcumsum,4)) %>%
+      relocate(VP, BSratio, SignedSize, BUY, SELL)
+}
+
+```
+
+## Continue 
+
+```{r, eval=FALSE}
+dfs_final = do.call(rbind, dfs)
+
+dfs_final %>%
+  group_by(SYMBOL) %>%
+  summarise(Agg.SIZE = tail(cum_size,1),
+            Avg.SIZE = round(mean(SIZE)),
+            Net.SIZE = sum(SignedSize),
+            Max.Buy.Money.mil = round(max(SignedMoney)/1e6),
+            Max.Sell.Money.mil = round(min(SignedMoney)/1e6),
+            Agg.Money.bil= round(sum(MONEY)/1e9),
+            Net.Money.Flow.mil = round(sum(SignedMoney)/1e6),
+            VP = tail(VP,1),
+            #AR1.IND = as.numeric(arima(as.numeric(IND),order=c(1,0,0))$coef[1]),
+            MKT.CAP = tail(mkt_cap,1),
+            RETURN = round(log(tail(PRICE,1)/head(PRICE,1))*100,2),
+            ) %>%
+  arrange(., desc(MKT.CAP)) %>%
+  mutate(MKT.Rank = 1:nrow(.)) %>%
+  arrange(., Agg.SIZE) %>%
+  select(-MKT.CAP) %>%
+  head(.,100)
+
+```
+
+
+```{r}
+dest = "G:/공유 드라이브/Project_TBD/Stock_Data/Symbol"
+for (dn in names(dfs)){
+    output_loc = paste(dest,dn,'tick',sep = "/")
+    info_loc = paste(dest,dn,'info',sep='/')
+    dir.create(paste(dest,dn,sep = "/"))
+    dir.create(paste(dest,dn,'tick',sep = "/"))
+    dir.create(paste(dest,dn,'info',sep='/'))
+    sub_dfs <- split(dfs[[dn]], dfs[[dn]]$DATE)
+    for (fn in names(sub_dfs)){
+        write.csv(sub_dfs[[fn]], 
+                  file.path(output_loc, paste0(fn, ".csv")), 
+                  row.names = FALSE)
+        write.csv(datas[[dn]],
+                  file.path(info_loc, paste0(fn, ".csv")),
+                  row.names = FALSE)
+    }
+}
+
+df %>%
+  group_by(SYMBOL) %>%
+  summarise(Agg.SIZE = tail(cum_size,1),
+            Avg.SIZE = round(mean(SIZE)),
+            Max.Money.mil= round(max(MONEY)/1e6),
+            Agg.Money.mil= round(sum(MONEY)/1e6),
+            VP = tail(VP,1),
+            MKT_CAP = tail(mkt_cap,1),
+            RETURN = round(log(tail(PRICE,1)/head(PRICE,1))*100,4),
+            Net.Money.Flow = getMoneyFlow(.)
+            ) %>%
+  arrange(., desc(MKT_CAP)) %>%
+  mutate(MKT_Rank = 1:nrow(.)) %>%
+  arrange(., desc(Agg.Money.mil)) %>%
+  head(.,10)
+
+ts2 = as.xts(subset(ts, select=-c(DT, DATE, TIME, SYMBOL)), 
+                   order.by = ts$DT)
+ts2 = cbind.xts(ts2, ts$SYMBOL)
+head(ts3)
+ts3 = merge(ts2, ts$SYMBOL)
+ts2 %>%
+  group_by(SYMBOL) %>%
+  summarise(Agg.Volume = sum(SIZE),
+            Agg.Money= sum(MONEY))
+
+dim(ts2)
+str(ts2)
+dim(cbind(ts2, tmp$SYMBOL))
+aggregateTS(ts2, alignBy = "seconds", alignPeriod = 10)
+
+str(ts)
+aggregateTS(ts, alignBy = "minutes", alignPeriod = 5)
+
+ts2 = as.xts(tmp[,c(DT,PRICE,SZIE)])
+str(sampleTData)
+str(tmp)
+ts <- as.xts(sampleTData[, list(DT, PRICE, SIZE)])
+gc()
+```
+</div>
+
 ## 4. 네이버 금융에서 주식티커 크롤링 
 
-출처: https://hyunyulhenry.github.io/quant_cookbook/%ED%81%AC%EB%A1%A4%EB%A7%81-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0.html
-
+관련 소스 출처: https://hyunyulhenry.github.io/quant_cookbook/%ED%81%AC%EB%A1%A4%EB%A7%81-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0.html
 
 ```{r, eval=FALSE, include=FALSE}
 library(rvest)
@@ -243,10 +388,88 @@ for (i in 0:1) {
 # 코스피와 코스닥 테이블 묶기
 data = do.call(rbind, data)
 head(data)
+data %>%
+  drop_na() %>%
+  rowwise() %>%
+  mutate(거래량 = as.numeric(gsub(",","",거래량))) %>%
+  ungroup() %>%
+  arrange(desc(거래량)) %>%
+  select(종목명,거래량, 종목코드) %>%
+  filter(str_detect(종목명, 'KODEX|TIGER|KBSTAR'),
+         !str_detect(종목명, '레버리지|2X')) %>%
+  head(100)
+```
+```{r}
+tail(dfs$KR114800, 10)
 ```
 
+## 5. 시장구분과 섹터구분
 
-## 5. Symbol 별로 분리해서 폴더에 집어넣기
+관련 소스 출처: https://hyunyulhenry.github.io/quant_cookbook/%EA%B8%88%EC%9C%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%88%98%EC%A7%91%ED%95%98%EA%B8%B0-%EA%B8%B0%EB%B3%B8.html#%EC%97%85%EC%A2%85%EB%B6%84%EB%A5%98-%ED%98%84%ED%99%A9-%ED%81%AC%EB%A1%A4%EB%A7%81
+
+- ETF 코드 받기
+
+```{r}
+library(httr)
+library(rvest)
+library(readr)
+
+gen_otp_url =
+  'http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd'
+gen_otp_data = list(
+  trdDd = '20210129',
+  share = '1',
+  money = '1',
+  csvxls_isNo = 'false',
+  name = 'fileDown',
+  url = 'dbms/MDC/STAT/standard/MDCSTAT04301'
+)
+otp = POST(gen_otp_url, query = gen_otp_data) %>%
+  read_html() %>%
+  html_text()
+
+down_url = 'http://data.krx.co.kr/comm/fileDn/download_csv/download.cmd'
+down_ETF_KS = POST(down_url, query = list(code = otp),
+                   add_headers(referer = gen_otp_url)) %>%
+  read_html(encoding = 'EUC-KR') %>%
+  html_text() %>%
+  read_csv()
+
+print(down_ETF_KS)
+code_ETF = down_ETF_KS %>%
+  mutate(종목코드 = paste0('KR',종목코드)) %>%
+  select(종목코드, 종목명, 기초지수_지수명)
+
+```
+
+- KOSPI 코드 받기
+```{r}
+gen_otp_url =
+  'http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd'
+gen_otp_data = list(
+  mktId = 'STK',
+  trdDd = '20210108',
+  money = '1',
+  csvxls_isNo = 'false',
+  name = 'fileDown',
+  url = 'dbms/MDC/STAT/standard/MDCSTAT03901'
+)
+otp = POST(gen_otp_url, query = gen_otp_data) %>%
+  read_html() %>%
+  html_text()
+
+down_url = 'http://data.krx.co.kr/comm/fileDn/download_csv/download.cmd'
+down_KOSPI_KS = POST(down_url, query = list(code = otp),
+                   add_headers(referer = gen_otp_url)) %>%
+  read_html(encoding = 'EUC-KR') %>%
+  html_text() %>%
+  read_csv()
+code_KOSPI = down_KOSPI_KS %>%
+  mutate(종목코드 = paste0('KR',종목코드)) %>%
+  select(종목코드, 종목명, )
+```
+ 
+## 6. Symbol 별로 분리해서 폴더에 집어넣기
 
 Seperate by Ticker
 

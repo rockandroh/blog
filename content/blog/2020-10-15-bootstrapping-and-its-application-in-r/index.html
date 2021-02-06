@@ -1,22 +1,3 @@
----
-title: Bootstrapping and its Implementation in R
-author: Roh
-date: '2020-10-15'
-slug: bootstrapping-and-its-application-in-r
-categories:
-  - statistics
-  - R
-tags:
-  - R
-  - bootstrapping
-meta_img: /Users/master/Documents/GitHub//blog/content/note/2020-10-15-bootstrapping-and-its-application-in-r/index_files/bootstrap.jpg
-output:
-  blogdown::html_page:
-    toc: true
-    toc_depth: 6
-# draft: true
----
-
 
 <div id="TOC">
 <ul>
@@ -34,7 +15,7 @@ output:
 </ul>
 </div>
 
-<p><img src="index_files/bootstrap.jpg" style="width:100.0%" /></p>
+<p><img src="/Users/master/Documents/GitHub//blog/content/note/2020-10-15-bootstrapping-and-its-application-in-r/index_files/bootstrap.jpg" style="width:100.0%" /></p>
 <div id="about" class="section level2">
 <h2>About</h2>
 <p>This page is to provide a gentle introduction of <code>Bootstrapping</code> and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end. Hope you enjoy and find it helpful to solidate your understanding. If you find error or have something you want to add more, feel free to email me (<a href="mailto:metrics@kakao.com" class="email">metrics@kakao.com</a>).</p>
@@ -83,9 +64,9 @@ bs_sample_median_vec = apply(bs_sample_mat, 2, median)
 printf(&quot;Median vector of Bootstrap sample: \n&quot;)</code></pre>
 <pre><code>## Median vector of Bootstrap sample:</code></pre>
 <pre class="r"><code>print(bs_sample_median_vec)</code></pre>
-<pre><code>##  [1] 18.70 20.35 19.20 19.20 19.70 17.80 18.70 21.00 18.70 19.20 19.70 19.70
-## [13] 19.70 17.95 19.20 19.70 19.20 19.20 19.20 20.10 18.70 19.20 18.10 19.20
-## [25] 18.10 19.20 19.20 21.00 19.20 19.70 18.10 19.70</code></pre>
+<pre><code>##  [1] 17.95 19.70 18.70 18.70 19.20 19.20 18.95 17.80 18.40 18.95 19.20 17.80
+## [13] 19.20 18.95 19.45 18.70 18.70 19.20 19.20 18.40 20.10 18.95 18.95 21.00
+## [25] 19.20 19.20 18.40 19.70 19.20 19.20 19.20 18.40</code></pre>
 <pre class="r"><code>sample_median_vec = median(mpg)
 printf(&quot;Sample median of orignal data: \n&quot;)</code></pre>
 <pre><code>## Sample median of orignal data:</code></pre>
@@ -108,13 +89,13 @@ where <span class="math inline">\(\bar{M}_{m}^{*}\)</span> is a mean of the seri
 <pre class="r"><code>sample_variance = function(x){(1/(length(x)-1))*sum((x-mean(x))^2)}
 bs_est_var = sample_variance(bs_sample_median_vec)
 printf(&quot;Bootstrap estimate of the variance is: %.2f&quot;, bs_est_var)</code></pre>
-<pre><code>## Bootstrap estimate of the variance is: 0.60</code></pre>
+<pre><code>## Bootstrap estimate of the variance is: 0.41</code></pre>
 <ul>
 <li><strong>Bootstrap estimate of the MSE</strong> Moreover, we can estimate the MSE by <span class="math display">\[\frac{1}{m}\sum\left(M_{n}^{*(l)}-M_{n}\right)^2\]</span></li>
 </ul>
 <pre class="r"><code>bs_MSE = (1/length(bs_sample_median_vec))*sum((bs_sample_median_vec - median(mpg))^2)
 printf(&quot;Bootstrap estimate of MSE is: %.2f&quot;, bs_MSE)</code></pre>
-<pre><code>## Bootstrap estimate of MSE is: 0.58</code></pre>
+<pre><code>## Bootstrap estimate of MSE is: 0.44</code></pre>
 <ul>
 <li><strong>Bootstrap confidence interval</strong> We can construct a <span class="math inline">\(1-\alpha\)</span> condifence interval of the population median via <span class="math display">\[M_n \pm z_{1-\alpha/2}\cdot \sqrt{\widehat{Var}_m\left(M_n\right)}\]</span></li>
 </ul>
@@ -122,7 +103,7 @@ printf(&quot;Bootstrap estimate of MSE is: %.2f&quot;, bs_MSE)</code></pre>
 left = median(mpg) - qnorm(1-alpha/2)*sqrt(bs_est_var)
 right = median(mpg) + qnorm(1-alpha/2)*sqrt(bs_est_var)
 printf(&quot;CI Interval: [%.3f, %.3f]&quot;, left, right)</code></pre>
-<pre><code>## CI Interval: [17.687, 20.713]</code></pre>
+<pre><code>## CI Interval: [17.949, 20.451]</code></pre>
 </div>
 <div id="difference-between-real-world-and-bootstrap-world" class="section level4">
 <h4>Difference between real world and bootstrap world</h4>
@@ -182,7 +163,7 @@ printf(&quot;CI Interval: [%.3f, %.3f]&quot;, left, right)</code></pre>
 <pre class="r"><code>ecdf_mpg = ecdf(mpg)
 plot(ecdf_mpg, xlab = &#39;x&#39;, ylab = &#39;Fn(x)&#39;, main = &#39;Empirical cdf&#39;, col=&#39;blue&#39;)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
-** Proposition of the Empirical CDF Estimator **</p>
+<strong>Proposition of the Empirical CDF Estimator</strong></p>
 <ol style="list-style-type: decimal">
 <li>Unbiased <span class="math display">\[E\left[\widehat{F}(x)\right]=F(x)\]</span></li>
 <li>Consistent <span class="math display">\[\widehat{F} \longrightarrow F(x)\]</span>

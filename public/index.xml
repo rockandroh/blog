@@ -13,7 +13,7 @@
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-3/</guid>
-      <description>TASK2: Cleaning 준비1.타임 스탬프 Sort 하기2. 장중 데이터만 가지고 오기3. DATE는 날짜 TIME은 시간4. 네이버 금융에서 주식티커 크롤링5. Symbol 별로 분리해서 폴더에 집어넣기Sourcediv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }body, td {font-size: 14px;}code.r{font-size: 12px;}pre {font-size: 12px}Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
+      <description>TASK2: Cleaning 준비 1.타임 스탬프 Sort 하기 2. 장중 데이터만 가지고 오기 3. DATE는 날짜 TIME은 시간 4. 네이버 금융에서 주식티커 크롤링 5. Symbol 별로 분리해서 폴더에 집어넣기 Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 14px; } code.r{ font-size: 12px; } pre { font-size: 12px }  Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
     </item>
     
     <item>
@@ -22,7 +22,7 @@
       <pubDate>Fri, 22 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-2/</guid>
-      <description>Task1: 레이턴시 계산0. Filtering Samsung Stock1. Use time object in python2. Calculate latency and clean it오전 8시 9시 앞에 ’0’을 붙여주기Latency +/- 정보 가지고 오기Sourcediv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }body, td {font-size: 14px;}code.r{font-size: 12px;}pre {font-size: 12px}Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
+      <description>Task1: 레이턴시 계산 0. Filtering Samsung Stock 1. Use time object in python 2. Calculate latency and clean it 오전 8시 9시 앞에 ’0’을 붙여주기 Latency +/- 정보 가지고 오기  Source     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 14px; } code.r{ font-size: 12px; } pre { font-size: 12px }  Note: 이 페이지는 키움 API를 통해 Real Time Tick Data를 받아온 후 데이터를 클리닝 하는 과정을 보여주고 있습니다.</description>
     </item>
     
     <item>
@@ -31,7 +31,7 @@
       <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/highfrequency-data-analysis-day1/</guid>
-      <description>HW7Question 1Question 2Theoretical ConceptIntegrated Volatility [IV]Realized Volatility [RV]Signature PlotTake logCalculate Averaged Realized VolatilityGet ARVs for bid,ask,mid, and tradePlotMysteryClueQuestion 3\(L_T^{(n,d)}\)\(\widehat{QV}\)TestQuestion 4div.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }body, td {font-size: 20px;}code.</description>
+      <description>HW7 Question 1 Question 2 Theoretical Concept Integrated Volatility [IV] Realized Volatility [RV] Signature Plot Take log Calculate Averaged Realized Volatility Get ARVs for bid,ask,mid, and trade Plot Mystery Clue   Question 3 \(L_T^{(n,d)}\) \(\widehat{QV}\) Test  Question 4     div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  body, td { font-size: 20px; } code.</description>
     </item>
     
     <item>
@@ -40,7 +40,7 @@
       <pubDate>Fri, 25 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/%EC%A3%BC%EC%8B%9D%EB%B0%B0%EB%8B%B9-dividend-2020/</guid>
-      <description>관심 급증?배당 관련 기본 지식2020년 배당 추정치 기준 상위 10개 종목2020년 10월 29일 매일경제데이터 불러오기24일 기준으로 배당률 구하기배당락 회복하는데 걸린 시간div.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }body, td {font-size: 18px;}code.r{font-size: 12px;}pre {font-size: 18px}2020년 연말 2021년 지급될 배당 관련한 주식에 대해서 사람들의 관심이 뜨겁다.</description>
+      <description>관심 급증? 배당 관련 기본 지식 2020년 배당 추정치 기준 상위 10개 종목 2020년 10월 29일 매일경제 데이터 불러오기 24일 기준으로 배당률 구하기 배당락 회복하는데 걸린 시간    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }  body, td { font-size: 18px; } code.r{ font-size: 12px; } pre { font-size: 18px }  2020년 연말 2021년 지급될 배당 관련한 주식에 대해서 사람들의 관심이 뜨겁다.</description>
     </item>
     
     <item>
@@ -49,7 +49,7 @@
       <pubDate>Thu, 24 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/ap-micro-unit4/</guid>
-      <description>4. Imperfect Competition (15-22%)4.1 Introduction4.2 Monopolies4.3 Price discrimination4.4 Monopolistic competition4.5 Oligopoly and game theoryReferencebody, td {font-size: 20px;}code.r{font-size: 12px;}pre {font-size: 12px}This page is a note for AP micro economics. It is a collection of study materials from sources in the reference list in the bottom and it is reorganized in my preference.</description>
+      <description>4. Imperfect Competition (15-22%) 4.1 Introduction 4.2 Monopolies 4.3 Price discrimination 4.4 Monopolistic competition 4.5 Oligopoly and game theory  Reference   body, td { font-size: 20px; } code.r{ font-size: 12px; } pre { font-size: 12px }  This page is a note for AP micro economics. It is a collection of study materials from sources in the reference list in the bottom and it is reorganized in my preference.</description>
     </item>
     
     <item>
@@ -59,8 +59,8 @@
       
       <guid>https://rockandroh.netlify.app/blog/price-elasticity/</guid>
       <description>This page is about the economics term “Price Elasticity”.
-Setting the right price for your product or service is hard. In fact, determining price is one of the toughest things a marketer has to do, in large part because it has such a big impact on the company’s bottom line. One of the critical elements of pricing is understanding what economists call “price elasticity” - HBR
-By definition, price elasticity of demand refers to the number calculated by the following formula \[ \epsilon=\frac{\Delta Q/Q}{\Delta P/P}=\frac{\partial Q}{\partial P}\cdot\frac{P}{Q}\] which is a percentage change in quantity demanded divided by a percentage change in price.</description>
+ Setting the right price for your product or service is hard. In fact, determining price is one of the toughest things a marketer has to do, in large part because it has such a big impact on the company’s bottom line. One of the critical elements of pricing is understanding what economists call “price elasticity” - HBR
+ By definition, price elasticity of demand refers to the number calculated by the following formula \[ \epsilon=\frac{\Delta Q/Q}{\Delta P/P}=\frac{\partial Q}{\partial P}\cdot\frac{P}{Q}\] which is a percentage change in quantity demanded divided by a percentage change in price.</description>
     </item>
     
     <item>
@@ -78,9 +78,9 @@
       <pubDate>Wed, 16 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
-      <description>유형2 - 계산작업RPythondiv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
+      <description>유형2 - 계산작업 R Python    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
 이 시리즈는 유형2로 유형1을 놓치신 분들은 아래의 링크를 이용하시면 됩니다.
-R/Python (1) - 기본작업# R 코드입니다.</description>
+R/Python (1) - 기본작업 # R 코드입니다.</description>
     </item>
     
     <item>
@@ -89,9 +89,9 @@ R/Python (1) - 기본작업# R 코드입니다.</description>
       <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%99%9C%EC%9A%A9%EB%8A%A5%EB%A0%A5/</guid>
-      <description>유형1RPythondiv.rcode pre { background-color:#fffff0; }div.rcode pre.r { background-color:#EDF6FA; }div.pycode pre { background-color:#fffff0; }div.pycode pre.python { background-color:#FFE9E9; }이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
+      <description>유형1 R Python    div.rcode pre { background-color:#fffff0; } div.rcode pre.r { background-color:#EDF6FA; }   div.pycode pre { background-color:#fffff0; } div.pycode pre.python { background-color:#FFE9E9; }  이 페이지는 컵활 1급의 Excel 예제를 그대로 R과 Python에서 해보는 것을 목적으로 하고 있습니다. 오류와 수정사항 그리고 교육문의는 metrics@kakao.com 으로 메일주시면 감사하겠습니다
 R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠습니다. 결과창은 동일하게 Ivory 색 블럭으로 표시됩니다.
-필요한 패키지 준비library(readxl) # read excellibrary(dplyr)library(DT)library(formattable)library(reticulate) # Python#py_install(packages = &amp;quot;matplotlib&amp;quot;)#py_install(packages = &amp;quot;pandas&amp;quot;)# &amp;quot;이것은 R 코드 입니다.</description>
+필요한 패키지 준비 library(readxl) # read excel library(dplyr) library(DT) library(formattable) library(reticulate) # Python #py_install(packages = &amp;quot;matplotlib&amp;quot;) #py_install(packages = &amp;quot;pandas&amp;quot;) # &amp;quot;이것은 R 코드 입니다.</description>
     </item>
     
     <item>
@@ -100,11 +100,11 @@ R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠�
       <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/book-review-predictive-data-mining-models/</guid>
-      <description>Predictive Data Minining Model IntroKnowledge discovery involves finding interesting patterns from data stored in large databases through use of computer analysis.
-Interesting implies non-trivial, implicit, previously unknown, easily understood, useful and actionable knowledge.
-Information is defined as the pattersn, correlations, rules, or relationships in data providing knowledge useful in decision making.
-Descriptive analytics
-reports of what has happened. Statistics are big part of that.Predictive analytics</description>
+      <description>Predictive Data Minining Model Intro Knowledge discovery involves finding interesting patterns from data stored in large databases through use of computer analysis.
+ Interesting implies non-trivial, implicit, previously unknown, easily understood, useful and actionable knowledge.
+ Information is defined as the pattersn, correlations, rules, or relationships in data providing knowledge useful in decision making.
+ Descriptive analytics
+ reports of what has happened. Statistics are big part of that.  Predictive analytics</description>
     </item>
     
     <item>
@@ -113,9 +113,9 @@ R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠�
       <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/database_intro/</guid>
-      <description>1강 : 개요2강 : 관계형 데이터 베이스Reference1강 : 개요정의
-특정 조직이 업무 수행하는데 필요한 관련성 있는 자료들의 집합체데이터 베이스 도입 배경
-파일 시스템의 문제점을 해결예시인사/급여/자재/마케팅의 독립적인 파일들독립된 파일 단위로 업무와 관련한 데이터를 저장하므로 데이터의 중복성과 데이터 종속성 발생데이터 무결성 위배 가능성 높음데이터 베이스를 이용해서 이 문제를 해결하려고 함데이터 베이스 시스템 구성</description>
+      <description>1강 : 개요 2강 : 관계형 데이터 베이스 Reference   1강 : 개요  정의
+ 특정 조직이 업무 수행하는데 필요한 관련성 있는 자료들의 집합체  데이터 베이스 도입 배경
+ 파일 시스템의 문제점을 해결 예시  인사/급여/자재/마케팅의 독립적인 파일들  독립된 파일 단위로 업무와 관련한 데이터를 저장하므로 데이터의 중복성과 데이터 종속성 발생  데이터 무결성 위배 가능성 높음  데이터 베이스를 이용해서 이 문제를 해결하려고 함  데이터 베이스 시스템 구성</description>
     </item>
     
     <item>
@@ -124,10 +124,10 @@ R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠�
       <pubDate>Thu, 19 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/multiple-comparison-test/</guid>
-      <description>T-testMultiple Comparison 정리- One sample- Two sample- Multiple sampleT-testcontinuous data 의 평균을 테스트
-\(\text{One smaple} \quad H_0: \mu=\mu_0 \qquad H_A:\mu\neq\mu_0\)\(\text{Two smaple} \quad H_0: \mu_1-\mu_2=0 \qquad H_A:\mu_1-mu_2\neq 0\)Outlier 로 Variance (\(s^2\)) 가 커지는 경우 T-statistic 이 급격히 작아지는 문제가 발생
+      <description>  T-test   Multiple Comparison 정리 - One sample - Two sample - Multiple sample T-test  continuous data 의 평균을 테스트
+ \(\text{One smaple} \quad H_0: \mu=\mu_0 \qquad H_A:\mu\neq\mu_0\) \(\text{Two smaple} \quad H_0: \mu_1-\mu_2=0 \qquad H_A:\mu_1-mu_2\neq 0\)  Outlier 로 Variance (\(s^2\)) 가 커지는 경우 T-statistic 이 급격히 작아지는 문제가 발생
 \[t = \frac{\bar{x}_1-\bar{x}_2}{s\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}\]
-</description>
+    </description>
     </item>
     
     <item>
@@ -136,8 +136,8 @@ R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠�
       <pubDate>Tue, 10 Nov 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/simple-math-question-1/</guid>
-      <description>질문1세팅풀이R code질문2세팅풀이R code질문1A,B,C 세 사람이 같이하면 5일 만에 끝낼 수 있는 일을 A, B 두 사람이 하면 10일, B, C 두 사람이 하면 6일 만에 끝낸다고 한다. 이 일을 B 혼자서 하게 되면 며칠이나 걸릴까?
-세팅끝내야 하는 일의 총 양을 1 이라고 하고 A, B, C 세 사람이 하루에 할 수 있는 일의 양을 a, b, c 라고 하자.</description>
+      <description>질문1 세팅 풀이 R code  질문2 세팅 풀이 R code    질문1 A,B,C 세 사람이 같이하면 5일 만에 끝낼 수 있는 일을 A, B 두 사람이 하면 10일, B, C 두 사람이 하면 6일 만에 끝낸다고 한다. 이 일을 B 혼자서 하게 되면 며칠이나 걸릴까?
+세팅  끝내야 하는 일의 총 양을 1 이라고 하고 A, B, C 세 사람이 하루에 할 수 있는 일의 양을 a, b, c 라고 하자.</description>
     </item>
     
     <item>
@@ -161,7 +161,7 @@ R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠�
       <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/reproducible-finance-with-r-1/</guid>
-      <description>데이터 불러오기 및 관련 function 연습패키지 준비하기데이터 불러오기csv파일 불러오기엑셀 파일 불러오기Daily 가격 데이터를 Monthly 데이터로 변환하기월말 가격월초 가격월평균 가격수익률 데이터 만들기xts 와 data frame 의 차이Spread()gather()Come back to price dataReference데이터 불러오기 및 관련 function 연습Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
+      <description>데이터 불러오기 및 관련 function 연습 패키지 준비하기 데이터 불러오기 csv파일 불러오기 엑셀 파일 불러오기  Daily 가격 데이터를 Monthly 데이터로 변환하기 월말 가격 월초 가격 월평균 가격 수익률 데이터 만들기 xts 와 data frame 의 차이 Spread() gather()  Come back to price data Reference    데이터 불러오기 및 관련 function 연습 Note: 이 페이지는 Reproducible Finance with R 책을 (과하게) 참고 하였습니다. 다른 Reference 는 밑에 적어 두겠습니다.</description>
     </item>
     
     <item>
@@ -170,19 +170,9 @@ R code 블럭과 Python code 블럭은 다음과 같이 색깔로 구분하겠�
       <pubDate>Wed, 21 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/sampling-method-in-detail/</guid>
-      <description>BasicInverse Transform SamplingRejection SamplingImportance SamplingThis page talks about how to sample from the distribution. We will go over well known sampling techniques and try to implement with various examples.
-BasicWhat it means to calcaulte the variance with mean 0?
-\[ Var[X]= \int_{-\infty}^{\infty} x^2 f(x)dx \]when \(f(x)\) is \(N(1,2)\). Then \(f(x)\) is \[\frac{1}{\sqrt{2\pi\sigma^2}}\cdot\exp\left(-(x-\mu)^2/2\sigma^2\right)\] where \(\mu\) is 0 and \(\sigma\) is 2.</description>
-    </item>
-    
-    <item>
-      <title>Useful R packages #1</title>
-      <link>https://rockandroh.netlify.app/blog/useful-r-packages-1/</link>
-      <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/useful-r-packages-1/</guid>
-      <description>This page provides a summary and simple examples of contents introduced in the Medium as “The Most Underrated R pakcages: 2020 Edition”.
-Misc#install.packages(&amp;#39;calendR&amp;#39;)library(calendR)## ~~ Package calendR## Visit https://r-coder.com/ for R tutorials ~~calendR(year = 2020, month=10, title.size = 10, subtitle = &amp;quot;Have a nice day&amp;quot;,subtitle.col = &amp;#39;Blue&amp;#39;,day.size = 3,weeknames.size = 4,weeknames.col = &amp;#39;blue&amp;#39;,weeknames = c(&amp;#39;Mon&amp;#39;,&amp;#39;Tue&amp;#39;,&amp;#39;Wed&amp;#39;,&amp;#39;Thu&amp;#39;,&amp;#39;Fri&amp;#39;,&amp;#39;Sat&amp;#39;,&amp;#39;Sun&amp;#39;),start = &amp;#39;M&amp;#39;,special.days = &amp;#39;weekend&amp;#39;,special.</description>
+      <description>Basic Inverse Transform Sampling Rejection Sampling Importance Sampling    This page talks about how to sample from the distribution. We will go over well known sampling techniques and try to implement with various examples.
+Basic What it means to calcaulte the variance with mean 0?
+\[ Var[X]= \int_{-\infty}^{\infty} x^2 f(x)dx \] when \(f(x)\) is \(N(1,2)\). Then \(f(x)\) is \[\frac{1}{\sqrt{2\pi\sigma^2}}\cdot\exp\left(-(x-\mu)^2/2\sigma^2\right)\] where \(\mu\) is 0 and \(\sigma\) is 2.</description>
     </item>
     
     <item>
@@ -191,8 +181,8 @@ Misc#install.packages(&amp;#39;calendR&amp;#39;)library(calendR)## ~~ Package
       <pubDate>Mon, 19 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/data-structure-summary/</guid>
-      <description>자료구조 렉쳐노트 키워드 정리자료의 표현소프트웨어 생명주기알고리즘구조체자료구조 렉쳐노트 키워드 정리아주 간단하게 키워드만 정리한 것이므로 내용이 많이 빈약합니다.
-자료의 표현디지털 시스템에서의 자료 표현모든 형식의 자료를 2진수 코드로 표현하여 저장 및 처리2진수 코드의 단위8비트 = 2니블 = 1바이트n개의 비트로 \(2^n\) 개의 상태표현수치자료의 표현10진수의 표현존 형식팩 형식2진수의 정수 표현문자자료의 표현문자에 대한 이진수 코드를 정의하여 사용문자에 대한 이진수 코드표BCD코드: 6비트를 사용하여 문자표현EBCDIC코드: 8비트를 사용하여 문자표현ASCII코드: 7비트를 사용하여 문자표현기타자료의 표현논리자료포인터 자료문자열 자료소프트웨어 생명주기생명주기요구분석 -&amp;gt; 시스템 명세 -&amp;gt; 설계 -&amp;gt; 구현 -&amp;gt; 테스트 -&amp;gt; 유지보수알고리즘성능분석- 존 형식의 표현- 공간 복잡도- 알고리즘을 프로그램으로 실행하여 완료하기까지 필요한 총 저장 공간의 양- 공간복잡도: 고정공간 + 가변공간- 시간 복잡도- 알고리즘을 프로그램으로 실행하여 완료하기까지의 총 소요시간- 시간 복잡도 = 컴파일 시간 + 실행 시간- Big O notation</description>
+      <description>자료구조 렉쳐노트 키워드 정리 자료의 표현 소프트웨어 생명주기 알고리즘 구조체    자료구조 렉쳐노트 키워드 정리 아주 간단하게 키워드만 정리한 것이므로 내용이 많이 빈약합니다.
+자료의 표현  디지털 시스템에서의 자료 표현  모든 형식의 자료를 2진수 코드로 표현하여 저장 및 처리 2진수 코드의 단위  8비트 = 2니블 = 1바이트 n개의 비트로 \(2^n\) 개의 상태표현   수치자료의 표현  10진수의 표현  존 형식 팩 형식  2진수의 정수 표현  문자자료의 표현  문자에 대한 이진수 코드를 정의하여 사용 문자에 대한 이진수 코드표  BCD코드: 6비트를 사용하여 문자표현 EBCDIC코드: 8비트를 사용하여 문자표현 ASCII코드: 7비트를 사용하여 문자표현   기타자료의 표현  논리자료 포인터 자료 문자열 자료    소프트웨어 생명주기  생명주기  요구분석 -&amp;gt; 시스템 명세 -&amp;gt; 설계 -&amp;gt; 구현 -&amp;gt; 테스트 -&amp;gt; 유지보수    알고리즘 성능분석 - 존 형식의 표현 - 공간 복잡도 - 알고리즘을 프로그램으로 실행하여 완료하기까지 필요한 총 저장 공간의 양 - 공간복잡도: 고정공간 + 가변공간 - 시간 복잡도 - 알고리즘을 프로그램으로 실행하여 완료하기까지의 총 소요시간 - 시간 복잡도 = 컴파일 시간 + 실행 시간 - Big O notation</description>
     </item>
     
     <item>
@@ -201,32 +191,9 @@ Misc#install.packages(&amp;#39;calendR&amp;#39;)library(calendR)## ~~ Package
       <pubDate>Sat, 17 Oct 2020 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/discrete-math-lec-note-part-1/</guid>
-      <description>이산수학 렉쳐노트 정리1주차: 명제와 논리2주차: 증명의 정의와 종류3주차: 집합의 개념과 종류 &amp;amp; 연산과 법칙4주차: 수의 표현 및 연산5주차 : 보수와 행렬6주차: 행렬이산수학 렉쳐노트 정리수업 교안을 간단하게 개념만 적는거라 내용이 많이 부실합니다. 자세한 내용은 나중에 추가하도록 하겠습니다.
-1주차: 명제와 논리명제와 논리연산자명제
-명제(Proposition): 참이나 거짓으로 구분할 수 있는 문장이나 수식진리값(Truth Value): 참이나 거짓을 가리키는 값(i.e., T or F, 0 or 1)In R, Zero is considered FALSE and non-zero numbers are taken as TRUE논리 연산자</description>
-    </item>
-    
-    <item>
-      <title>Bootstrapping and its Implementation in R</title>
-      <link>https://rockandroh.netlify.app/blog/bootstrapping-and-its-application-in-r/</link>
-      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/bootstrapping-and-its-application-in-r/</guid>
-      <description>AboutEmpirical Bootstrap (a.k.a Nonparametric Bootstrap)What is bootstrapping sample and how to generate it?Let’s take median as a parameter of distribution of our interestWhat is it for?Difference between real world and bootstrap worldEmpirical CDFWhy does it work?Parametric BootstrapReferencesAboutThis page is to provide a gentle introduction of Bootstrapping and its application in R and Python. I make my own summary of the materials related to the topic and the reference is provided in the end.</description>
-    </item>
-    
-    <item>
-      <title>Rmd Note Sample Using both R, Python, and C</title>
-      <link>https://rockandroh.netlify.app/blog/note-template/</link>
-      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://rockandroh.netlify.app/blog/note-template/</guid>
-      <description>1 Head 12 Head 22.1 R example2.2 Python Example3 Latex Example3.0.0.1 References (Example)Note: This document is to provide a sample template for the lecture notes in .Rmd
-Memo: test
-horizontal line***
-Usage of singe quote
-x = 5 # radius of a circleFor a circle with the radius 5,its area is 78.5398163.
-1 Head 1Add link like this.</description>
+      <description>이산수학 렉쳐노트 정리 1주차: 명제와 논리 2주차: 증명의 정의와 종류 3주차: 집합의 개념과 종류 &amp;amp; 연산과 법칙 4주차: 수의 표현 및 연산 5주차 : 보수와 행렬 6주차: 행렬    이산수학 렉쳐노트 정리 수업 교안을 간단하게 개념만 적는거라 내용이 많이 부실합니다. 자세한 내용은 나중에 추가하도록 하겠습니다.
+1주차: 명제와 논리 명제와 논리연산자 명제
+ 명제(Proposition): 참이나 거짓으로 구분할 수 있는 문장이나 수식 진리값(Truth Value): 참이나 거짓을 가리키는 값(i.e., T or F, 0 or 1)  In R, Zero is considered FALSE and non-zero numbers are taken as TRUE   논리 연산자</description>
     </item>
     
     <item>
@@ -236,12 +203,12 @@ x = 5 # radius of a circleFor a circle with the radius 5,its area is 78.539816
       
       <guid>https://rockandroh.netlify.app/blog/useful-website/</guid>
       <description>Note: This page is to provide a list of useful notes
-Blogdown book/tutorial/bloghttps://apreshill.rbind.io/post/up-and-running-with-blogdown/ [Tutorial]
-https://bookdown.org/yihui/blogdown/
-https://www.storybench.org/how-to-build-a-website-with-blogdown-in-r/
+Blogdown book/tutorial/blog  https://apreshill.rbind.io/post/up-and-running-with-blogdown/ [Tutorial]
+ https://bookdown.org/yihui/blogdown/
+ https://www.storybench.org/how-to-build-a-website-with-blogdown-in-r/
 Hugo version control in netlify by setting the environment variable.
-https://docs.netlify.com/configure-builds/environment-variables/#netlify-configuration-variables
-HUGO_VERSIONWe need to set this not to have ‘build-site’ errorBuilding sites … ERROR 2020/10/15 16:41:28 render of &#34;taxonomyTerm&#34; failed: &#34;/opt/build/repo/themes/hugo-xmin/layouts/_default/terms.html:8:21&#34;: execute of template failed: template: _default/terms.html:8:21: executing &#34;_default/terms.html&#34; at &amp;lt;.Page.RelPermalink&amp;gt;: can&#39;t evaluate field Page in type hugolib.</description>
+ https://docs.netlify.com/configure-builds/environment-variables/#netlify-configuration-variables
+ HUGO_VERSION We need to set this not to have ‘build-site’ error  Building sites … ERROR 2020/10/15 16:41:28 render of &#34;taxonomyTerm&#34; failed: &#34;/opt/build/repo/themes/hugo-xmin/layouts/_default/terms.html:8:21&#34;: execute of template failed: template: _default/terms.html:8:21: executing &#34;_default/terms.html&#34; at &amp;lt;.Page.RelPermalink&amp;gt;: can&#39;t evaluate field Page in type hugolib.</description>
     </item>
     
     <item>
@@ -264,9 +231,9 @@ Hugo version control in netlify by setting the environment variable.
       <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/2015-07-23-r-rmarkdown/</guid>
-      <description>R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
 You can embed an R code chunk like this:
-summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
     </item>
     
     <item>
@@ -275,7 +242,7 @@ summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/teaching/</guid>
-      <description>____________________________________________________________________________________________________Teaching Assistant (TA) &amp; Grader PositionsUniversity of Chicago (UoC) / 시카고대학교2020 Winter: Econometricss &amp;nbsp;-&amp;nbsp; Syllabus, TA Evaluation [Bachelor Course] 2019 Autumn: Statistical Methods in Economics &amp;nbsp;-&amp;nbsp; Syllabus, TA Evaluation [Bachelor Course] 2020 Winter: Introduction to Stochastic Calculus &amp;nbsp;-&amp;nbsp; Syllabus, Grader [Master Course]2019 Winter: Portfolio Theory and Risk Management I &amp;nbsp;-&amp;nbsp; Syllabus, Grader [Master Course]Students are invited to visit Uchicago Canvas to download teaching materials for these courses.</description>
+      <description>____________________________________________________________________________________________________  Teaching Assistant (TA) &amp; Grader Positions   University of Chicago (UoC) / 시카고대학교   2020 Winter: Econometricss &amp;nbsp;-&amp;nbsp; Syllabus, TA Evaluation [Bachelor Course]  2019 Autumn: Statistical Methods in Economics &amp;nbsp;-&amp;nbsp; Syllabus, TA Evaluation [Bachelor Course]  2020 Winter: Introduction to Stochastic Calculus &amp;nbsp;-&amp;nbsp; Syllabus, Grader [Master Course] 2019 Winter: Portfolio Theory and Risk Management I &amp;nbsp;-&amp;nbsp; Syllabus, Grader [Master Course]  Students are invited to visit Uchicago Canvas to download teaching materials for these courses.</description>
     </item>
     
     <item>

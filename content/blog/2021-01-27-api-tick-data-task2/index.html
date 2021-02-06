@@ -73,11 +73,22 @@ pre {
 </ul>
 <div class="rcode">
 <pre class="r"><code>wd_win = &quot;G:/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-26&quot;
-wd_mac = &quot;/Volumes/GoogleDrive/공유드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-26&quot;
+wd_mac = &quot;/Volumes/GoogleDrive/공유 드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-25&quot;
+
 tbl =
-  list.files(path = wd_win, pattern = &#39;.*stocks_trade.*\\.csv&#39;) %&gt;%
-  map_df(~readr::read_csv(paste(wd_win,.,sep = &#39;/&#39;),
+  list.files(path = wd_mac, pattern = &#39;.*stocks_trade.*\\.csv&#39;) %&gt;%
+  map_df(~readr::read_csv(paste(wd_mac,.,sep = &#39;/&#39;),
                           col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,&#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;rotation&#39;,&#39;bs_ratio&#39;, &#39;mkt_type&#39;, &#39;mkt_cap&#39;),
+                          col_types = cols(.default=&quot;d&quot;, code = &quot;c&quot;)
+                   )
+         )
+
+wd2 = &quot;/Volumes/GoogleDrive/공유
+드라이브/Project_TBD/Stock_Data/real_time/kiwoom_stocks/2021-01-25&quot;
+tbl =
+  list.files(path = wd2, pattern = &#39;.*stocks_trade.*\\.csv&#39;)[2:8] %&gt;%
+  map_df(~readr::read_csv(paste(wd2,.,sep = &#39;/&#39;),
+                          col_names = c(&#39;code&#39;,&#39;trade_date&#39;,&#39;timestamp&#39;,&#39;price&#39;,&#39;open&#39;,&#39;high&#39;,&#39;low&#39;,&#39;size&#39;,&#39;cum_size&#39;,&#39;ask1&#39;,&#39;bid1&#39;,&#39;rotation&#39;,&#39;bs_ration&#39;, &#39;mkt_type&#39;, &#39;mkt_cap&#39;),
                           col_types = cols(.default=&quot;d&quot;, code = &quot;c&quot;)
                    )
          )
