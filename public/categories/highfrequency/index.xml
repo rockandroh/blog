@@ -6,7 +6,26 @@
     <description>Recent content in highfrequency on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/highfrequency/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 10 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/categories/highfrequency/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>주식데이터 Cleaning 및 Manipulating</title>
+      <link>https://rockandroh.netlify.app/blog/kiwoom-data-cleaning-example/</link>
+      <pubDate>Wed, 10 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/blog/kiwoom-data-cleaning-example/</guid>
+      <description>유사한 데이터를 만들어 봅시다 특정시간 뽑아내기 필요한 틱커만 뽑아내기 (a,b,c) 티커로 스플릿 후 리스트 만들기 각 티커별 추가 변수 생성 특정 시간(e.g. 90초) 에 맞춰 OHLC-V 만들기 특정 시간(e.g. 90초)에 맞춰 Aggreagte 하기 OHLCV랑 Agg 합치기 OHLCV랑 Agg 합치기 특정시각 (9시 1분 30초) 데이터만 뽑아내기 특정변수() 데이터만 뽑아내기 뽑아낸 변수 데이터 Time Varying 순위 매기기   body, td { font-size: 20px; } code.r{ font-size: 12px; } pre { font-size: 18px }  Note: 키움 데이터 클리닝 예제입니다.</description>
+    </item>
+    
+    <item>
+      <title>GME Jan 28 사건 재구성</title>
+      <link>https://rockandroh.netlify.app/blog/gme-jan-28/</link>
+      <pubDate>Sun, 07 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/blog/gme-jan-28/</guid>
+      <description>Note: 사건재구성 1편: 게임스탁 편 입니다. 오류 및 문의사항은 metrics@kakao.com 으로 메일주시면 감사하겠습니다
+안녕하세요! Roboticks입니다. 첫주제는 최근에 핫한 GAMESTOP $GME에 관한 이야기입니다. 게임스탑에 관련한 숏스퀴즈, Reddit, 시타델, 로빈후드 등에 관한 정보와 설명은 유투브에 이미 많은 분들이 커버하였습니다. 저희 또한 이사태를 흥미롭게 지켜봤는데, 지금은 사태가 일단락 되는 것 같습니다. 이 시점에서 논란인 많은 ‘날’ 중의 하나였던 1월 28일의 데이터를 보면서 어떤 일들이 있었는지 조금더 구체적으로 살펴보도록 하겠습니다.</description>
+    </item>
+    
     <item>
       <title>키움 API Tick Data - Task2</title>
       <link>https://rockandroh.netlify.app/blog/api-tick-data-task1-complete-3/</link>

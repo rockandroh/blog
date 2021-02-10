@@ -1,0 +1,217 @@
+---
+title: 주식데이터 Cleaning 및 Manipulating
+author: roboticks
+date: '2021-02-10'
+slug: kiwoom-data-cleaning-example
+categories:
+  - highfrequency
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+
+*__Note__: 키움 데이터 클리닝 예제입니다. 실제 데이터와 유사한 toy example로 간단하게 보여주고자 합니다. 전체코드는 Github에 올려져 있습니다.*
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(dplyr)
+library(tibble)
+library(data.table)
+library(highfrequency)
+library(xts)
+options(digits.secs=6)
+options(scipen=999)
+options(max.print = 99999999)
+options(digits=10)
+options(tz="Asia/Seoul")
+```
+
+## 유사한 데이터를 만들어 봅시다
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+set.seed(1)
+df1 =
+  data.frame(
+      DT = rep(seq(as.POSIXct("2021-02-10 8:59:30", tz="GMT"), 
+                  length.out=10, by='30 sec'),
+                each = 5),
+      PRICE = round(rnorm(50, mean=20, sd=5)),
+      SIZE = round(c(rnorm(25, mean=100, sd=50),
+                   rnorm(25, mean=1000, sd=200))),
+      SYMBOL = rep(c('a','b','c','d','e'),10)
+  )
+df1
+```
+
+## 특정시간 뽑아내기
+
+- 예를들어, 장오픈시간만
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+cut_time_of_day <- function(x, t_str_begin, t_str_end){
+  
+  tstr_to_sec <- function(t_str){
+    #"09:00:00" to sec of day
+    as.numeric(as.POSIXct(paste("1970-01-01", t_str), "UTC")) %% (24*60*60)
+  }
+  
+  #POSIX ignores leap second
+  #sec_of_day = as.numeric(index(x)) %% (24*60*60)                                #GMT only
+  sec_of_day = {lt = as.POSIXlt(index(x)); lt$hour *60*60 + lt$min*60 + lt$sec}   #handle tzone
+  sec_begin  = tstr_to_sec(t_str_begin)
+  sec_end    = tstr_to_sec(t_str_end)
+  
+  return(x[ sec_of_day >= sec_begin & sec_of_day <= sec_end,])
+}
+
+df1 %>% 
+    data.table::as.data.table() %>%
+    as.xts(subset(., select=-c(DT, SYMBOL)), 
+           order.by = .$DT) %>%
+    cut_time_of_day(., '09:00:00',	'09:04:00')
+```
+
+
+## 필요한 틱커만 뽑아내기 (a,b,c)
+
+- 실례로, 스팩과 우선주, ETN 티커는 빼고싶은 경우가 있습니다.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+want = c('a','b','c')
+df2 = 
+  df1 %>%
+  filter(SYMBOL %in% want)
+df2
+```
+
+## 티커로 스플릿 후 리스트 만들기
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+df3 = split(df2, df2$SYMBOL)
+df3
+names(df3)
+```
+
+## 각 티커별 추가 변수 생성
+
+- Return
+- Cumsum
+- 실제로는 아주 많은 추가 변수 생성!
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+for (dn in names(df3)){
+  df3[[dn]] =
+    df3[[dn]] %>%
+    mutate(RETURN = round(TTR::ROC(PRICE, n=1, type = 'discrete'),2)) %>%
+    mutate(CUM_SIZE = cumsum(SIZE))
+}
+df3
+```
+
+## 특정 시간(e.g. 90초) 에 맞춰 OHLC-V 만들기
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+ls.names <- names(df3)
+ls.ohlcv <- vector("list", length(ls.names))
+names(ls.ohlcv) <- ls.names
+
+for (dn in names(df3)){
+  ls.ohlcv[[dn]] =
+    data.table::as.data.table(df3[[dn]]) %>%
+    makeOHLCV(.,
+              alignBy = 'seconds',
+              alignPeriod = 90,
+    )
+}
+
+ls.ohlcv
+```
+
+## 특정 시간(e.g. 90초)에 맞춰 Aggreagte 하기
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+ls.names <- names(df3)
+ls.agg <- vector("list", length(ls.names))
+names(ls.agg) <- ls.names
+
+for (dn in names(df3)){
+  ls.agg[[dn]] =
+    data.table::as.data.table(df3[[dn]]) %>%
+    as.xts(subset(., select=-c(DT, SYMBOL)), 
+           order.by = .$DT) %>%
+    aggregateTS(., FUN='previoustick',
+                alignBy = 'seconds',
+                alignPeriod = 90,
+                dropna = FALSE
+    )
+}
+ls.agg
+```
+
+## OHLCV랑 Agg 합치기
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+ls.merge <- vector("list", length(ls.names))
+names(ls.merge) <- ls.names
+
+for (dn in names(df3)){
+  ls.merge[[dn]] =
+    merge(ls.agg[[dn]], ls.ohlcv[[dn]])
+}
+ls.merge
+```
+
+## OHLCV랑 Agg 합치기
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+ls.merge <- vector("list", length(ls.names))
+names(ls.merge) <- ls.names
+
+for (dn in names(df3)){
+  ls.merge[[dn]] =
+    merge(ls.agg[[dn]], ls.ohlcv[[dn]])
+}
+
+ls.merge
+```
+
+## 특정시각 (9시 1분 30초) 데이터만 뽑아내기
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+#do.call(rbind, lapply(ls.merge, function(x) x['2021-02-10 09:01:30']))
+(ls.rbind = 
+   bind_rows(lapply(ls.merge, function(x) x['2021-02-10 09:01:30']), .id = "SYMBOL"))
+```
+
+
+## 특정변수() 데이터만 뽑아내기
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+(ls.cbind=
+  do.call(cbind, lapply(ls.merge, function(x) x[,4])) %>%
+  `colnames<-`(paste0(ls.names,'_CUMSIZE')))
+```
+
+## 뽑아낸 변수 데이터 Time Varying 순위 매기기
+
+```{r}
+t(apply(-ls.cbind, 1, rank, ties.method='min'))
+```
+
+
+
+
+
