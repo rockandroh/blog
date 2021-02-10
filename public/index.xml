@@ -13,7 +13,7 @@
       <pubDate>Wed, 10 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>https://rockandroh.netlify.app/blog/kiwoom-data-cleaning-example/</guid>
-      <description>유사한 데이터를 만들어 봅시다 특정시간 뽑아내기 필요한 틱커만 뽑아내기 (a,b,c) 티커로 스플릿 후 리스트 만들기 각 티커별 추가 변수 생성 특정 시간(e.g. 90초) 에 맞춰 OHLC-V 만들기 특정 시간(e.g. 90초)에 맞춰 Aggreagte 하기 OHLCV랑 Agg 합치기 OHLCV랑 Agg 합치기 특정시각 (9시 1분 30초) 데이터만 뽑아내기 특정변수() 데이터만 뽑아내기 뽑아낸 변수 데이터 Time Varying 순위 매기기   body, td { font-size: 20px; } code.r{ font-size: 12px; } pre { font-size: 18px }  Note: 키움 데이터 클리닝 예제입니다.</description>
+      <description>유사한 데이터를 만들어 봅시다 특정시간 뽑아내기 필요한 틱커만 뽑아내기 (a,b,c) 티커로 스플릿 후 리스트 만들기 각 티커별 추가 변수 생성 특정 시간(e.g. 90초) 에 맞춰 OHLC-V 만들기 특정 시간(e.g. 90초)에 맞춰 Aggreagte 하기 OHLCV랑 Agg 합치기 특정시각 (9시 1분 30초) 데이터만 뽑아내기 특정변수(e.g. CUMSIZE) 데이터만 뽑아내기 뽑아낸 변수 데이터 Time Varying 순위 매기기 추가 예정   body, td { font-size: 20px; } code.r{ font-size: 12px; } pre { font-size: 18px }  Note: 키움 데이터 클리닝 예제입니다.</description>
     </item>
     
     <item>

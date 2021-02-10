@@ -103,7 +103,6 @@ df2
 ```{r,echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 df3 = split(df2, df2$SYMBOL)
 df3
-names(df3)
 ```
 
 ## 각 티커별 추가 변수 생성
@@ -175,20 +174,6 @@ for (dn in names(df3)){
 ls.merge
 ```
 
-## OHLCV랑 Agg 합치기
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-ls.merge <- vector("list", length(ls.names))
-names(ls.merge) <- ls.names
-
-for (dn in names(df3)){
-  ls.merge[[dn]] =
-    merge(ls.agg[[dn]], ls.ohlcv[[dn]])
-}
-
-ls.merge
-```
-
 ## 특정시각 (9시 1분 30초) 데이터만 뽑아내기
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 #do.call(rbind, lapply(ls.merge, function(x) x['2021-02-10 09:01:30']))
@@ -197,7 +182,7 @@ ls.merge
 ```
 
 
-## 특정변수() 데이터만 뽑아내기
+## 특정변수(e.g. CUMSIZE) 데이터만 뽑아내기
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 (ls.cbind=
@@ -207,10 +192,11 @@ ls.merge
 
 ## 뽑아낸 변수 데이터 Time Varying 순위 매기기
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 t(apply(-ls.cbind, 1, rank, ties.method='min'))
 ```
 
+## 추가 예정
 
 
 
