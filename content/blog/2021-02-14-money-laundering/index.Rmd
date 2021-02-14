@@ -1,0 +1,49 @@
+---
+title: 자금세탁 Money Laundering
+author: ''
+date: '2021-02-14'
+slug: money-laundering
+categories:
+  - money laundering
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+
+<style type="text/css">
+
+body, td {
+   font-size: 20px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 18px
+}
+</style>
+
+*__Note__: 자금세탁관련 자료 모음 및 정리입니다. 문의사항은 metrics@kakao.com 으로 하시면 됩니다.*
+
+## 1.자금세탁 개요
+
+Money laundering is the process of making dirty money look clean. Examples of related crime include
+ 
+- Illegal arms sales
+- Narcotics trafficking
+- Smuggling
+- Embezzlement
+- Insider trading
+- Bribery
+- Computer fraud scheme
+
+The rationality behind the global AML regime is based on the premise that it is possible to intervene in institutional authorities that mediate transactions in order to maximize financial transparency.
+
+
+## Reference
+
+- CH2: Risks and Methods of Money Laundering and Terrorist Fianancing
+- Deploying Machine Learning Models in an AML (SAS paper 4553-2020)
