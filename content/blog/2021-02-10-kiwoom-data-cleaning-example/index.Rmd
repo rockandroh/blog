@@ -30,13 +30,14 @@ pre {
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 library(dplyr)
+library(tidyr)
 library(tibble)
 library(data.table)
 library(highfrequency)
 library(xts)
 options(digits.secs=6)
 options(scipen=999)
-options(max.print = 99999999)
+options(max.print = 100)
 options(digits=10)
 options(tz="Asia/Seoul")
 ```
@@ -47,19 +48,24 @@ set.seed(1)
 df1 =
   data.frame(
       DT = rep(seq(as.POSIXct("2021-02-10 8:59:30", tz="GMT"), 
-                  length.out=10, by='30 sec'),
+                  length.out=2000, by='5 sec'),
                 each = 5),
-      PRICE = round(rnorm(50, mean=20, sd=5)),
-      SIZE = round(c(rnorm(25, mean=100, sd=50),
-                   rnorm(25, mean=1000, sd=200))),
-      SYMBOL = rep(c('a','b','c','d','e'),10)
+      PRICE = round(c(rnorm(5000, mean=50, sd=5),
+                      rnorm(5000, mean=60, sd=10)))/10 + 20,
+      SIZE = abs(round(c(rnorm(400, mean=0, sd=1000),
+                    rnorm(400, mean=0, sd=2000),
+                    rnorm(400, mean=0, sd=3000),
+                    rnorm(400, mean=0, sd=1000),
+                    rnorm(400, mean=0, sd=500)
+                   ))),
+      SYMBOL = rep(c('a','b','c','d','e'),400)
   )
 df1
 ```
 
 ## 특정시간 뽑아내기
 
-- 예를들어, 장오픈시간만
+- 예를들어, 장오픈 이후 1분
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 cut_time_of_day <- function(x, t_str_begin, t_str_end){
@@ -82,7 +88,7 @@ df1 %>%
     data.table::as.data.table() %>%
     as.xts(subset(., select=-c(DT, SYMBOL)), 
            order.by = .$DT) %>%
-    cut_time_of_day(., '09:00:00',	'09:04:00')
+    cut_time_of_day(., '09:00:00',	'09:01:00')
 ```
 
 
@@ -91,7 +97,7 @@ df1 %>%
 - 실례로, 스팩과 우선주, ETN 티커는 빼고싶은 경우가 있습니다.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-want = c('a','b','c')
+want = c('a','b','c','d')
 df2 = 
   df1 %>%
   filter(SYMBOL %in% want)
@@ -104,6 +110,7 @@ df2
 df3 = split(df2, df2$SYMBOL)
 df3
 ```
+
 
 ## 각 티커별 추가 변수 생성
 
@@ -133,14 +140,14 @@ for (dn in names(df3)){
     data.table::as.data.table(df3[[dn]]) %>%
     makeOHLCV(.,
               alignBy = 'seconds',
-              alignPeriod = 90,
+              alignPeriod = 60,
     )
 }
 
 ls.ohlcv
 ```
 
-## 특정 시간(e.g. 90초)에 맞춰 Aggreagte 하기
+## 특정 시간(e.g. 60초)에 맞춰 Aggreagte 하기
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 ls.names <- names(df3)
@@ -154,7 +161,7 @@ for (dn in names(df3)){
            order.by = .$DT) %>%
     aggregateTS(., FUN='previoustick',
                 alignBy = 'seconds',
-                alignPeriod = 90,
+                alignPeriod = 60,
                 dropna = FALSE
     )
 }
@@ -178,7 +185,7 @@ ls.merge
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 #do.call(rbind, lapply(ls.merge, function(x) x['2021-02-10 09:01:30']))
 (ls.rbind = 
-   bind_rows(lapply(ls.merge, function(x) x['2021-02-10 09:01:30']), .id = "SYMBOL"))
+   bind_rows(lapply(ls.merge, function(x) x['2021-02-10 09:02:00']), .id = "SYMBOL"))
 ```
 
 
@@ -196,8 +203,38 @@ ls.merge
 t(apply(-ls.cbind, 1, rank, ties.method='min'))
 ```
 
-## 추가 예정
+## CO-MOVEMENT 질문
+
+### 조건을 만족한 종목들중 하나의 종목과 나머지 종목들의 Comovement
+예를들어 지수와 그 지수를 구성하는 종목들의 유사도
 
 
+### Rolling (e.g. 10min) Pearson Corr
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(corrr)
+return.cbind=
+  do.call(cbind, lapply(ls.merge, function(x) x[,3])) %>%
+  `colnames<-`(paste0(ls.names,'_return'))
+date = index(return.cbind)
+get_corr = function(x, focus){
+  result = 
+    correlate(x) %>%
+    focus(focus) %>%
+    mutate_if(is.numeric, function(x) round(x,3))
+  return(result)
+}
+
+ls.corr = ls.merge <- vector("list", length(ls.names))
+names(ls.corr) <- ls.names
+
+return.cbind %>%
+  fortify.zoo(., names = 'date') %>% # convert zoo to dataframe
+  drop_na() %>%
+  subset(., select=c(-date)) %>%
+  rollapply(10, FUN = cor)
+  
+```
+
+Short-term changes are better interpreted from returns correlations, whilst valuations of long-term evolution may be improved using prices. So we choose return with rolling correlation for 10 minute window
 
