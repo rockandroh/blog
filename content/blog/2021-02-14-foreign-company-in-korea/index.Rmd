@@ -108,7 +108,7 @@ head(com_list)
 com_list =
   com_list %>%
   `colnames<-`(c('이름','Name','Address','Sector','Industry','Country','Category'))
-head(com_list)
+str(com_list)
 ```
 
 ## 섹터별 회사 숫자
@@ -146,19 +146,22 @@ country_selected = c('미국, 중국, 일본, 영국, 캐나다, 홍콩, 프랑�
 
 com_list1 =
   com_list %>%
-  filter(Name )
   filter(Country %in% unlist(strsplit(country_selected, ', ' ))) %>%
   drop_na()
 
 grepl()
-  
+
+a = com_list1$Name
+b = fb$Name
   
 sum(com_list1$Name %in% fb$Name)
 fb$Name[!is.na(pmatch(fb$Name, com_list1$Name))]
 com_list1$Name[!is.na(pmatch(com_list1$Name,fb$Name))]
 grep
 head(com_list1)
-  
+
+c = max.col(sapply(a, grepl, b))
+length(c)
 ```
 
 - 미국, 중국, 일본, 영국, 캐나다 
