@@ -51,7 +51,8 @@ options(tz="Asia/Seoul")
 ## 전체
 
 ```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-fb = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
+#fb = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
+fb = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
 fb =
   fb %>%
   `colnames<-`(c('Rank','Name','Country','Sales','Profits','Assets','Market Value'))
@@ -102,8 +103,8 @@ fb %>%
 ## Glimpse
 
 ```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-com_list = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/foreign company in korea.xlsx')
-head(com_list)
+#com_list = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/foreign company in korea.xlsx')
+com_list = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/foreign company in korea.xlsx')
 
 com_list =
   com_list %>%
@@ -151,16 +152,24 @@ com_list1 =
 
 grepl()
 
-a = com_list1$Name
-b = fb$Name
-  
+a<-c('r3','N_3','citi', 'Morgan', 'Apple')
+b<-c('sp_one_R1', 'sp_one_N_3', 'the citigroup', 'sp_two_R3', 'the_R3_N_3' , 'JPMorgan', 'Apple llc', 'APPL','Mor')
+
+a = fb$Name %>% tolower()
+b = com_list1$Name %>% tolower()
+c = sapply(a, grepl, b)
+b[(1*c %>% rowSums())>0]
+
+
 sum(com_list1$Name %in% fb$Name)
 fb$Name[!is.na(pmatch(fb$Name, com_list1$Name))]
-com_list1$Name[!is.na(pmatch(com_list1$Name,fb$Name))]
+com_list1$Name[(1*sapply)]
 grep
 head(com_list1)
 
-c = max.col(sapply(a, grepl, b))
+
+
+
 length(c)
 ```
 

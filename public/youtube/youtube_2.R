@@ -186,9 +186,6 @@ code_KOSPI = down_KOSPI_KS %>%
   mutate(종목코드 = paste0('KR',종목코드)) %>%
   select(종목코드, 종목명, 시장구분, 업종명)
 
-####
-
-
 ## KOSDAQ: code_KOSDAQ ====
 gen_otp_url =
   'http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd'
