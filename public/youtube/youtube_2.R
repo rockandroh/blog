@@ -13,6 +13,7 @@ library(httr)
 library(rvest)
 library(readr)
 library(stringr)
+library(data.table)
 
 
 options(digits.secs=6)
@@ -33,11 +34,55 @@ tbl =
   map_df(~readr::read_csv(paste(wd_mac,.,sep = '/'),
                           col_names = c('code','trade_date','timestamp','price','open','high','low','size','cum_size','ask1','bid1','rotation','bs_ratio', 'mkt_type', 'mkt_cap'),
                           col_types = cols(.default="d", code = "c")
-  )
+    )
   )
 sum(is.na(tbl))
 gc()
 dim(tbl)
+
+sell_hoga = c()
+col_names2= 
+  c('code', 'hoga_date', 'timestamp',
+    sprintf('sell_hoga%s',seq(10,1)),
+    sprintf('buy_hoga%s',seq(1,10)),
+    sprintf('sell_hoga%s_stack',seq(10,1)),
+    sprintf('buy_hoga%s_stack',seq(1,10)),
+    'total_buy_hoga_stack',
+    'total_sell_hoga_stack',
+    'net_buy_hoga_stack',
+    'net_sell_hoga_stack',
+    'ratio_buy_hoga_stack',
+    'ratio_sell_hoga_stack'
+  )
+
+length(col_names2)
+
+tbl2 =
+  list.files(path = wd_mac, pattern = '.*stocks_order.*\\.csv')[1:3] %>%
+  map_df(data.table::fread(paste(wd_mac,.,sep = '/'),
+              col_names = col_names2,
+              col_types = cols(.default="d", code = "c")
+    )
+  )
+
+tbl2 =
+  list.files(path = wd_mac, pattern = '.*stocks_order.*\\.csv')[1:3] %>%
+  map_df(data.table::fread(paste(file_path,.,sep = '/'),
+             colClasses = c(code='character',
+                            hoga_date='character'),
+             select = c(1,2,45,46,47,48,49),
+             col.names = col_names2[c(1,2,45,46,47,48,49)]                         )
+  )
+
+temp = fread(paste(file_path,'hoga_toy_data.csv',sep='/'),
+             colClasses = c(code='character',
+                            hoga_date='character'),
+             select = c(1,2,45,46,47,48,49),
+             col.names = col_names2[c(1,2,45,46,47,48,49)]
+             )
+
+file_path = "/Volumes/GoogleDrive/내 드라이브/document/Kiwoom"
+
 
 # Basic cleaning and Save ----
 
@@ -379,6 +424,9 @@ for (dn in ts.names){
 }
 
 save(ts_merged, file=paste0(wd_mac,'/','ts_merged.Rdata'))
+
+# Load file #####
+load(file=paste0(wd_mac,'/','ts_merged.Rdata'))
 
 cut_time_of_day <- function(x, t_str_begin, t_str_end){
   
