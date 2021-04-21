@@ -1,0 +1,170 @@
+---
+title: Forbes2000 and Foreign Company in Korea
+author: ''
+date: '2021-02-14'
+slug: foreign-company-in-korea
+categories: []
+tags: []
+output:
+  blogdown::html_page:
+    toc: true
+    toc_depth: 4
+---
+
+
+<style type="text/css">
+
+body, td {
+   font-size: 15px;
+}
+code.r{
+  font-size: 12px;
+}
+pre {
+  font-size: 12px
+}
+</style>
+
+*__Note__:포브스 외국 기업 및 한국에 있는 외국기업 정리입니다. 문의사항은 metrics@kakao.com 으로 하시면 됩니다.*
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(data.table)
+options(digits.secs=6)
+options(scipen=999)
+options(max.print = 100)
+options(digits=10)
+options(tz="Asia/Seoul")
+```
+
+아래 변수의 숫자 단위는 전부 $ million 입니다.
+
+- Sales
+- Profit
+- Asseet
+- Market Value (As of 2020/5/13)
+
+# 포브스 2000
+
+## 전체
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+#fb = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
+fb = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
+fb =
+  fb %>%
+  `colnames<-`(c('Rank','Name','Country','Sales','Profits','Assets','Market Value'))
+fb %>%
+    DT::datatable(rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
+
+```
+
+## 포스브 2020에 있는 한국기업?
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+fb %>% 
+  filter(Country == 'South Korea') %>%
+  DT::datatable(rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
+```
+
+## Forbes 선정기업이 속한 국가들
+
+- 미국, 중국, 일본, 영국, 캐나다 
+- 홍콩, 한국, 프랑스, 독일, 인도
+- 대만, 스위스, 호주, 이탈리아, 네덜란드
+- 스웨덴, 스페인, 러시아, 아일랜드, 브라질
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+fb %>% 
+  group_by(Country) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count)) %>%
+  DT::datatable(rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
+```
+
+
+
+## 인터넷에 돌아다니는 외국계 기업 취업정보 기업리스트
+
+- 레지나
+- 커리어랩
+
+## Glimpse
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+#com_list = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/foreign company in korea.xlsx')
+com_list = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/foreign company in korea.xlsx')
+
+com_list =
+  com_list %>%
+  `colnames<-`(c('이름','Name','Address','Sector','Industry','Country','Category'))
+str(com_list)
+```
+
+## 섹터별 회사 숫자
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+com_list %>%
+  group_by(Sector) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  DT::datatable(rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
+```
+
+## 국가별 숫자
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+com_list %>%
+  group_by(Country) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  DT::datatable(rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
+```
+
+## 필터링
+
+- 포브스 2000이랑 겹치는 회사
+- 포브스 탑 10국가에 해당하는 기업 + 싱가포르
+- NA 없애기
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+country_selected = c('미국, 중국, 일본, 영국, 캐나다, 홍콩, 프랑스, 독일, 인도, 대만, 싱가포르')
+
+com_list1 =
+  com_list %>%
+  filter(Country %in% unlist(strsplit(country_selected, ', ' ))) %>%
+  drop_na()
+
+a<-c('r3','N_3','citi', 'Morgan', 'Apple')
+b<-c('sp_one_R1', 'sp_one_N_3', 'the citigroup', 'sp_two_R3', 'the_R3_N_3' , 'JPMorgan', 'Apple llc', 'APPL','Mor')
+
+a = fb$Name %>% tolower()
+b = com_list1$Name %>% tolower()
+c = sapply(a, grepl, b)
+b[(1*c %>% rowSums())>0]
+
+
+sum(com_list1$Name %in% fb$Name)
+fb$Name[!is.na(pmatch(fb$Name, com_list1$Name))]
+com_list1$Name[(sapply)]
+grep
+head(com_list1)
+
+
+
+
+length(c)
+```
+

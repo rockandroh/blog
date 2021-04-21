@@ -1,5 +1,5 @@
 ---
-title: Forbes2000 and Foreign Company in Korea
+title: 국내에 있는 외국인 투자기업 알아보기
 author: ''
 date: '2021-02-14'
 slug: foreign-company-in-korea
@@ -10,7 +10,6 @@ output:
     toc: true
     toc_depth: 4
 ---
-
 
 <style type="text/css">
 
@@ -25,7 +24,7 @@ pre {
 }
 </style>
 
-*__Note__:포브스 외국 기업 및 한국에 있는 외국기업 정리입니다. 문의사항은 metrics@kakao.com 으로 하시면 됩니다.*
+*__Note__: 한국에 있는 외국계 기업 정리입니다. 문의사항은 metrics@kakao.com 으로 하시면 됩니다.*
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 library(dplyr)
@@ -39,6 +38,61 @@ options(digits=10)
 options(tz="Asia/Seoul")
 ```
 
+## 외국계 기업?
+
+우리가 흔히 이야기 하는 외국계기업은 외국기업, 외국정부, 외국공공기관 등이 외국 법령에 의거하여 어느 정도의 자금을 국내 존재하는 기업에 출자하거나 전액을 투자하여 현지기업을 설립하는 기업을 말한다. 여기서 외국법 혹은 국내법에 의해 설립 되어있는지 여부에 따라 외국기업 현지법인 그리고 외국인투자기업으로 나누어지게 된다. 이는 경영권과 의결권 행사 여부와 관련있다. 
+
+- 외국기업 현지법인
+
+> 외국기업 현지법인'의 성격은 외국법에 의해 설립된 외국법인의 일부라고 생각하면 된다. 외국법인의 일부란, 해외 본사와 현지법인이 회계와 결산 등을 동시에 진행하는 동일체이다. 또한 현지법인에서 매출에 대한 이익이 발생했을 때 이익금을 본사로 송금할 수 있으며, 해외 송금시 소득세 등을 원청징수 할 필요가 없다.
+
+
+
+한국에는 많은 수의 외국인투자기업이 이미 진출을 해있습니다. 2019년에는 18,000여개 정도였고 2020년에는 14,800여개 정도 됩니다. 전국 곳곳에 외국계기업이 어떻게 분포해 있는지 그리고 어떠한 업종들이 있는지 차차 알아보겠습니다. 
+
+#### 투자기업 유형
+
+
+## 한국에서 상대적으로 잘 알려져 있는 외국계 기업들
+
+
+
+
+## 산업통상자원부 외국인 투자기업정보 활용!
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+com_list = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/산업통상자원부_외국계기업.xlsx')
+colnames(com_list)
+colnames(com_list) = c('name_kr','name_eng','tel','post_code','address','industry_specific_name','industry_name', 'industry_code', 'init_date','rep_sector', 'country', 'type')
+
+df = com_list %>%
+  select(name_kr, address, industry_code, country) %>%
+  mutate(address = substr(address,start = 1, stop = 2))
+df %>% DT::datatable(rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+com_list %>%
+  select(name_kr, name_eng, address, industry_code, country) %>%
+  mutate(address = substr(address,start = 1, stop = 2)) %>% 
+  DT::datatable(rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
+```
+
+한국 통상자원부 데이터는 우리가 흔히 알고있는 회사들을 검색해봤을때 회사들이 중복되서 나오거나 안나오는 경우들이 있다. 예를들어, 
+
+- 코카콜라
+- IBM
+- 
+
+
+
+## 번외편: 포브스 2000
+
 아래 변수의 숫자 단위는 전부 $ million 입니다.
 
 - Sales
@@ -46,9 +100,9 @@ options(tz="Asia/Seoul")
 - Asseet
 - Market Value (As of 2020/5/13)
 
-# 포브스 2000
+## 포브스 2000
 
-## 전체
+포브스 2000 선정 기업!
 
 ```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 #fb = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
@@ -74,10 +128,9 @@ fb %>%
             columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
 ```
 
-## Forbes 선정기업이 속한 국가들
+## Forbes에 선정기업이 속한 국가 숫자
 
 탑 20
-
 - 미국, 중국, 일본, 영국, 캐나다 
 - 홍콩, 한국, 프랑스, 독일, 인도
 - 대만, 스위스, 호주, 이탈리아, 네덜란드
@@ -94,106 +147,11 @@ fb %>%
 ```
 
 
-## 인터넷에 돌아다니는 외국계 기업 취업정보 기업리스트
+## Source
 
-- 레지나
-- 커리어랩
-
-
-## Glimpse
-
-```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-#com_list = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/foreign company in korea.xlsx')
-com_list = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/foreign company in korea.xlsx')
-
-com_list =
-  com_list %>%
-  `colnames<-`(c('이름','Name','Address','Sector','Industry','Country','Category'))
-str(com_list)
-```
-
-## 섹터별 회사 숫자
-
-```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-com_list %>%
-  group_by(Sector) %>%
-  summarise(count = n()) %>%
-  arrange(desc(count)) %>%
-  DT::datatable(rownames = FALSE,
-          options = list(
-            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
-```
-
-## 국가별 숫자
-
-```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-com_list %>%
-  group_by(Country) %>%
-  summarise(count = n()) %>%
-  arrange(desc(count)) %>%
-  DT::datatable(rownames = FALSE,
-          options = list(
-            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
-```
-
-## 필터링
-
-- 포브스 2000이랑 겹치는 회사
-- 포브스 탑 10국가에 해당하는 기업 + 싱가포르
-- NA 없애기
-
-```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-country_selected = c('미국, 중국, 일본, 영국, 캐나다, 홍콩, 프랑스, 독일, 인도, 대만, 싱가포르')
-
-com_list1 =
-  com_list %>%
-  filter(Country %in% unlist(strsplit(country_selected, ', ' ))) %>%
-  drop_na()
-
-grepl()
-
-a<-c('r3','N_3','citi', 'Morgan', 'Apple')
-b<-c('sp_one_R1', 'sp_one_N_3', 'the citigroup', 'sp_two_R3', 'the_R3_N_3' , 'JPMorgan', 'Apple llc', 'APPL','Mor')
-
-a = fb$Name %>% tolower()
-b = com_list1$Name %>% tolower()
-c = sapply(a, grepl, b)
-b[(1*c %>% rowSums())>0]
-
-
-sum(com_list1$Name %in% fb$Name)
-fb$Name[!is.na(pmatch(fb$Name, com_list1$Name))]
-com_list1$Name[(1*sapply)]
-grep
-head(com_list1)
-
-
-
-
-length(c)
-```
-
-- 미국, 중국, 일본, 영국, 캐나다 
-- 홍콩, 한국, 프랑스, 독일, 인도
-- 대만, 스위스, 호주, 이탈리아, 네덜란드
-- 스웨덴, 스페인, 러시아, 아일랜드, 브라질
-
-
-```{r}
-pmatch("med", c("mean", "median", "mode")) # returns 2
-pmatch(c("", "ab", "ab"), c("abc", "ab"), dup=TRUE)
-charmatch(c("", "ab", "ab"), c("abc", "ab"))
-```
-
-
-
-
-
-
-
-
-
-
+- 산업자원통상부
+- https://megrey.tistory.com/65
+- 
 
 
 
