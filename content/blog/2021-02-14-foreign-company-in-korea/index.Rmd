@@ -1,44 +1,72 @@
 ---
-title: 국내에 있는 외국인 투자기업 알아보기
+title: 국내에 있는 외국인 투자기업 (a.k.a 외국계 기업) 알아보기
 author: ''
 date: '2021-02-14'
-slug: foreign-company-in-korea
 categories: []
 tags: []
 output:
   blogdown::html_page:
     toc: true
-    toc_depth: 4
+    toc_depth: 2
 ---
+
+<img src="/blog/pic/foreign_company_pic.png"
+  align="center"
+  width="600"
+  style="background-color: white; padding-right: 0px;"
+/>
+
 
 <style type="text/css">
 
 body, td {
-   font-size: 15px;
+   font-size: 12px;
 }
 code.r{
-  font-size: 12px;
+  font-size: 11px;
 }
 pre {
-  font-size: 12px
+  font-size: 11px
 }
 </style>
 
-*__Note__: 한국에 있는 외국계 기업 정리입니다. 문의사항은 metrics@kakao.com 으로 하시면 됩니다.*
+*__Note__: 한국에 있는 외국계 기업 관련 내용 정리입니다. 문의사항은 metrics@kakao.com 으로 하시면 됩니다.*
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 library(dplyr)
 library(tidyr)
 library(tibble)
 library(data.table)
+library(ggplot2)
+library(extrafont) # font
+library(showtext) # 글꼴, install.packages("showtext")
+library(ggrepel)
 options(digits.secs=6)
 options(scipen=999)
 options(max.print = 100)
 options(digits=10)
 options(tz="Asia/Seoul")
+
+
+theme.ti <- element_text(family="AppleGothic", face="bold", size=12) #그래프 제목 스타일 변경
+theme.ax <- element_text(family="AppleGothic", face="bold", size=10, angle=00, hjust=0.54, vjust=0.5) #그래프 축 이름 스타일 변경
+theme.leti<-element_text(family="AppleGothic", face="bold") #범례 제목 (legend) 스타일 변경, 범례가 있을 경우
+theme.lete<-element_text(family="AppleGothic") #범례 항목 (legend) 스타일 변경, 범례가 있을 경우 
+
+theme_update(text=element_text(family="NanumGothicCoding"))
+par(family='Unbatang')
 ```
 
-## 외국계 기업?
+## 외국계 기업 채용 관련 사이트 
+
+현재 채용중인 외국계 기업들은 아래의 채용 관련 사이트를 확인!
+
+- [잡코리아 x 코트라](https://www.jobkorea.co.kr/Theme/kotra)
+- [피플앤잡 외국계기업 취업 전문사이트](https://www.peoplenjob.com/)
+- [경기도 외국인투자기업온라인 홍보](http://www.foreigncompanyjob.com/index.php?device=pc)
+- [지난 외국인투자기업 채용박랍회](https://www.jobfairfic.org/main/)
+
+## 외국계 기업이란?
 
 우리가 흔히 이야기 하는 외국계기업은 외국기업, 외국정부, 외국공공기관 등이 외국 법령에 의거하여 어느 정도의 자금을 국내 존재하는 기업에 출자하거나 전액을 투자하여 현지기업을 설립하는 기업을 말한다. 여기서 외국법 혹은 국내법에 의해 설립 되어있는지 여부에 따라 외국기업 현지법인 그리고 외국인투자기업으로 나누어지게 된다. 이는 경영권과 의결권 행사 여부와 관련있다. 
 
@@ -46,13 +74,13 @@ options(tz="Asia/Seoul")
 
 > 외국기업 현지법인'의 성격은 외국법에 의해 설립된 외국법인의 일부라고 생각하면 된다. 외국법인의 일부란, 해외 본사와 현지법인이 회계와 결산 등을 동시에 진행하는 동일체이다. 또한 현지법인에서 매출에 대한 이익이 발생했을 때 이익금을 본사로 송금할 수 있으며, 해외 송금시 소득세 등을 원청징수 할 필요가 없다.
 
-- 외국인투자기업
+- 외국인 투자기업
 
 > 외국본사와 외국인투자기업은 회계와 결산을 독립적으로 진행한다. 매출에 대한 이익이 발생했을 때 이익금을 본사로 송금할 수 없으며 배당금으로 지급해야한다. 배당금을 해외 송금시 그에 맞춰 원청징수를 한다.
 
-한국에는 많은 수의 외국인투자기업이 이미 진출을 해있습니다. 2019년에는 18,000여개 정도였고 2020년에는 14,800여개 정도 됩니다. 전국 곳곳에 외국계기업이 어떻게 분포해 있는지 그리고 어떠한 업종들이 있는지 차차 알아보겠습니다. 
+한국에는 많은 수의 외국인투자기업이 이미 진출을 해있다. 2019년에는 18,000여개 정도였고 2020년에는 14,800여개 정도 된다. 전국 곳곳에 외국계기업이 어떻게 분포해 있는지 그리고 어떠한 업종들이 있는지 차차 알아보자. 
 
-## 기업의 형태
+#### 기업의 형태
 
 - 현지법인/자회사 (Corporate)
     e.g) IBM, P&G, 코카콜라, 후지쯔
@@ -63,35 +91,365 @@ options(tz="Asia/Seoul")
 - 연락사무소 (Liaison Office)
 - 대리점 (Agent)
 
-## 외국인 투자기업 파헤치기
+#### 외국인 투자기업 검색 및 특이점
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
-#com_list = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/산업통상자원부_외국계기업.xlsx')
-com_list = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/산업통상자원부_외국계기업.xlsx')
+com_list = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/산업통상자원부_외국계기업.xlsx')
+#com_list = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/산업통상자원부_외국계기업.xlsx')
 #colnames(com_list)
 colnames(com_list) = c('name_kr','name_eng','tel','post_code','address','industry_specific_name','industry_name', 'industry_code', 'init_date','rep_sector', 'country', 'type')
 
 df = com_list %>%
-  select(name_kr, address, industry_code, country) %>%
-  mutate(address = substr(address,start = 1, stop = 2))
+  select(name_kr, name_eng, address, industry_code, country) %>%
+  mutate(name_eng = substr(name_eng, start=1, stop=25)) %>%
+  mutate(address = substr(address,start = 1, stop = 2)) %>%
+  mutate_at(vars(industry_code), funs(as.character))
 df %>% DT::datatable(rownames = FALSE,
           options = list(
             columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
 ```
 
-여기서 우리가 흔히 알고 있는 외국계 기업을 쳐서 확인해보면 몇가지 특이한 사항을 발견할 수 있다. 
+여기서 우리가 흔히 알고 있는 외국계 기업(e.g., 코카콜라 그리고 IBM)을 쳐서 확인해보면 몇가지 특이한 사항을 발견할 수 있다. 코카콜라와 IBM을 위의 테이블 Search에 각각 검색해 보면, 
+
+먼저 코카콜라의 경우, 코카콜라음료주식회사와 한국코카콜라가 나온다. 이 두 회사의 관계는 이 [기사](https://www.news1.kr/articles/?2460802)의 정보에 의하면, 미국 코카콜라의 국내 법인인 한국코카콜라가 코카콜라음료 회사에 원액공급을 해주고 코카콜라음료의 지분의 LG생활건강이 지분 90%를 보유하고 있다. 여기서 신기한건 코카콜라음료주식회사의 대표국적이 아일랜드로 되어있다는 점이다. 
+
+#### 네덜란드
+IBM의 경우, 미국회사로 알려져 있지만 아이비엠 코리아(한국아이비엠주식회사) 같은 경우는 대표국가가 네덜란드로 되어있다. 네덜란드법인으로 등록하는 이유는, 이 [기사](https://magazine.hankyung.com/business/article/202102256563b)에 의하면, 네덜란드는 특허 지식재산권과 관련해 로열티에 매기는 세금이 거의 없어 기업은 물론 스타들의 조세 피난처로 각광받고 있기 때문이다. 아이비엠 코리아를 제외하고 르노삼성자동차, 소니코리아, 구찌(Gucci)코리아, 그리고 백신때문에 말이 많은 **한국아스트라제네카** 까지 네덜란드를 대표국가로 두고있다. 
+
+#### 룩셈부르크
+조세피난처까지는 아니지만 그에 준하는 낮은 세율을 룩셈부르크를 쳐보면 우리가 잘 알고있는 프랑스 명품 브랜드인 샤넬 코리아와 보테가 베네타가 있고 유명 화장품 브랜드인 에스까다(Escada)도 포함되어있다. 증권 시스템 컨설팅 회사로 세계적인 회사인 뮤렉스 코리아와 도이치 증권사가 있다. 항공권 및 호텔 예약 대행사인 엑스피디아도 룩셈부르크를 대표국가로 두고 있다.
+
+카카오를 검색해보면, 카카오도 외국인 투자기업에 포함되어 있으며, 자회사들의 대표국가도 싱가포르, 영국 그리고 몰타로 싱가포르와 몰타는 준 조세피난처에 속하는 국가들이다. 
+
+## 외국계 기업 분석
+
+글을 작성하는 2021년 4월 기준, 산업통상자원부에서 제공하는 외국인투자이기업은 총 14,823개 이다. 이 중에서 간단하게 업종별, 국가별, 소재지별로 한번 알아보자.
+
+#### 한국표준산업분류 코드
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+ind_code_list = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/kor_industry_code_edit.xlsx')
+ind_code_list %>% DT::datatable(rownames = FALSE,
+          options = list(
+            columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
+```
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+get_category = function(code){
+  if ( 1 <= as.numeric(code) && as.numeric(code) <= 3) {
+    return("농업임업어업")  
+  }
+  else if ( 5 <= as.numeric(code) && as.numeric(code) <= 8) {
+    return ("광업")
+  }
+  else if ( 10 <= as.numeric(code) && as.numeric(code) <= 34) {
+    return ("제조업")
+  }
+  else if ( 35 == as.numeric(code) ){
+    return ("전기가스증기공급업")
+  }
+  else if ( 36 <= as.numeric(code) && as.numeric(code) <= 39){
+    return ("수도하수폐기물처리")
+  }
+  else if( 41 <= as.numeric(code) && as.numeric(code) <= 42){
+    return("건설업")
+  }
+  else if( 45 <= as.numeric(code) && as.numeric(code) <= 47){
+    return("도소매업")
+  }
+  else if( 49 <= as.numeric(code) && as.numeric(code) <= 52){
+    return("운수창고업")
+  }
+  else if( 55 <= as.numeric(code) && as.numeric(code) <= 56){
+    return("숙박음식점업")
+  }
+  else if( 58 <= as.numeric(code) && as.numeric(code) <= 63){
+    return("정보통신업")
+  }
+  else if( 64 <= as.numeric(code) && as.numeric(code) <= 66){
+    return("금융보험업")
+  }
+  else if( 68 == as.numeric(code)){
+    return("부동산업")
+  }
+  else if( 70 <= as.numeric(code) && as.numeric(code) <= 73){
+    return("과학기술서비스업")
+  }
+  else if( 74 <= as.numeric(code) && as.numeric(code) <= 76){
+    return("임대서비스업")
+  }
+  else if( 84 == as.numeric(code)){
+    return("공공행정_사회보장행정")
+  }
+  else if( 85 == as.numeric(code)){
+    return("교육서비스업")
+  }
+  else if( 86 <= as.numeric(code) && as.numeric(code) <= 87){
+    return("보건사회복지업")
+  }
+  else if( 90 <= as.numeric(code) && as.numeric(code) <= 91){
+    return("예술스포츠여가서비스업")
+  }
+  else if( 94 <= as.numeric(code) && as.numeric(code) <= 96){
+    return("협회및단체수리개인서비스업")
+  }
+  else if( 97 <= as.numeric(code) && as.numeric(code) <= 98){
+    return("자가소비생산활동")
+  }
+  else if( 99 == as.numeric(code)){
+    return("국제및외국기관")
+  }
+  else {
+    return("Not Assigned")
+  }
+}
+```
+
+#### 업종별 대분류: 파이차트
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+sum1 =
+  df %>%
+  group_by(industry_code) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+sum2 =
+  sum1 %>%
+  left_join(ind_code_list) %>%
+  mutate(category_code = substring(industry_code, first = 1, last = 2)) %>%
+  mutate(industry_code = substring(industry_code, first=1, last=5)) %>%
+  rowwise() %>%
+  mutate(large_category = get_category(category_code))
+
+sum3 = 
+  sum2 %>%
+  group_by(large_category) %>%
+  summarise(n = sum(Count)) %>%
+  arrange(desc(n))
+
+sum4 = 
+  sum3 %>%
+  mutate(prop = round(n / sum(n) *100,0)) %>%
+  #mutate(ypos = cumsum(prop)- 0.5*prop ) %>%
+  arrange(desc(prop)) %>%
+  head(8)
+
+sum4$large_category = factor(sum4$large_category,
+                             levels=rev(as.character(sum4$large_category))) 
+ggplot(sum4, aes(x="", y = prop, fill=large_category)) +
+  geom_bar(stat="identity", width = 1, color="black") +
+  coord_polar("y", start=0) +
+  theme_void() +
+  labs(title = "2021 국내 외국계 기업 업종별 비율(Proportion)",
+       y = "",
+       colour = "업종",
+       subtitle = "rockandroh.com"
+       ) +
+  theme(
+    legend.position="right",
+    axis.title.x = element_text(family="NanumGothicCoding", face="bold", size=11, angle=00, hjust=0.54, vjust=0.5), 
+    #axis.title.y = element_text(family="NanumGothicCoding", face="bold", size=11, angle=00, hjust=0.54, vjust=0.45),
+    legend.title = element_blank(), 
+    legend.text = element_text(family = "NanumGothicCoding", size=10),
+    plot.title = element_text(hjust = 0,
+                              vjust = 0,
+                size = rel(1.1), face = "bold",
+                family="NanumGothicCoding")
+  ) +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  scale_fill_brewer(palette = "Set2") +
+  geom_text(aes(x=1.3, y=cumsum(prop)-prop/2, label= paste0(prop,"%")))
+
+```
+
+제조업과 도소매업이 가장 많은 비율을 차지하고 있고 그 두개의 비율은 무려 65% 정도해 해당된다. 가장 많은 비율을 차지하는 제조업과 도소매업안에서 어떤 세부업종들이 있는지 확인해보자.
+
+#### 제조업 내 소분류
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+sum3 = 
+  sum2 %>%
+  filter(large_category == "제조업") %>%
+  select(industry_kr, Count)
+total = sum(sum3$Count)
+sum4 = 
+  sum3 %>%
+  mutate(prop = round(Count/total * 100,1)) %>%
+  head(10)
+sum4$industry_kr = factor(sum4$industry_kr,
+                             levels=rev(as.character(sum4$industry_kr))) 
+
+ggplot(sum4, aes(x = reorder(industry_kr,-prop), y = prop, fill=industry_kr, label = prop)) + 
+  geom_bar(stat="identity", width = 1, color="black") +
+  labs(title = "2021 국내 외국계 기업 제조업 비율",
+       y = "",
+       x = "",
+       colour = "업종",
+       subtitle = "rockandroh.com"
+       ) +
+ geom_text(position = position_dodge(width = .9),    # move to center of bars
+              vjust = -0.5,    # nudge above top of bar
+              size = 3) +
+  theme_classic() +
+  scale_fill_brewer(palette = "Set3") +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(
+    legend.position="right",
+    axis.title.y = element_text(family="NanumGothicCoding", face="bold", size=11, angle=00, hjust=0.54, vjust=0.45),
+    legend.title = element_blank(), 
+    legend.text = element_text(family = "NanumGothicCoding", size=8),
+    plot.title = element_text(hjust = 0,
+                              vjust = 0,
+                size = rel(1.1), face = "bold",
+                family="NanumGothicCoding"),
+    axis.title.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank()
+  )
+```
+
+#### 도소매업 내 소분류
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+sum5 = 
+  sum2 %>%
+  filter(large_category == "도소매업")
+  
+sum5 = 
+  sum5 %>%
+  mutate(prop = round(Count / sum(sum5$Count) *100,0)) %>%
+  select(industry_kr, Count, prop) %>%
+  head(8) %>%
+  as.tibble()
+
+sum5$industry_kr = factor(sum5$industry_kr,
+                             levels=rev(as.character(sum5$industry_kr)))
+
+ggplot(sum5, aes(x = reorder(industry_kr,-prop), y = prop, fill=industry_kr, label = prop)) + 
+  geom_bar(stat="identity", width = 1, color="black") +
+  theme_classic() +
+  labs(title = "2021 국내 외국계 기업 도소매업 비율",
+       y = "",
+       x = "",
+       colour = "업종",
+       subtitle = "rockandroh.com"
+       ) +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  geom_text(position = position_dodge(width = .9),    # move to center of bars
+              vjust = -0.5,    # nudge above top of bar
+              size = 3) +
+  scale_fill_brewer(palette = "Set2") +
+  theme(
+    legend.position="right",
+    axis.title.y = element_text(family="NanumGothicCoding", face="bold", size=11, angle=00, hjust=0.54, vjust=0.45),
+    legend.title = element_blank(), 
+    legend.text = element_text(family = "NanumGothicCoding", size=8),
+    plot.title = element_text(hjust = 0,
+                              vjust = 0,
+                size = rel(1.1), face = "bold",
+                family="NanumGothicCoding"),
+    axis.title.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank()
+  )
+```
+
+#### 국내 소재지별
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+sum1 = 
+  df %>% 
+  group_by(address) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count)) 
+sum2 = 
+  sum1 %>%
+  mutate(prop = round(Count / sum(sum1$Count) *100,0)) %>%
+  head(10)
+sum2$address = factor(sum2$address,
+                             levels=rev(as.character(sum2$address)))
+
+ggplot(sum2, aes(x = reorder(address,-prop), y = prop, fill=address,
+                 label = prop)) +
+  geom_bar(stat="identity", width = 1, color="black") +
+  labs(title = "2021 국내 외국계 기업 소재지별 비율",
+       y = "",
+       x = "",
+       colour = "업종",
+       subtitle = "rockandroh.com"
+       ) +
+  theme_classic() +
+  scale_fill_brewer(palette = "Set3") +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  geom_text(position = position_dodge(width = .9),    # move to center of bars
+              vjust = -0.5,    # nudge above top of bar
+              size = 3) +
+  scale_fill_brewer(palette = "Set3") +
+  guides(fill = guide_legend(ncol=2, reverse = TRUE)) +
+  theme(
+    legend.position="right",
+    axis.title.y = element_text(family="NanumGothicCoding", face="bold", size=11, angle=00, hjust=0.54, vjust=0.45),
+    legend.title = element_blank(), 
+    legend.text = element_text(family = "NanumGothicCoding", size=8),
+    plot.title = element_text(hjust = 0,
+                              vjust = 0,
+                size = rel(1.1), face = "bold",
+                family="NanumGothicCoding"),
+    axis.title.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank()
+  )
+```
+
+#### 대표투자 국가별
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+sum1 = 
+  df %>% 
+  group_by(country) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+sum2 = 
+  sum1 %>%
+  mutate(prop = round(Count / sum(sum1$Count) *100,0)) %>%
+  head(10)
+
+sum2$country = factor(sum2$country, rev(as.character(sum2$country)))
+
+ggplot(sum2, aes(x = reorder(country,-prop), y = prop, fill=country, label=prop)) +
+  geom_bar(stat="identity", width = 1, color="black") +
+  labs(title = "2021 국내 외국계 기업 소재지별 비율",
+       y = "",
+       x = "",
+       colour = "업종",
+       subtitle = "rockandroh.com"
+       ) +
+  theme_classic() +
+  scale_fill_brewer(palette = "Set3") +
+  guides(fill=guide_legend(ncol=2, reverse = TRUE)) +
+  geom_text(position = position_dodge(width = .9),    # move to center of bars
+              vjust = -0.5,    # nudge above top of bar
+              size = 3) +
+  theme(
+    legend.position="right",
+    axis.title.y = element_text(family="NanumGothicCoding", face="bold", size=11, angle=00, hjust=0.54, vjust=0.45),
+    legend.title = element_blank(), 
+    legend.text = element_text(family = "NanumGothicCoding", size=8),
+    plot.title = element_text(hjust = 0,
+                              vjust = 0,
+                size = rel(1.1), face = "bold",
+                family="NanumGothicCoding"),
+    axis.title.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank()
+  )
+
+```
 
 
+## 포브스2000 
 
-한국 통상자원부 데이터는 우리가 흔히 알고있는 회사들을 검색해봤을때 회사들이 중복되서 나오거나 안나오는 경우들이 있다. 예를들어, 
-
-- 코카콜라
-- IBM
-- 
-
-
-
-## 번외편: 포브스 2000
+먼저 포브스 선정 기업 2000개를 살펴보면 아래의 표와 같다.
 
 아래 변수의 숫자 단위는 전부 $ million 입니다.
 
@@ -100,13 +458,9 @@ df %>% DT::datatable(rownames = FALSE,
 - Asseet
 - Market Value (As of 2020/5/13)
 
-## 포브스 2000
-
-포브스 2000 선정 기업!
-
 ```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 #fb = readxl::read_xlsx('G:/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
-#fb = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
+fb = readxl::read_xlsx('/Volumes/GoogleDrive/내 드라이브/Document/Company Info/Forbes 2000.xlsx')
 fb =
   fb %>%
   `colnames<-`(c('Rank','Name','Country','Sales','Profits','Assets','Market Value'))
@@ -117,8 +471,7 @@ fb %>%
 
 ```
 
-
-## 포스브 2020에 있는 한국기업?
+#### 포스브 2020에 있는 한국기업?
 
 ```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
 fb %>% 
@@ -128,7 +481,7 @@ fb %>%
             columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
 ```
 
-## Forbes에 선정기업이 속한 국가 숫자
+#### Forbes 선정기업이 속한 국가 숫자
 
 탑 20
 - 미국, 중국, 일본, 영국, 캐나다 
@@ -146,6 +499,70 @@ fb %>%
             columnDefs = list(list(className = 'dt-center', targets = "_all")))) 
 ```
 
+## 국내 외국계 기업중 포브스 2000 에 속한 기업은?
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE, error=FALSE}
+fb_name = rep(NA,2000)
+fc_name = rep(NA,2000)
+kr_name = rep(NA,2000)
+value = rep(NA,2000)
+country = rep(NA,2000)
+rank = c(1:2000)
+
+fb_in_fc = data.frame(fb_name, fc_name, kr_name, value, country, rank)
+
+
+for (i in 1:length(fb$Name)){
+  matched_name = agrep(fb$Name[i], df$name_eng, max=0, value=TRUE, ignore.case = TRUE)
+  len = length(matched_name)
+  if(len == 1 ){
+    fb_in_fc[i,] = cbind(fb$Name[i],
+                         matched_name,
+                         df %>% filter(name_eng == matched_name) %>% select(name_kr),
+                         fb$`Market Value`[i],
+                         fb$Country[i],
+                         i)
+  }
+  else if (len > 1){
+    name_kr = c()
+    for (j in 1:len){
+      name_kr[j] = df %>% filter(name_eng == matched_name[j]) %>% select(name_kr)
+    }
+    fb_in_fc[i,] = cbind(fb$Name[i],
+                         paste(matched_name,collapse=" / "),
+                         paste(name_kr,collapse=" / "),
+                         fb$`Market Value`[i],
+                         fb$Country[i],
+                         i)
+  }
+}
+
+fb_in_fc2 =
+  fb_in_fc %>% 
+  filter(fb_name != 'NA')
+colnames(fb_in_fc2) = c('Forbes', '매칭된 외투기업(복수영문)','복수국문', '시장가치', '국가', "Rank")
+
+fb_in_fc2 %>%
+  DT::datatable(rownames = FALSE,
+                caption = "매칭된 국내 외투기업들이 포브스 선정기업과 일치하는지 확인을 꼭 해야합니다",
+                options = list(
+                  columnDefs = list(list(className = 'dt-center', targets = "_all"))))
+
+```
+
+## 일반적으로 잘알려진 외국계 회사들 (업데이트 예정)
+
+- 헤지펀드
+  - 
+- 금융IT 컨설팅
+  - 뮤렉스/뉴메릭스/피나스트라
+- 오퍼레이션 컨설팅
+  - PwC/딜로이트/EY/KPMG
+- 전략컨설팅
+  - 맥킨지/베인/보스턴컨설팅
+
+- 반도체
+  - 
 
 ## Source
 

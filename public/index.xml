@@ -6,7 +6,17 @@
     <description>Recent content in Home on Rock &#39;n&#39; Roh</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 14 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://rockandroh.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>국내에 있는 외국인 투자기업 (a.k.a 외국계 기업) 알아보기</title>
+      <link>https://rockandroh.netlify.app/blog/2021-02-14-foreign-company-in-korea/</link>
+      <pubDate>Sun, 14 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://rockandroh.netlify.app/blog/2021-02-14-foreign-company-in-korea/</guid>
+      <description>외국계 기업 채용 관련 사이트 외국계 기업이란? 외국계 기업 분석 포브스2000 국내 외국계 기업중 포브스 2000 에 속한 기업은? 일반적으로 잘알려진 외국계 회사들 (업데이트 예정) Source   body, td { font-size: 12px; } code.r{ font-size: 11px; } pre { font-size: 11px }  Note: 한국에 있는 외국계 기업 관련 내용 정리입니다. 문의사항은 metrics@kakao.com 으로 하시면 됩니다.
+외국계 기업 채용 관련 사이트 현재 채용중인 외국계 기업들은 아래의 채용 관련 사이트를 확인!</description>
+    </item>
+    
     <item>
       <title>주식데이터 Cleaning 및 Manipulating</title>
       <link>https://rockandroh.netlify.app/blog/kiwoom-data-cleaning-example/</link>
